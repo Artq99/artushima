@@ -47,9 +47,4 @@ def start_app():
     Start the application.
     """
 
-    global _app
-
-    if _app is None:
-        init_app()
-
-    _app.run("localhost")
+    get_app().run("localhost")
