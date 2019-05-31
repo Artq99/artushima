@@ -3,3 +3,9 @@ __pycache__/
 
 # virtual environment
 venv/
+
+# VSCode settings
+.vscode/
+
+# logs
+logs/

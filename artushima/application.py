@@ -4,7 +4,10 @@ The module contains the application object and methods for its initialisation.
 
 import flask
 
+from artushima.commons import logger
+
 _app = None
+
 
 def init_app():
     """
@@ -18,6 +21,9 @@ def init_app():
     @_app.route("/")
     def index():
         return flask.render_template("index.html")
+
+    logger.log_info("The application has been initialised.")
+
 
 def get_app():
     """
@@ -34,3 +40,16 @@ def get_app():
         init_app()
 
     return _app
+
+
+def start_app():
+    """
+    Start the application.
+    """
+
+    global _app
+
+    if _app is None:
+        init_app()
+
+    _app.run("localhost")
