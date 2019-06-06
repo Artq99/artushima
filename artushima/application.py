@@ -6,6 +6,8 @@ import flask
 
 from artushima.commons import logger
 from artushima.commons import properties
+from artushima.persistence import pu
+from artushima.persistence import model
 from artushima.views import index_view
 
 _app = None
@@ -22,6 +24,10 @@ def init_app():
 
     # initialising properties
     properties.init()
+
+    # initialising the database
+    pu.init_engine()
+    model.Base.metadata.create_all(pu.SqlEngine)
 
     # registering views
     _app.register_blueprint(index_view.index_blueprint)

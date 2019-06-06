@@ -12,3 +12,6 @@ logs/
 
 # .env files
 *.env
+
+# database files
+*.db
