@@ -1,0 +1,70 @@
+<!doctype html>
+
+<head>
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/artushima.css') }}">
+    <title>Artushima</title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="w3-top">
+        <div class="w3-bar w3-black">
+            <a class="w3-bar-item w3-button w3-hover-orange" href="/"><i class="fas fa-home fa-lg"></i></a>
+            <span class="w3-bar-item w3-text-orange w3-large w3-hide-small logo">
+                <b>Artushima</b>
+            </span>
+
+            {% if session["username"] %}
+            <a class="w3-bar-item w3-button w3-right w3-hover-orange" href="/auth/logout">Wyloguj się</a>
+            {% else %}
+            <a class="w3-bar-item w3-button w3-right w3-hover-orange" href="/auth/login">Zaloguj się</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <br><br>
+
+    <!-- Messages -->
+    <section class="messages">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="w3-container">
+            {% for category, message in messages %}
+            {% if category == "error" %}
+            <div class="w3-panel w3-black w3-border w3-border-orange w3-round-large">
+                <p>
+                    <span class="w3-badge w3-red">!</span>
+                    <span class="w3-text-orange">BŁĄD: {{ message }}</span>
+                </p>
+            </div>
+            {% elif category == "warning" %}
+            <div class="w3-panel w3-black w3-border w3-border-orange w3-round-large">
+                <p>
+                    <span class="w3-badge w3-yellow">?</span>
+                    <span class="w3-text-orange">UWAGA: {{ message }}</span>
+                </p>
+            </div>
+            {% elif category == "info" %}
+            <div class="w3-panel w3-black w3-border w3-border-orange w3-round-large">
+                <p>
+                    <span class="w3-badge w3-blue">i</span>
+                    <span class="w3-text-orange">INFO: {{ message }}</span>
+                </p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </section>
+
+    <section class="content">
+        {% block content %}{% endblock %}
+    </section>
+
+</body>

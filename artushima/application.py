@@ -5,6 +5,8 @@ The module contains the application object and methods for its initialisation.
 import flask
 
 from artushima.commons import logger
+from artushima.commons import properties
+from artushima.views import index_view
 
 _app = None
 
@@ -18,9 +20,11 @@ def init_app():
 
     _app = flask.Flask(__name__)
 
-    @_app.route("/")
-    def index():
-        return flask.render_template("index.html")
+    # initialising properties
+    properties.init()
+
+    # registering views
+    _app.register_blueprint(index_view.index_blueprint)
 
     logger.log_info("The application has been initialised.")
 
