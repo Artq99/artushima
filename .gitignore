@@ -9,3 +9,6 @@ venv/
 
 # logs
 logs/
+
+# .env files
+*.env
