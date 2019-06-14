@@ -59,3 +59,22 @@ class AbstractPersistenceTestClass(AbstractTestClass):
 
         pu.current_session.close()
         pu.current_session = None
+
+
+class AbstractServiceTestClass(AbstractTestClass):
+    """
+    The base class for all service tests.
+
+    It mocks the SQL session from the persistence unit, assuring that no data is read from or written to the database.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.current_session_mock = mock.create_autospec(pu.Session)
+        pu.current_session = self.current_session_mock
+
+    def tearDown(self):
+        super().tearDown()
+
+        pu.current_session = None
