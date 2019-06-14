@@ -3,6 +3,7 @@ The persistence unit module of the application.
 """
 
 import sqlalchemy
+from sqlalchemy import orm
 
 from artushima.commons import properties
 from artushima.commons import exceptions
@@ -33,7 +34,7 @@ def init_engine(testing=False):
     Initialise the SQL engine.
 
     Arguments:
-        - testing - if True, an instance of an in-memory mysql database is created instead of connecting to
+        - testing - if True, an instance of an in-memory sqlite database is created instead of connecting to
                     the file based one.
     """
 
@@ -46,7 +47,14 @@ def init_engine(testing=False):
 
         if db_file_name is None:
             raise exceptions.PersistenceError(
-                "The property 'DB_URI' not present. Cannot initialise the database.", "pu", "init_engine"
+                "The property 'DB_URI' not present. Cannot initialise the database.", __name__, init_engine.__name__
             )
 
         SqlEngine = sqlalchemy.create_engine("sqlite:///" + db_file_name)
+
+    Session = orm.sessionmaker(SqlEngine)
+
+
+# The object representing the currently used session.
+# Not initalised by default
+current_session = None
