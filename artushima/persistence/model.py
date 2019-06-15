@@ -27,7 +27,7 @@ class UserEntity(Base):
     id = Column("ID", Integer, primary_key=True)
     created_on = Column("CREATED_ON", DateTime, nullable=False)
     modified_on = Column("MODIFIED_ON", DateTime, nullable=False)
-    opt_lock = Column("OPT_LOC", Integer, nullable=False)
+    opt_lock = Column("OPT_LOCK", Integer, nullable=False)
     user_name = Column("USER_NAME", String, nullable=False, unique=True)
     password_hash = Column("PASSWORD_HASH", String)
     role = Column("ROLE", Integer, nullable=False)
@@ -45,7 +45,7 @@ class UserEntity(Base):
         userdata["created_on"] = self.created_on
         userdata["modified_on"] = self.modified_on
         userdata["opt_lock"] = self.opt_lock
-        userdata["username"] = self.user_name
+        userdata["user_name"] = self.user_name
         userdata["password_hash"] = self.password_hash
         userdata["role"] = self.role
 

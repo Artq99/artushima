@@ -5,9 +5,60 @@ The data access object for the user entity.
 from sqlalchemy.exc import SQLAlchemyError
 
 from artushima.commons import logger
+from artushima.commons import roles_utils
 from artushima.commons.exceptions import PersistenceError
 from artushima.persistence import pu
 from artushima.persistence import model
+from artushima.persistence.dao import dao_utils
+
+
+def create(data: dict):
+    """
+    Create a new user.
+
+    Arguments:
+        - data - a dictionary containing the following entries:
+            - user_name
+            - password_hash
+            - role
+
+    Returns:
+        a dictionary containing data of the newly persisted user
+    """
+
+    def extract_data(d: dict, key: str):
+        """
+        Extract data for the given key from the given dictionary. Raise a PersistenceError, if the key is missing.
+        """
+
+        try:
+            return d[key]
+        except KeyError:
+            raise PersistenceError("The key '{}' is missing.".format(key), __name__, create.__name__)
+
+    user = dao_utils.init_entity(model.UserEntity)
+
+    user.user_name = extract_data(data, "user_name")
+    user.password_hash = extract_data(data, "password_hash")
+    user.role = extract_data(data, "role")
+
+    if user.user_name is None:
+        raise PersistenceError("The argument 'user_name' cannot be None.", __name__, create.__name__)
+
+    if user.role is None:
+        raise PersistenceError("The argument 'role' cannot be None.", __name__, create.__name__)
+
+    if not roles_utils.check_if_role_exists(user.role):
+        raise PersistenceError("The role is invalid.", __name__, create.__name__)
+
+    try:
+        pu.current_session.add(user)
+        pu.current_session.flush()
+    except SQLAlchemyError as e:
+        logger.log(str(e))
+        raise PersistenceError("Error on persisting data.", __name__, create.__name__)
+
+    return user.map_to_dict()
 
 
 def read_by_user_name(user_name: str):
