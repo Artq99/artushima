@@ -26,21 +26,7 @@ def create(data: dict):
         a dictionary containing data of the newly persisted user
     """
 
-    def extract_data(d: dict, key: str):
-        """
-        Extract data for the given key from the given dictionary. Raise a PersistenceError, if the key is missing.
-        """
-
-        try:
-            return d[key]
-        except KeyError:
-            raise PersistenceError("The key '{}' is missing.".format(key), __name__, create.__name__)
-
-    user = dao_utils.init_entity(model.UserEntity)
-
-    user.user_name = extract_data(data, "user_name")
-    user.password_hash = extract_data(data, "password_hash")
-    user.role = extract_data(data, "role")
+    user = _map_to_new_entity(data)
 
     if user.user_name is None:
         raise PersistenceError("The argument 'user_name' cannot be None.", __name__, create.__name__)
@@ -59,6 +45,32 @@ def create(data: dict):
         raise PersistenceError("Error on persisting data.", __name__, create.__name__)
 
     return user.map_to_dict()
+
+
+def _map_to_new_entity(data: dict):
+    """
+    Map the given data to a newly created entity.
+    """
+
+    user = dao_utils.init_entity(model.UserEntity)
+    user.user_name = _get_value_from_create_data(data, "user_name")
+    user.password_hash = _get_value_from_create_data(data, "password_hash")
+    user.role = _get_value_from_create_data(data, "role")
+
+    return user
+
+
+def _get_value_from_create_data(data: dict, key: str):
+    """
+    Get the value from the given data dict under the given key.
+
+    Raises a PersistenceError when the key is missing.
+    """
+
+    if key not in data.keys():
+        raise PersistenceError("The key '{}' is missing.".format(key), __name__, create.__name__)
+
+    return data[key]
 
 
 def read_by_user_name(user_name: str):
