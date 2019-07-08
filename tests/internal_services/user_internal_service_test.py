@@ -6,14 +6,15 @@ from unittest import mock
 
 from tests import abstracts
 
+from artushima import constants
 from artushima.commons.exceptions import BusinessError
 from artushima.persistence.dao import user_dao
 from artushima.internal_services import user_internal_service
 
 
-class CheckIfUserExistsTest(abstracts.AbstractServiceTestClass):
+class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
     """
-    Tests for the method user_internal_service.check_if_user_exists.
+    The base test case class with mocks prepared for tests of the user_internal_service module.
     """
 
     def setUp(self):
@@ -26,6 +27,12 @@ class CheckIfUserExistsTest(abstracts.AbstractServiceTestClass):
         super().tearDown()
 
         user_internal_service.user_dao = user_dao
+
+
+class CheckIfUserExistsTest(_TestCaseWithMocks):
+    """
+    Tests for the method user_internal_service.check_if_user_exists.
+    """
 
     def test_response_true(self):
         """
@@ -49,7 +56,7 @@ class CheckIfUserExistsTest(abstracts.AbstractServiceTestClass):
 
     def test_response_false(self):
         """
-        The test checks if the method returns False, when the user of the given user name does not exist in the 
+        The test checks if the method returns False, when the user of the given user name does not exist in the
         database.
         """
 
@@ -83,3 +90,34 @@ class CheckIfUserExistsTest(abstracts.AbstractServiceTestClass):
             ctx.exception.message
         )
         self.user_dao_mock.read_by_user_name.assert_not_called()
+
+
+class CreateUserTest(_TestCaseWithMocks):
+    """
+    Tests for the method user_internal_service_test.create_user.
+    """
+
+    def test_positive_output(self):
+        """
+        The test checks if the method correctly calls the corresponding repository.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user",
+            "password_hash": "test_hash",
+            "role": constants.ROLE_PLAYER
+        }
+
+        self.user_dao_mock.create.return_value = {
+            "id": 1,
+            "user_name": "test_user",
+            "password_hash": "test_hash",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when
+        user_internal_service.create_user(data)
+
+        # then
+        self.user_dao_mock.create.assert_called_once_with(data)

@@ -25,3 +25,20 @@ def check_if_user_exists(user_name: str):
     user = user_dao.read_by_user_name(user_name)
 
     return user is not None
+
+
+def create_user(data: dict):
+    """
+    Create a new user.
+
+    Arguments:
+        - data - the dictionary containing the following entries:
+            - user_name
+            - password_hash
+            - role
+
+    Returns:
+        a dictionary containing data of the newly created user
+    """
+
+    return user_dao.create(data)
