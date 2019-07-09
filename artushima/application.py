@@ -32,6 +32,15 @@ def init_app():
     # registering views
     _app.register_blueprint(index_view.index_blueprint)
 
+    # setting the secret key
+    secret_key = properties.get_app_secret_key()
+
+    if secret_key is None:
+        logger.log_error("Application startup failed.")
+        raise RuntimeError("Application startup failed.")
+
+    _app.secret_key = secret_key
+
     logger.log_info("The application has been initialised.")
 
 
@@ -57,4 +66,13 @@ def start_app():
     Start the application.
     """
 
-    get_app().run("localhost")
+    app = get_app()
+
+    host = properties.get_app_host()
+    port = properties.get_app_port()
+
+    if host is None or port is None:
+        logger.log_error("Application startup failed.")
+        raise RuntimeError("Application startup failed.")
+
+    app.run(host, port=port)
