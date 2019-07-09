@@ -32,7 +32,7 @@ def get(property_name):
     property_value = os.getenv(property_name)
 
     if property_value is None:
-        logger.log(logger.WARNING, "Property '%s' not found." % property_name)
+        logger.log_warning("Property '{}' not found.".format(property_name))
 
     return property_value
 
