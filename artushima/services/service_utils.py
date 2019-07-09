@@ -46,7 +46,7 @@ def create_response_success(message=None, **kwargs):
     return create_response(constants.RESPONSE_STATUS_SUCCESS, message=message, **kwargs)
 
 
-def create_failure(message=None, **kwargs):
+def create_response_failure(message=None, **kwargs):
     """
     Create a response dictionary, common for all services, with the status 'failure'.
 

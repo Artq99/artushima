@@ -57,8 +57,9 @@ class AbstractPersistenceTestClass(AbstractTestClass):
 
         model.Base.metadata.drop_all(pu.SqlEngine)
 
-        pu.current_session.close()
-        pu.current_session = None
+        if pu.current_session is not None:
+            pu.current_session.close()
+            pu.current_session = None
 
 
 class AbstractServiceTestClass(AbstractTestClass):
