@@ -5,6 +5,8 @@ The module containing abstract base classes for all tests.
 import unittest
 from unittest import mock
 
+from sqlalchemy import orm
+
 from artushima.commons import logger
 from artushima.commons.logger import log as log_default  # backup
 from artushima.persistence import pu
@@ -72,7 +74,7 @@ class AbstractServiceTestClass(AbstractTestClass):
     def setUp(self):
         super().setUp()
 
-        self.current_session_mock = mock.create_autospec(pu.Session)
+        self.current_session_mock = mock.create_autospec(orm.Session)
         pu.current_session = self.current_session_mock
 
     def tearDown(self):
