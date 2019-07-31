@@ -4,10 +4,12 @@ The module contains the application object and methods for its initialisation.
 
 import flask
 
+from artushima import constants
 from artushima.commons import logger
 from artushima.commons import properties
 from artushima.persistence import pu
 from artushima.persistence import model
+from artushima.services import startup_service
 from artushima.views import index_view
 
 _app = None
@@ -36,10 +38,23 @@ def init_app():
     secret_key = properties.get_app_secret_key()
 
     if secret_key is None:
-        logger.log_error("Application startup failed.")
-        raise RuntimeError("Application startup failed.")
+        _fail_startup()
 
     _app.secret_key = secret_key
+
+    # creating superuser
+    superuser_exists_response = startup_service.check_if_superuser_exists()
+
+    if superuser_exists_response["status"] != constants.RESPONSE_STATUS_SUCCESS:
+        _fail_startup()
+
+    superuser_exists = superuser_exists_response["superuser_exists"]
+
+    if not superuser_exists:
+        superuser_response = startup_service.create_superuser()
+
+        if superuser_response["status"] != constants.RESPONSE_STATUS_SUCCESS:
+            _fail_startup()
 
     logger.log_info("The application has been initialised.")
 
@@ -72,7 +87,12 @@ def start_app():
     port = properties.get_app_port()
 
     if host is None or port is None:
-        logger.log_error("Application startup failed.")
-        raise RuntimeError("Application startup failed.")
+        _fail_startup()
 
     app.run(host, port=port)
+
+
+def _fail_startup():
+    message = "Application startup failed"
+    logger.log_error(message)
+    raise RuntimeError(message)
