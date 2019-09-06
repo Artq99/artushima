@@ -121,3 +121,29 @@ class CreateUserTest(_TestCaseWithMocks):
 
         # then
         self.user_dao_mock.create.assert_called_once_with(data)
+
+
+class ReadUserByUserNameTest(_TestCaseWithMocks):
+    """
+    Tests for the method user_internal_service_test.read_user_by_user_name.
+    """
+
+    def test_positive_output(self):
+        """
+        The test checks if the method correctly calls the corresponding repository.
+        """
+
+        # given
+        self.user_dao_mock.read_by_user_name.return_value = {
+            "id": 1,
+            "user_name": "test_user",
+            "password_hash": "test_hash",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when
+        user = user_internal_service.read_user_by_user_name("test_user")
+
+        # then
+        self.assertIsNotNone(user)
+        self.user_dao_mock.read_by_user_name.assert_called_once_with("test_user")

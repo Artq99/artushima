@@ -42,3 +42,17 @@ def create_user(data: dict):
     """
 
     return user_dao.create(data)
+
+
+def read_user_by_user_name(user_name: str) -> dict:
+    """
+    Read the user by its user name.
+
+    Arguments:
+        - user_name - the user name
+
+    Returns:
+        a dictionary containing data of the user, if it could be found, None otherwise
+    """
+
+    return user_dao.read_by_user_name(user_name)
