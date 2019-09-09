@@ -8,11 +8,13 @@ import werkzeug
 from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import logger
+from artushima.persistence.decorators import transactional_service_method
 from artushima.internal_services import user_internal_service
 from artushima.internal_services import auth_internal_service
 from artushima.services import service_utils
 
 
+@transactional_service_method
 def log_in(user_name: str, password: str) -> dict:
     """
     Log in to the application and generate an authentication token for continuous authentication.
