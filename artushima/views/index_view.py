@@ -13,4 +13,4 @@ def index():
     The endpoint for '/'.
     """
 
-    return flask.render_template("index/index.html")
+    return flask.render_template("index.html")
