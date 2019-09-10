@@ -2,7 +2,6 @@
 The service providing methods for user to log in, log out and authenticate.
 """
 
-import flask
 import werkzeug
 
 from artushima.commons.exceptions import PersistenceError
@@ -17,14 +16,14 @@ from artushima.services import service_utils
 @transactional_service_method
 def log_in(user_name: str, password: str) -> dict:
     """
-    Log in to the application and generate an authentication token for continuous authentication.
+    Get the authentication token.
 
     Arguments:
         - user_name - the login
         - password - the password
 
     Returns:
-        a service response with the status of the operation and the list of messages in case of failure.
+        a service response containing the authentication token.
     """
 
     if user_name is None:
@@ -48,7 +47,6 @@ def log_in(user_name: str, password: str) -> dict:
     if not werkzeug.check_password_hash(user["password_hash"], password):
         return service_utils.create_response_failure("Niepoprawny login lub hasło.")
 
-    flask.session["user_name"] = user["user_name"]
-    flask.session["token"] = auth_internal_service.generate_token(user)
+    token = auth_internal_service.generate_token(user).decode()
 
-    return service_utils.create_response_success()
+    return service_utils.create_response_success(token=token)

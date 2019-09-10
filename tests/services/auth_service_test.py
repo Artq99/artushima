@@ -51,16 +51,7 @@ class LogInTest(abstracts.AbstractServiceTestClass):
             "password_hash": "test_hash"
         }
         self.werkzeug_mock.check_password_hash.return_value = True
-        test_token = {
-            "aud": "test_user",
-            "iat": "test_iat",
-            "exp": "test_exp"
-        }
-        self.auth_internal_service_mock.generate_token.return_value = test_token
-        self.flask_mock.session = {
-            "user_name": None,
-            "token": None
-        }
+        self.auth_internal_service_mock.generate_token.return_value = b'test_token'
 
         # when
         response = auth_service.log_in("test_user", "password")
@@ -70,8 +61,6 @@ class LogInTest(abstracts.AbstractServiceTestClass):
         self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
         self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with("test_user")
         self.werkzeug_mock.check_password_hash.assert_called_once_with("test_hash", "password")
-        self.assertEqual("test_user", self.flask_mock.session["user_name"])
-        self.assertEqual(test_token, self.flask_mock.session["token"])
 
     def test_user_does_not_exist(self):
         """

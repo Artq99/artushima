@@ -50,7 +50,7 @@ class GenerateTokenTest(abstracts.AbstractServiceTestClass):
         }
 
         payload = {
-            "aud": "test_user",
+            "sub": "test_user",
             "iat": datetime.datetime(2019, 1, 1),
             "exp": datetime.datetime(2019, 1, 1) + datetime.timedelta(minutes=60)
         }

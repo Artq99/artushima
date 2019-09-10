@@ -1,5 +1,5 @@
 """
-The module providing internal logics for the user authentication.
+The module providing internal logic for the user authentication.
 """
 
 import datetime
@@ -10,7 +10,7 @@ from artushima.commons.exceptions import BusinessError
 from artushima.commons import properties
 
 
-def generate_token(user_data):
+def generate_token(user_data: dict) -> bytes:
     """
     Generate a new authentication token for the given user.
 
@@ -30,7 +30,7 @@ def generate_token(user_data):
         raise BusinessError("The property 'token_expiration_time' is not present.", __name__, generate_token.__name__)
 
     payload = {
-        "aud": user_data["user_name"],
+        "sub": user_data["user_name"],
         "iat": datetime.datetime.utcnow(),
         "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=int(token_expiration_time))
     }
