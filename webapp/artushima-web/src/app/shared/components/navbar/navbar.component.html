@@ -4,11 +4,17 @@
       <fa-icon [icon]="iconBiohazard" size="lg"></fa-icon>
     </span>
     <span class="m-2">Artushima</span>
+    <span class="m-2 art-navbar-btn">
+      <a href="/dashboard">
+        <fa-icon [icon]="iconHome"></fa-icon>
+      </a>
+    </span>
   </span>
   <span class="navbar-text">
-    <!-- The functionality of this button must be changed, when the required components will be ready. -->
-    <span class="m-2 art-navbar-btn" (click)="logInOutOnClick()">
-      <fa-icon [icon]="iconLogInOut" size="lg"></fa-icon>
+    <span class="m-2 art-navbar-btn">
+      <a href="/login">
+        <fa-icon [icon]="iconLogInOut" size="lg"></fa-icon>
+      </a>
     </span>
   </span>
 </nav>

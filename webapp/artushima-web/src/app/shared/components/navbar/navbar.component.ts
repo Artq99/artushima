@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IconDefinition, faBiohazard, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faBiohazard, faHome, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +12,11 @@ export class NavbarComponent implements OnInit {
    * The biohazard icon.
    */
   iconBiohazard: IconDefinition = faBiohazard;
+
+  /**
+   * The home icon.
+   */
+  iconHome: IconDefinition = faHome;
 
   /**
    * The icon indicating the state of the authentication.
@@ -27,17 +32,6 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     // TODO this must be changen when the required components will be ready.
     this.iconLogInOut = this.iconSignIn;
-  }
-
-  /**
-   * This method is only temorary.
-   */
-  logInOutOnClick() {
-    if (this.iconLogInOut === this.iconSignIn) {
-      this.iconLogInOut = this.iconSignOut;
-    } else {
-      this.iconLogInOut = this.iconSignIn;
-    }
   }
 
 }

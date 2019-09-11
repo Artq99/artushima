@@ -1,9 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SharedModule } from './shared/shared.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
+import { LoginComponent } from './authentication/components/login/login.component';
+
+/**
+ * The definitions of all the routes existing in the application.
+ */
+const appRoutes: Routes = [
+  { path: "dashboard", component: DashboardComponent },
+  { path: "login", component: LoginComponent },
+  {
+    path: '',
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
+  }
+]
 
 @NgModule({
   declarations: [
@@ -11,7 +29,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    SharedModule
+    RouterModule.forRoot(appRoutes),
+    SharedModule,
+    AuthenticationModule,
+    DashboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
