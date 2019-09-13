@@ -26,10 +26,10 @@ def log_in(user_name: str, password: str) -> dict:
         a service response containing the authentication token.
     """
 
-    if user_name is None:
+    if not user_name:
         return service_utils.create_response_failure("Brakująca nazwa użytkownika.")
 
-    if password is None:
+    if not password:
         return service_utils.create_response_failure("Brakujące hasło.")
 
     try:

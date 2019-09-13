@@ -9,12 +9,14 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
 import { LoginComponent } from './authentication/components/login/login.component';
+import { AuthGuard } from './core/guards/auth.guard';
+import { CoreModule } from './core/core.module';
 
 /**
  * The definitions of all the routes existing in the application.
  */
 const appRoutes: Routes = [
-  { path: "dashboard", component: DashboardComponent },
+  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginComponent },
   {
     path: '',
@@ -30,6 +32,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
+    CoreModule,
     SharedModule,
     AuthenticationModule,
     DashboardModule,

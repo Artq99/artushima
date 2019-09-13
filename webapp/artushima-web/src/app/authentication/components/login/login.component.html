@@ -1,13 +1,13 @@
 <div class="container">
   <form>
     <div class="form-group">
-      <label for="inputPassword">Nazwa użytkownika</label>
-      <input type="text" class="form-control" id="inputUserName">
+      <label>Nazwa użytkownika</label>
+      <input type="text" class="form-control" name="userName" [(ngModel)]="userName">
     </div>
     <div class="form-group">
-      <label for="inputPassword">Hasło</label>
-      <input type="password" class="form-control" id="inputPassword" placeholder="Hasło">
+      <label>Hasło</label>
+      <input type="password" class="form-control" placeholder="Hasło" name="password" [(ngModel)]="password">
     </div>
-    <button type="submit" class="btn btn-primary">Zaloguj się</button>
+    <button type="submit" class="btn btn-primary" (click)="loginOnClick()">Zaloguj się</button>
   </form>
 </div>
