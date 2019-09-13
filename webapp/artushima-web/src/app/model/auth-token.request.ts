@@ -1,3 +1,6 @@
+/**
+ * The request class for the endpoint '/api/auth/login':
+ */
 export class AuthTokenRequest {
   userName: string;
   password: string;
