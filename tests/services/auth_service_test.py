@@ -48,6 +48,7 @@ class LogInTest(abstracts.AbstractServiceTestClass):
         # given
         self.user_internal_service_mock.read_user_by_user_name.return_value = {
             "user_name": "test_user",
+            "role": constants.ROLE_PLAYER,
             "password_hash": "test_hash"
         }
         self.werkzeug_mock.check_password_hash.return_value = True
@@ -59,6 +60,11 @@ class LogInTest(abstracts.AbstractServiceTestClass):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
+        self.assertEqual({
+            "userName": "test_user",
+            "role": "role_player",
+            "token": 'test_token'
+        }, response["currentUser"])
         self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with("test_user")
         self.werkzeug_mock.check_password_hash.assert_called_once_with("test_hash", "password")
 

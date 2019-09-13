@@ -7,6 +7,7 @@ import werkzeug
 from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import logger
+from artushima.commons import roles_utils
 from artushima.persistence.decorators import transactional_service_method
 from artushima.internal_services import user_internal_service
 from artushima.internal_services import auth_internal_service
@@ -49,4 +50,10 @@ def log_in(user_name: str, password: str) -> dict:
 
     token = auth_internal_service.generate_token(user).decode()
 
-    return service_utils.create_response_success(token=token)
+    current_user = {
+        "userName": user["user_name"],
+        "role": roles_utils.get_str_role(user["role"]),
+        "token": token
+    }
+
+    return service_utils.create_response_success(currentUser=current_user)

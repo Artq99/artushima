@@ -20,6 +20,9 @@ def create_response(status, message=None, **kwargs):
         a response dictionary
     """
 
+    if message is None:
+        message = ""
+
     response = {
         "status": status,
         "message": message
