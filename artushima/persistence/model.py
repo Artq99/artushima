@@ -17,6 +17,28 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
+class BlacklistedTokenEntity(Base):
+    """
+    The entity for the blacklisted token.
+    """
+
+    __tablename__ = "T_BLACKLISTED_TOKEN"
+
+    id = Column("ID", Integer, primary_key=True)
+    token = Column("TOKEN", String, nullable=False)
+
+    def map_to_dict(self):
+        """
+        Map this entity data to a dictionary.
+        """
+
+        token_dto = dict()
+        token_dto["id"] = self.id
+        token_dto["token"] = self.token
+
+        return token_dto
+
+
 class UserEntity(Base):
     """
     The entity for the user data.
@@ -40,16 +62,16 @@ class UserEntity(Base):
         Map this enitity data to a dictionary.
         """
 
-        userdata = dict()
-        userdata["id"] = self.id
-        userdata["created_on"] = self.created_on
-        userdata["modified_on"] = self.modified_on
-        userdata["opt_lock"] = self.opt_lock
-        userdata["user_name"] = self.user_name
-        userdata["password_hash"] = self.password_hash
-        userdata["role"] = self.role
+        user_dto = dict()
+        user_dto["id"] = self.id
+        user_dto["created_on"] = self.created_on
+        user_dto["modified_on"] = self.modified_on
+        user_dto["opt_lock"] = self.opt_lock
+        user_dto["user_name"] = self.user_name
+        user_dto["password_hash"] = self.password_hash
+        user_dto["role"] = self.role
 
-        return userdata
+        return user_dto
 
 
 class UserHistoryEntity(Base):
