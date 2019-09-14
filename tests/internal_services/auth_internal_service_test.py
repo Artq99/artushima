@@ -11,6 +11,7 @@ from tests import abstracts
 
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import properties
+from artushima.persistence.dao import blacklisted_token_dao
 from artushima.internal_services import auth_internal_service
 
 
@@ -109,3 +110,41 @@ class GenerateTokenTest(abstracts.AbstractServiceTestClass):
         )
         self.properties_mock.get_token_expiration_time.assert_called_once()
         self.jwt_mock.encode.assert_not_called()
+
+
+class BlacklistTokenTest(abstracts.AbstractServiceTestClass):
+    """
+    Tests for the method auth_internal_service.blacklist_token.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.blacklisted_token_dao_mock = mock.create_autospec(blacklisted_token_dao)
+        auth_internal_service.blacklisted_token_dao = self.blacklisted_token_dao_mock
+
+    def tearDown(self):
+        super().tearDown()
+
+        auth_internal_service.blacklisted_token_dao = blacklisted_token_dao
+
+    def test_blacklist(self):
+        """
+        The test checks if the method correctly calls the DAO to persist the given token as blacklisted.
+        """
+
+        # given
+        token = "test_token"
+        persisted_token = {
+            "id": 1,
+            "token": token
+        }
+        self.blacklisted_token_dao_mock.create.return_value = persisted_token
+
+        # when
+        response = auth_internal_service.blacklist_token(token)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(persisted_token, response)
+        self.blacklisted_token_dao_mock.create.assert_called_once_with(token)

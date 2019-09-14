@@ -8,6 +8,7 @@ import jwt
 
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import properties
+from artushima.persistence.dao import blacklisted_token_dao
 
 
 def generate_token(user_data: dict) -> bytes:
@@ -36,3 +37,17 @@ def generate_token(user_data: dict) -> bytes:
     }
 
     return jwt.encode(payload, properties.get_app_secret_key(), algorithm="HS256")
+
+
+def blacklist_token(token: str) -> dict:
+    """
+    Blacklist a token, so it cannot be used for the authentication anymore.
+
+    Arguments:
+        - token - the token to be blacklisted
+
+    Returns:
+        a dictionary containing the blacklisted token data
+    """
+
+    return blacklisted_token_dao.create(token)
