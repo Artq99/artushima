@@ -49,6 +49,7 @@ def log_in(user_name: str, password: str) -> dict:
     if not werkzeug.check_password_hash(user["password_hash"], password):
         return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
+    # TODO try ... except
     token = auth_internal_service.generate_token(user).decode()
 
     current_user = {
@@ -58,3 +59,24 @@ def log_in(user_name: str, password: str) -> dict:
     }
 
     return service_utils.create_response_success(currentUser=current_user)
+
+
+@transactional_service_method
+def log_out(token: str) -> dict:
+    """
+    Blacklist the given token.
+
+    Artuments:
+        - token - the token to be blacklisted
+
+    Returns:
+        a dictionary containing data of the blacklisted token
+    """
+
+    try:
+        persisted_token = auth_internal_service.blacklist_token(token)
+    except PersistenceError as e:
+        logger.log_error(str(e))
+        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
+
+    return service_utils.create_response_success(token=persisted_token)

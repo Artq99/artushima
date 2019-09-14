@@ -8,16 +8,19 @@ import flask
 import werkzeug
 
 from tests import abstracts
+from tests import test_utils
 
 from artushima import constants
+from artushima import messages
+from artushima.commons.exceptions import PersistenceError
 from artushima.internal_services import user_internal_service
 from artushima.internal_services import auth_internal_service
 from artushima.services import auth_service
 
 
-class LogInTest(abstracts.AbstractServiceTestClass):
+class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
     """
-    Tests for the method auth_service.log_in.
+    The base test case class with mocks prepared for tests of the auth_service module.
     """
 
     def setUp(self):
@@ -39,6 +42,12 @@ class LogInTest(abstracts.AbstractServiceTestClass):
         auth_service.werkzeug = werkzeug
         auth_service.user_internal_service = user_internal_service
         auth_service.auth_internal_service = auth_internal_service
+
+
+class LogInTest(_TestCaseWithMocks):
+    """
+    Tests for the method auth_service.log_in.
+    """
 
     def test_log_in_successful(self):
         """
@@ -144,4 +153,98 @@ class LogInTest(abstracts.AbstractServiceTestClass):
         self.assertEqual("Brakujące hasło.", response["message"])
         self.user_internal_service_mock.read_user_by_user_name.assert_not_called()
         self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.assert_not_called()
+        self.auth_internal_service_mock.generate_token.assert_not_called()
+
+    def test_persistence_error_on_getting_user(self):
+        """
+        The test checks if the method returns a response with the status failure and a correct error message, when
+        a PersistenceError occurs.
+        """
+
+        # given
+        user_name = "test_user"
+        password = "test_password"
+
+        self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_persistence_error()
+
+        # when
+        response = auth_service.log_in(user_name, password)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
+        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with(user_name)
+        self.werkzeug_mock.check_password_hash.assert_not_called()
+        self.auth_internal_service_mock.generate_token.assert_not_called()
+
+    def test_business_error_on_getting_user(self):
+        """
+        The test checks if the method returns a response with the status failure and a correct error message, when
+        a BusinessError occurs.
+        """
+
+        # given
+        user_name = "test_user"
+        password = "test_password"
+
+        self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_business_error()
+
+        # when
+        response = auth_service.log_in(user_name, password)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.APPLICATION_ERROR, response["message"])
+        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with(user_name)
+        self.werkzeug_mock.check_password_hash.assert_not_called()
+        self.auth_internal_service_mock.generate_token.assert_not_called()
+
+
+class LogOutTest(_TestCaseWithMocks):
+    """
+    Tests for the method auth_service.log_out.
+    """
+
+    def test_positive_output(self):
+        """
+        The test checks if the method gives a correct response after blacklisting a token.
+        """
+
+        # given
+        token = "test_token"
+        peristed_token = {
+            "id": 1,
+            "token": token
+        }
+
+        self.auth_internal_service_mock.blacklist_token.return_value = peristed_token
+
+        # when
+        response = auth_service.log_out(token)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
+        self.assertEqual(peristed_token, response["token"])
+        self.auth_internal_service_mock.blacklist_token.assert_called_once_with(token)
+
+    def test_persistence_error(self):
+        """
+        The test checks if the method gives a correct response when a PersistenceError occurs.
+        """
+
+        # given
+        token = "test_token"
+
+        self.auth_internal_service_mock.blacklist_token.side_effect = PersistenceError("Test.", "TestClass", "test")
+
+        # when
+        response = auth_service.log_out(token)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
+        self.auth_internal_service_mock.blacklist_token.assert_called_once_with(token)
