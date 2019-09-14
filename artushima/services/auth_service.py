@@ -4,6 +4,7 @@ The service providing methods for user to log in, log out and authenticate.
 
 import werkzeug
 
+from artushima import messages
 from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import logger
@@ -28,25 +29,25 @@ def log_in(user_name: str, password: str) -> dict:
     """
 
     if not user_name:
-        return service_utils.create_response_failure("Brakująca nazwa użytkownika.")
+        return service_utils.create_response_failure(messages.USERNAME_MISSING)
 
     if not password:
-        return service_utils.create_response_failure("Brakujące hasło.")
+        return service_utils.create_response_failure(messages.PASSWORD_MISSING)
 
     try:
         user = user_internal_service.read_user_by_user_name(user_name)
     except PersistenceError as e:
         logger.log_error(str(e))
-        return service_utils.create_response_failure("Błąd odczytu danych.")
+        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
     except BusinessError as e:
         logger.log_error(str(e))
-        return service_utils.create_response_failure("Błąd aplikacji.")
+        return service_utils.create_response_failure(messages.APPLICATION_ERROR)
 
     if user is None:
-        return service_utils.create_response_failure("Niepoprawny login lub hasło.")
+        return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
     if not werkzeug.check_password_hash(user["password_hash"], password):
-        return service_utils.create_response_failure("Niepoprawny login lub hasło.")
+        return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
     token = auth_internal_service.generate_token(user).decode()
 
