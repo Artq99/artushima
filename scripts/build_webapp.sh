@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "================================================================================"
 echo
 echo " * * *   Building Script for the artushima-web   * * * "
