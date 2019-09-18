@@ -15,11 +15,9 @@ from artushima.persistence.dao import blacklisted_token_dao
 from artushima.internal_services import auth_internal_service
 
 
-class GenerateTokenTest(abstracts.AbstractServiceTestClass):
+class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
     """
-    Tests for the method auth_internal_service.generate_token.
-
-    The user data used in the tests contains only the user name, while the method does not need anything else in fact.
+    The base test case class with mocks prepared for tests of the auth_internal_service module.
     """
 
     def setUp(self):
@@ -29,9 +27,11 @@ class GenerateTokenTest(abstracts.AbstractServiceTestClass):
         self.jwt_mock = mock.create_autospec(jwt)
         self.datetime_mock = mock.create_autospec(datetime)
         self.datetime_mock.timedelta = datetime.timedelta
+        self.blacklisted_token_dao_mock = mock.create_autospec(blacklisted_token_dao)
         auth_internal_service.properties = self.properties_mock
         auth_internal_service.jwt = self.jwt_mock
         auth_internal_service.datetime = self.datetime_mock
+        auth_internal_service.blacklisted_token_dao = self.blacklisted_token_dao_mock
 
     def tearDown(self):
         super().tearDown()
@@ -39,6 +39,15 @@ class GenerateTokenTest(abstracts.AbstractServiceTestClass):
         auth_internal_service.properties = properties
         auth_internal_service.jwt = jwt
         auth_internal_service.datetime = datetime
+        auth_internal_service.blacklisted_token_dao = blacklisted_token_dao
+
+
+class GenerateTokenTest(_TestCaseWithMocks):
+    """
+    Tests for the method auth_internal_service.generate_token.
+
+    The user data used in the tests contains only the user name, while the method does not need anything else in fact.
+    """
 
     def test_token_generated_correctly(self):
         """
@@ -112,21 +121,10 @@ class GenerateTokenTest(abstracts.AbstractServiceTestClass):
         self.jwt_mock.encode.assert_not_called()
 
 
-class BlacklistTokenTest(abstracts.AbstractServiceTestClass):
+class BlacklistTokenTest(_TestCaseWithMocks):
     """
     Tests for the method auth_internal_service.blacklist_token.
     """
-
-    def setUp(self):
-        super().setUp()
-
-        self.blacklisted_token_dao_mock = mock.create_autospec(blacklisted_token_dao)
-        auth_internal_service.blacklisted_token_dao = self.blacklisted_token_dao_mock
-
-    def tearDown(self):
-        super().tearDown()
-
-        auth_internal_service.blacklisted_token_dao = blacklisted_token_dao
 
     def test_blacklist(self):
         """
@@ -148,3 +146,66 @@ class BlacklistTokenTest(abstracts.AbstractServiceTestClass):
         self.assertIsNotNone(response)
         self.assertEqual(persisted_token, response)
         self.blacklisted_token_dao_mock.create.assert_called_once_with(token)
+
+
+class DecodeTokenTest(_TestCaseWithMocks):
+    """
+    Test for the method auth_internal_service.decode_token.
+    """
+
+    def test_correctly_decoded_token(self):
+        """
+        The test checks if the method can decode a token correctly.
+        """
+
+        # given
+        token = "test_token"
+        self.properties_mock.get_app_secret_key.return_value = "secret"
+        self.jwt_mock.decode.return_value = "decoded_token"
+
+        # when
+        decoded_token = auth_internal_service.decode_token(token)
+
+        # then
+        self.assertEqual("decoded_token", decoded_token)
+        self.properties_mock.get_app_secret_key.assert_called_once()
+        self.jwt_mock.decode.assert_called_once_with(token, "secret", algorithm="HS256")
+
+    def test_expired_signature(self):
+        """
+        The test checks if the method raises a BusinessError, when the token signature has expired.
+        """
+
+        # given
+        token = "test_token"
+        self.properties_mock.get_app_secret_key.return_value = "secret"
+        self.jwt_mock.decode.side_effect = jwt.ExpiredSignatureError()
+
+        # when then
+        with self.assertRaises(BusinessError) as ctx:
+            auth_internal_service.decode_token(token)
+
+        self.assertEqual(
+            "Authentication token signature has expired. " +
+            "(artushima.internal_services.auth_internal_service.decode_token)",
+            ctx.exception.message
+        )
+
+    def test_invalid_token(self):
+        """
+        The test checks if the method raises a BusinessError, when the token is invalid.
+        """
+
+        # given
+        token = "test_token"
+        self.properties_mock.get_app_secret_key.return_value = "secret"
+        self.jwt_mock.decode.side_effect = jwt.InvalidTokenError()
+
+        # when then
+        with self.assertRaises(BusinessError) as ctx:
+            auth_internal_service.decode_token(token)
+
+        self.assertEqual(
+            "The token is invalid. (artushima.internal_services.auth_internal_service.decode_token)",
+            ctx.exception.message
+        )

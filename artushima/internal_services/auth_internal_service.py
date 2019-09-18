@@ -5,6 +5,8 @@ The module providing internal logic for the user authentication.
 import datetime
 
 import jwt
+from jwt import InvalidTokenError
+from jwt import ExpiredSignatureError
 
 from artushima.commons.exceptions import BusinessError
 from artushima.commons import properties
@@ -51,3 +53,24 @@ def blacklist_token(token: str) -> dict:
     """
 
     return blacklisted_token_dao.create(token)
+
+
+def decode_token(token: str) -> dict:
+    """
+    Decode the authentication token.
+
+    Arguments:
+        - token - the token to be decoded
+
+    Returns:
+        a dictionary containing the decoded token data
+    """
+
+    try:
+        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
+    except ExpiredSignatureError:
+        raise BusinessError("Authentication token signature has expired.", __name__, decode_token.__name__)
+    except InvalidTokenError:
+        raise BusinessError("The token is invalid.", __name__, decode_token.__name__)
+
+    return decoded_token
