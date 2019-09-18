@@ -52,7 +52,7 @@ class UserEntity(Base):
     opt_lock = Column("OPT_LOCK", Integer, nullable=False)
     user_name = Column("USER_NAME", String, nullable=False, unique=True)
     password_hash = Column("PASSWORD_HASH", String)
-    role = Column("ROLE", Integer, nullable=False)
+    role = Column("ROLE", String, nullable=False)
 
     user_history_entries = relationship("UserHistoryEntity", back_populates="user")
     run_campaigns = relationship("CampaignEntity", back_populates="game_master")
