@@ -9,6 +9,8 @@ from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
 
 from artushima.commons.exceptions import BusinessError
+from artushima.commons.exceptions import TokenExpirationError
+from artushima.commons.exceptions import TokenInvalidError
 from artushima.commons import properties
 from artushima.persistence.dao import blacklisted_token_dao
 
@@ -68,9 +70,10 @@ def decode_token(token: str) -> dict:
 
     try:
         decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
-    except ExpiredSignatureError:
-        raise BusinessError("Authentication token signature has expired.", __name__, decode_token.__name__)
-    except InvalidTokenError:
-        raise BusinessError("The token is invalid.", __name__, decode_token.__name__)
+    except ExpiredSignatureError as e:
+        raise TokenExpirationError("Authentication token signature has expired.",
+                                   __name__, decode_token.__name__) from e
+    except InvalidTokenError as e:
+        raise TokenInvalidError("The token is invalid.", __name__, decode_token.__name__) from e
 
     return decoded_token

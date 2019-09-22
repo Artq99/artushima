@@ -2,6 +2,9 @@
 The module containing the constant definitions.
 """
 
+# Test bearer
+TEST_BEARER_TOKEN = "TEST-9999"
+
 # User roles
 ROLE_ADMIN = "role_admin"
 ROLE_GAME_MASTER = "role_game_master"

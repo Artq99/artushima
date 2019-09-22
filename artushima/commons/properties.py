@@ -85,3 +85,11 @@ def get_superuser_password():
     """
 
     return get("SUPERUSER_PASSWORD")
+
+
+def get_test_bearer_enabled():
+    """
+    Get the property that tells, if the test bearer token should be authenticated.
+    """
+
+    return bool(get("TEST_BEARER_ENABLED"))
