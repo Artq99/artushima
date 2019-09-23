@@ -276,6 +276,7 @@ class AuthenticateTest(_TestCaseWithMocks):
             "user_name": "test_user"
         }
 
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 
@@ -285,6 +286,61 @@ class AuthenticateTest(_TestCaseWithMocks):
         # then
         self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
 
+    def test_token_is_blacklisted(self):
+        """
+        The test checks if the method returns a correct status and message when the given token has been blacklisted.
+        """
+
+        # given
+        token = "test_token"
+
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = True
+
+        # when
+        response = auth_service.authenticate(token, [])
+
+        # then
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.AUTHENTICATION_FAILED, response["message"])
+
+    def test_persistence_error_on_checking_if_token_is_blacklisted(self):
+        """
+        The test checks if the method returns a correct status and message when a PersistenceError occurs on checking
+        if the given token has been blacklisted.
+        """
+
+        # given
+        token = "test_token"
+
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.side_effect = \
+            test_utils.create_persistence_error()
+
+        # when
+        response = auth_service.authenticate(token, [])
+
+        # then
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
+
+    def test_business_error_on_checking_if_token_is_blacklisted(self):
+        """
+        The test checks if the method returns a correct status and message when a BusinessError occurs on checking
+        if the given token has been blacklisted.
+        """
+
+        # given
+        token = "test_token"
+
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.side_effect = \
+            test_utils.create_business_error()
+
+        # when
+        response = auth_service.authenticate(token, [])
+
+        # then
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.APPLICATION_ERROR, response["message"])
+
     def test_token_expired(self):
         """
         The test checks if the method returns a correct status and message when the given token has expired.
@@ -293,6 +349,7 @@ class AuthenticateTest(_TestCaseWithMocks):
         # given
         token = "test_token"
 
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.side_effect = test_utils.create_token_expiration_error()
 
         # when
@@ -353,6 +410,7 @@ class AuthenticateTest(_TestCaseWithMocks):
             "sub": "test_user"
         }
 
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
         self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_persistence_error()
 
@@ -382,6 +440,7 @@ class AuthenticateTest(_TestCaseWithMocks):
             "role": constants.ROLE_PLAYER
         }
 
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 
@@ -409,6 +468,7 @@ class AuthenticateTest(_TestCaseWithMocks):
             "role": constants.ROLE_PLAYER
         }
 
+        self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 

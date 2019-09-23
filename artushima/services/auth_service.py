@@ -107,6 +107,19 @@ def authenticate(token: str, required_roles: list) -> dict:
         else:
             return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
+    # checking if the token has not been blacklisted
+    try:
+        token_is_blacklisted = auth_internal_service.check_if_token_is_blacklisted(token)
+    except PersistenceError as e:
+        logger.log_error(str(e))
+        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
+    except BusinessError as e:
+        logger.log_error(str(e))
+        return service_utils.create_response_failure(messages.APPLICATION_ERROR)
+
+    if token_is_blacklisted:
+        return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
+
     # decoding the token
     try:
         decoded_token = auth_internal_service.decode_token(token)
