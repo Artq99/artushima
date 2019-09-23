@@ -8,6 +8,7 @@ import jwt
 from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
 
+from artushima import error_messages
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
@@ -55,6 +56,29 @@ def blacklist_token(token: str) -> dict:
     """
 
     return blacklisted_token_dao.create(token)
+
+
+def check_if_token_is_blacklisted(token: str) -> bool:
+    """
+    Check if the token has been blacklisted.
+
+    Arguments:
+        - token - the token to check
+
+    Returns:
+        True, if the token has been blacklisted, False otherwise
+    """
+
+    _validate_argument_token(token)
+    blacklisted_token = blacklisted_token_dao.read_by_token(token)
+
+    return blacklisted_token is not None
+
+
+def _validate_argument_token(token: str) -> None:
+    if token is None:
+        error_message = error_messages.ON_NONE_ARGUMENT.format("token")
+        raise BusinessError(error_message, __name__, check_if_token_is_blacklisted.__name__)
 
 
 def decode_token(token: str) -> dict:

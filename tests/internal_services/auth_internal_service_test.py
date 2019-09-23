@@ -148,6 +148,56 @@ class BlacklistTokenTest(_TestCaseWithMocks):
         self.blacklisted_token_dao_mock.create.assert_called_once_with(token)
 
 
+class CheckIfTokenIsBlacklistedTest(_TestCaseWithMocks):
+    """
+    Tests for the method auth_internal_service.check_if_token_is_blacklisted.
+    """
+
+    def test_token_is_blacklisted(self):
+        """
+        The test checks if the method returns True if the token has been blacklisted.
+        """
+
+        # given
+        token = "test_token"
+
+        self.blacklisted_token_dao_mock.read_by_token.return_value = {
+            "id": 1,
+            "token": token
+        }
+
+        # when
+        response = auth_internal_service.check_if_token_is_blacklisted(token)
+
+        # then
+        self.assertTrue(response)
+
+    def test_token_is_not_blacklisted(self):
+        """
+        The test checks if the method returns False if the token has not been blacklisted.
+        """
+
+        # given
+        token = "test_token"
+
+        self.blacklisted_token_dao_mock.read_by_token.return_value = None
+
+        # when
+        response = auth_internal_service.check_if_token_is_blacklisted(token)
+
+        # then
+        self.assertFalse(response)
+
+    def test_argument_token_is_none(self):
+        """
+        The test checks if the method raises a BusinessError when the argument 'token' is None.
+        """
+
+        # when then
+        with self.assertRaises(BusinessError):
+            auth_internal_service.check_if_token_is_blacklisted(None)
+
+
 class DecodeTokenTest(_TestCaseWithMocks):
     """
     Test for the method auth_internal_service.decode_token.
