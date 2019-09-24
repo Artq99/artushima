@@ -3,10 +3,16 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let authService: AuthService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [AuthService]
+    })
+    authService = TestBed.get(AuthService);
+  });
 
   it('should be created', () => {
-    const service: AuthService = TestBed.get(AuthService);
-    expect(service).toBeTruthy();
+    expect(authService).toBeTruthy();
   });
 });

@@ -1,5 +1,13 @@
 import { TestBed, async } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { SharedModule } from './shared/shared.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+
 import { AppComponent } from './app.component';
+
+import { appRoutes } from './app.module';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -7,6 +15,12 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        RouterTestingModule.withRoutes(appRoutes),
+        SharedModule,
+        AuthenticationModule,
+        DashboardModule
+      ]
     }).compileComponents();
   }));
 
@@ -20,12 +34,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('artushima-web');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('artushima-web app is running!');
   });
 });

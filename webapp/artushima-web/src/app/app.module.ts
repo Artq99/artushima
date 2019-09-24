@@ -15,7 +15,7 @@ import { CoreModule } from './core/core.module';
 /**
  * The definitions of all the routes existing in the application.
  */
-const appRoutes: Routes = [
+export const appRoutes: Routes = [
   { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginComponent },
   {

@@ -14,9 +14,11 @@ export class AuthService {
   constructor() { }
 
   /**
-   * Returns true if user has authenticated, fallse otherwise.
+   * Indicates the state of user authentication.
+   *
+   * @returns true if user has been authenticated, false otherwise.
    */
-  isUserLoggedIn(): boolean {
+  public isUserLoggedIn(): boolean {
 
     if (localStorage.getItem("currentUser")) {
       return true;
