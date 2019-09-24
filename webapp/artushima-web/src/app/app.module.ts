@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SharedModule } from './shared/shared.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 
@@ -33,7 +32,6 @@ export const appRoutes: Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     CoreModule,
-    SharedModule,
     AuthenticationModule,
     DashboardModule,
   ],

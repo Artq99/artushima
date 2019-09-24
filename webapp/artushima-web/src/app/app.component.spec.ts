@@ -1,7 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 
@@ -17,8 +17,8 @@ describe('AppComponent', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes(appRoutes),
-        SharedModule,
         AuthenticationModule,
+        CoreModule,
         DashboardModule
       ]
     }).compileComponents();
