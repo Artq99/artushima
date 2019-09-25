@@ -39,28 +39,7 @@ export class LoginComponent {
    */
   loginOnClick() {
 
-    let authTokenRequest: AuthTokenRequest = new AuthTokenRequest(this.userName, this.password);
-
-    this.backendService.getAuthToken(authTokenRequest)
-      .pipe(first())
-      .subscribe(
-        response => {
-          if (response.status === "success") {
-            this.authService.setCurrentUser(response.currentUser);
-
-            if (this.authService.redirectRoute) {
-              this.router.navigate([this.authService.redirectRoute]);
-            } else {
-              this.router.navigate(["dashboard"]);
-            }
-          } else {
-            // TODO change into an alert, when the alert component will be ready
-            console.log(response.message);
-          }
-        },
-        // TODO change into an alert, when the alert component will be ready
-        error => console.log(error)
-      );
+    this.authService.login(this.userName, this.password).subscribe(data => console.log(data));
   }
 
 }
