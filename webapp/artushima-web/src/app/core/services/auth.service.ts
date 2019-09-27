@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -22,7 +21,6 @@ export class AuthService {
 
   constructor(
     private httpClient: HttpClient,
-    private router: Router
   ) { }
 
   public get postAuthRedirectRoute() {
@@ -72,7 +70,6 @@ export class AuthService {
         response => {
           if (response.status === RequestStatus.SUCCESS) {
             localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(response.currentUser));
-            this.router.navigate([this.postAuthRedirectRoute]);
           } else {
             // TODO change into message
             console.log(response.message);

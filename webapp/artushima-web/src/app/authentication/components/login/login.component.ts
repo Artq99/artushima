@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { first } from 'rxjs/operators';
-import { BackendService } from 'src/app/core/services/backend.service';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { AuthTokenRequest } from 'src/app/model/auth-token.request';
 import { Router } from '@angular/router';
+
+import { AuthService } from 'src/app/core/services/auth.service';
+
+import { RequestStatus } from 'src/app/model/request-status';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +24,6 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private backendService: BackendService,
     private authService: AuthService
   ) {
 
@@ -39,7 +38,15 @@ export class LoginComponent {
    */
   loginOnClick() {
 
-    this.authService.login(this.userName, this.password).subscribe(data => console.log(data));
+    this.authService.login(this.userName, this.password)
+      .subscribe(status => {
+        if (status === RequestStatus.SUCCESS) {
+          this.router.navigate([this.authService.postAuthRedirectRoute]);
+        } else {
+          // TODO change this into a message
+          console.log("Login status failure.");
+        }
+      });
   }
 
 }

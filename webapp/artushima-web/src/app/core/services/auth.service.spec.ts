@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing'
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
 
 import { AuthenticationModule } from 'src/app/authentication/authentication.module';
 import { DashboardModule } from 'src/app/dashboard/dashboard.module';
@@ -29,7 +27,6 @@ describe('AuthService', () => {
   TEST_RESPONSE_FAILURE.message = 'Error';
 
   let httpTestingController: HttpTestingController;
-  let router: Router;
   let authService: AuthService;
 
   beforeEach(() => {
@@ -38,14 +35,12 @@ describe('AuthService', () => {
       providers: [AuthService],
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule,
         DashboardModule,
         AuthenticationModule
       ]
     })
 
     httpTestingController = TestBed.get(HttpTestingController);
-    router = TestBed.get(Router);
     authService = TestBed.get(AuthService);
   });
 
@@ -88,7 +83,6 @@ describe('AuthService', () => {
 
       // given
       spyOn(localStorage, 'setItem');
-      spyOn(router, 'navigate');
 
       // when then
       authService.login('testUser', 'password')
@@ -99,14 +93,12 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).toHaveBeenCalledWith(KEY_CURRENT_USER, JSON.stringify(TEST_USER));
-      expect(router.navigate).toHaveBeenCalledWith(['dashboard']);
     });
 
     it('should process failed response', () => {
 
       // given
       spyOn(localStorage, 'setItem');
-      spyOn(router, 'navigate');
 
       // when then
       authService.login('testUser', 'password')
@@ -117,14 +109,12 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).not.toHaveBeenCalled();
-      expect(router.navigate).not.toHaveBeenCalled();
     });
 
     it('should process http error', () => {
 
       // given
       spyOn(localStorage, 'setItem');
-      spyOn(router, 'navigate');
 
       // when then
       authService.login('testUser', 'password')
@@ -135,7 +125,6 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).not.toHaveBeenCalled();
-      expect(router.navigate).not.toHaveBeenCalled();
     });
   });
 });
