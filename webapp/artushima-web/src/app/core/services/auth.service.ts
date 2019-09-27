@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { RequestStatus } from 'src/app/model/request-status';
@@ -18,10 +18,19 @@ export const DEFAULT_POST_AUTH_REDIRECT_ROUTE = 'dashboard';
 export class AuthService {
 
   private redirectRoute: string;
+  private currentUserBehaviorSubject: BehaviorSubject<CurrentUser>;
+
+  /**
+   * The Observable that provides data of the currently logged in user.
+   */
+  public currentUser$: Observable<CurrentUser>;
 
   constructor(
     private httpClient: HttpClient,
-  ) { }
+  ) {
+    this.currentUserBehaviorSubject = new BehaviorSubject(this.getCurrentUserFromLocalStorage());
+    this.currentUser$ = this.currentUserBehaviorSubject.asObservable();
+  }
 
   public get postAuthRedirectRoute() {
 
@@ -70,6 +79,7 @@ export class AuthService {
         response => {
           if (response.status === RequestStatus.SUCCESS) {
             localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(response.currentUser));
+            this.currentUserBehaviorSubject.next(response.currentUser);
           } else {
             // TODO change into message
             console.log(response.message);
