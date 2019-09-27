@@ -57,6 +57,15 @@ export class AuthService {
     return this.getCurrentUserFromLocalStorage() !== undefined;
   }
 
+  public getAuthToken(): string {
+
+    if (this.isUserLoggedIn()) {
+      return this.getCurrentUserFromLocalStorage().token;
+    } else {
+      return undefined;
+    }
+  }
+
   /**
    * Sends a request to the backend to authenticate a user.
    *

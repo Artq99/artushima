@@ -77,6 +77,33 @@ describe('AuthService', () => {
     });
   });
 
+  describe('getAuthToken', () => {
+
+    it('should return a token when the user has been authenticated', () => {
+
+      // given
+      spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_USER));
+
+      // when
+      let result: string = authService.getAuthToken();
+
+      // then
+      expect(result).toEqual(TEST_USER.token);
+    });
+
+    it('should return undefined when the user has not been authenticated', () => {
+
+      // given
+      spyOn(localStorage, 'getItem').and.returnValue(null);
+
+      // when
+      let result: string = authService.getAuthToken();
+
+      // then
+      expect(result).toEqual(undefined);
+    });
+  });
+
   describe('login', () => {
 
     it('should authenticate a user', () => {
