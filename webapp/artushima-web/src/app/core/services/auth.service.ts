@@ -11,22 +11,34 @@ import { CurrentUser } from 'src/app/model/current-user';
 
 export const URL_AUTH_LOGIN = '/api/auth/login';
 export const KEY_CURRENT_USER = 'currentUser';
+export const DEFAULT_POST_AUTH_REDIRECT_ROUTE = 'dashboard';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  // TODO make it private and create getter and setter for it
-  /**
-   * The variable holding a route to redirect after login.
-   */
-  public redirectRoute: string;
+  private redirectRoute: string;
 
   constructor(
     private httpClient: HttpClient,
     private router: Router
   ) { }
+
+  public get postAuthRedirectRoute() {
+
+    let route = this.redirectRoute;
+    if (route === undefined) {
+      return DEFAULT_POST_AUTH_REDIRECT_ROUTE;
+    } else {
+      this.redirectRoute = undefined;
+      return route;
+    }
+  }
+
+  public set postAuthRedirectRoute(route: string) {
+    this.redirectRoute = route;
+  }
 
   /**
    * Indicates the state of the user authentication.
@@ -60,16 +72,7 @@ export class AuthService {
         response => {
           if (response.status === RequestStatus.SUCCESS) {
             localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(response.currentUser));
-
-            let route: string;
-
-            if (this.redirectRoute) {
-              route = this.redirectRoute;
-            } else {
-              route = 'dashboard';
-            }
-
-            this.router.navigate([route]);
+            this.router.navigate([this.postAuthRedirectRoute]);
           } else {
             // TODO change into message
             console.log(response.message);
