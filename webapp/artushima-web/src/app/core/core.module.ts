@@ -6,6 +6,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { NavbarComponent } from './components/navbar/navbar.component';
 
+/**
+ * A module containing core application functionalities, including singleton
+ * services, guards, interceptors and general purpose components, like navbar.
+ */
 @NgModule({
   declarations: [
     NavbarComponent

@@ -4,17 +4,22 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
+/**
+ * A guard that ensures, that only an authenitcated user can access a given
+ * route. If the user has not been authenticated, it redirects to the login
+ * page.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(
+  public constructor(
     private router: Router,
     private authService: AuthService
   ) { }
 
-  canActivate(
+  public canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
