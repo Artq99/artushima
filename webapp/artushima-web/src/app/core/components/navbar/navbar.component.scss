@@ -1,3 +1,6 @@
 .art-navbar-btn {
   cursor: pointer;
+  &:hover {
+    color: aqua;
+  }
 }

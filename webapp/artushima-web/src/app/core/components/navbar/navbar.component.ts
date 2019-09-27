@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { IconDefinition, faBiohazard, faHome, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import {
+  IconDefinition,
+  faBiohazard,
+  faSignInAlt,
+  faSignOutAlt,
+  faUserCircle
+} from '@fortawesome/free-solid-svg-icons';
+
+import { CurrentUser } from 'src/app/model/current-user';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,30 +18,41 @@ import { IconDefinition, faBiohazard, faHome, faSignInAlt, faSignOutAlt } from '
 })
 export class NavbarComponent implements OnInit {
 
-  /**
-   * The biohazard icon.
-   */
-  iconBiohazard: IconDefinition = faBiohazard;
+  @Input()
+  public currentUser: CurrentUser = undefined;
 
-  /**
-   * The home icon.
-   */
-  iconHome: IconDefinition = faHome;
+  // icons
+  public iconBiohazard: IconDefinition = faBiohazard;
+  public iconSignIn: IconDefinition = faSignInAlt;
+  public iconSignOut: IconDefinition = faSignOutAlt;
+  public iconUser: IconDefinition = faUserCircle;
 
-  /**
-   * The icon indicating the state of the authentication.
-   */
-  iconLogInOut: IconDefinition;
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
-  // The icons for the authentication state.
-  private iconSignIn: IconDefinition = faSignInAlt;
-  private iconSignOut: IconDefinition = faSignOutAlt
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe(currentUser => {
+      this.currentUser = currentUser;
+    });
+  }
 
-  constructor() { }
+  public homeOnClick() {
+    this.router.navigate(['dashboard']);
+  }
 
-  ngOnInit() {
-    // TODO this must be changen when the required components will be ready.
-    this.iconLogInOut = this.iconSignIn;
+  public logInOnClick() {
+    this.router.navigate(['login'])
+  }
+
+  public logOutOnClick() {
+    if (this.currentUser !== undefined) {
+      this.currentUser = undefined;
+    } else {
+      this.currentUser = new CurrentUser();
+      this.currentUser.userName = "testUser";
+    }
   }
 
 }

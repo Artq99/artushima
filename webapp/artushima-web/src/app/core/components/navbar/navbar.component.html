@@ -1,20 +1,47 @@
 <nav class="navbar fixed-top navbar-dark bg-dark">
+
+  <!-- Left part -->
   <span class="navbar-text">
-    <span class="m-2">
-      <fa-icon [icon]="iconBiohazard" size="lg"></fa-icon>
-    </span>
-    <span class="m-2">Artushima</span>
-    <span class="m-2 art-navbar-btn">
-      <a routerLink="/dashboard">
-        <fa-icon [icon]="iconHome"></fa-icon>
-      </a>
+    <span class="art-navbar-btn">
+      <span class="m-2">
+        <fa-icon [icon]="iconBiohazard" size="lg"></fa-icon>
+      </span>
+      <span class="m-2">Artushima</span>
     </span>
   </span>
+
+  <!-- Right part -->
   <span class="navbar-text">
-    <span class="m-2 art-navbar-btn">
-      <a routerLink="/login">
-        <fa-icon [icon]="iconLogInOut" size="lg"></fa-icon>
-      </a>
-    </span>
+
+    <!-- Logging in or out-->
+    <span *ngIf="currentUser === undefined; then thenBlock else elseBlock"></span>
+
+    <!-- Log in-->
+    <ng-template #thenBlock>
+      <span class="art-navbar-btn" (click)="logInOnClick()">
+        <span>Log in</span>
+        <span class="m-2">
+          <fa-icon [icon]="iconSignIn" size="lg"></fa-icon>
+        </span>
+      </span>
+    </ng-template>
+
+    <!-- Log out -->
+    <ng-template #elseBlock>
+      <span class="art-navbar-btn">
+        <span class="m-2">
+          <fa-icon [icon]="iconUser" size="lg"></fa-icon>
+        </span>
+        <span class="m-2">
+          {{ currentUser.userName }}
+        </span>
+      </span>
+      <span class="art-navbar-btn" (click)="logOutOnClick()">
+        <span class="m-2">
+          <fa-icon [icon]="iconSignOut" size="lg"></fa-icon>
+        </span>
+      </span>
+    </ng-template>
+
   </span>
 </nav>
