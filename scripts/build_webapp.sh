@@ -12,7 +12,7 @@ echo " Stage 1: building the Angular application."
 echo "--------------------------------------------------------------------------------"
 echo
 
-cd ../webapp/artushima-web
+cd ../artushima-web
 ng build --prod=true --deploy-url=static/
 
 echo "--------------------------------------------------------------------------------"
@@ -20,7 +20,7 @@ echo " Stage 2: cleaning up."
 echo "--------------------------------------------------------------------------------"
 echo
 
-cd ../../
+cd ../
 if [ -d "artushima/static" ]; then
     rm -R artushima/static
 fi
@@ -37,7 +37,7 @@ echo " Stage 3: copying files."
 echo "--------------------------------------------------------------------------------"
 echo
 
-cp webapp/artushima-web/dist/artushima-web/* artushima/static/
+cp artushima-web/dist/artushima-web/* artushima/static/
 mv artushima/static/index.html artushima/templates/index.html
 
 echo "--------------------------------------------------------------------------------"
