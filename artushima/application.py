@@ -11,6 +11,7 @@ from artushima.persistence import pu
 from artushima.persistence import model
 from artushima.services import startup_service
 from artushima.views import index_view
+from artushima.web_api import auth_endpoint
 
 _app = None
 
@@ -33,6 +34,9 @@ def init_app():
 
     # registering views
     _app.register_blueprint(index_view.index_blueprint)
+
+    # registering web-service endpoints
+    _app.register_blueprint(auth_endpoint.auth_blueprint)
 
     # setting the secret key
     secret_key = properties.get_app_secret_key()

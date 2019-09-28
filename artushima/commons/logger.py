@@ -2,9 +2,18 @@ import os
 import time
 import datetime
 
+
 INFO = "INFO"
 WARNING = "WARNING"
 ERROR = "ERROR"
+
+_LOG_DIR = "logs"
+_ENCODING = "utf-8"
+
+_FILE_TIMESTAMP_PATTERN = "%Y_%m_%d"
+_FILE_NAME_PATTERN = "artushima_{}.log"
+_TIMESTAMP_PATTERN = "%Y-%m-%d %H:%M:%S"
+_LOG_PATTERN = "[{}] ({}): {}\n"
 
 
 def log(severity, message):
@@ -13,13 +22,13 @@ def log(severity, message):
     """
 
     t = time.time()
-    file_timestamp = datetime.datetime.fromtimestamp(t).strftime("%Y_%m_%d")
-    file_name = "artushima_%s.log" % file_timestamp
-    file_path = os.path.join("logs", file_name)
-    timestamp = datetime.datetime.fromtimestamp(t).strftime("%Y-%m-%d %H:%M:%S")
+    file_timestamp = datetime.datetime.fromtimestamp(t).strftime(_FILE_TIMESTAMP_PATTERN)
+    file_name = _FILE_NAME_PATTERN.format(file_timestamp)
+    file_path = os.path.join(_LOG_DIR, file_name)
+    timestamp = datetime.datetime.fromtimestamp(t).strftime(_TIMESTAMP_PATTERN)
 
-    message = str(message.encode("utf-8"))[2:-1]
-    text = "[%s] (%s): %s\n" % (severity, timestamp, message)
+    message = str(message.encode(_ENCODING))[2:-1]
+    text = _LOG_PATTERN.format(severity, timestamp, message)
 
     with open(file_path, "a") as f:
         f.write(text)

@@ -130,7 +130,7 @@ class CreateSuperuserTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
-        self.assertIsNone(response["message"])
+        self.assertEqual("", response["message"])
         self.properties_mock.get_superuser_password.assert_called_once()
         self.security_mock.generate_password_hash.assert_called_once_with("password")
         self.user_internal_service_mock.create_user.assert_called_once_with({

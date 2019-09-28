@@ -5,7 +5,7 @@ The module contains exception classes for the application.
 _ERROR_MESSAGE_TEMPLATE = "%s (%s.%s)"
 
 
-class Error(Exception):
+class ArtushimaError(Exception):
     """
     The base class for all application specific errors.
 
@@ -20,7 +20,7 @@ class Error(Exception):
         self.message = self.args[0]
 
 
-class PersistenceError(Error):
+class PersistenceError(ArtushimaError):
     """
     The error raised by repositories when a persistence action fails.
 
@@ -33,9 +33,35 @@ class PersistenceError(Error):
     pass
 
 
-class BusinessError(Error):
+class BusinessError(ArtushimaError):
     """
     The error raised by services.
+
+    Arguments:
+        - message - the error message
+        - class_name - the name of the class where the error occured
+        - method_name = the name of the method where the error ocured
+    """
+
+    pass
+
+
+class TokenExpirationError(BusinessError):
+    """
+    The error raised when the authentication token has expired.
+
+    Arguments:
+        - message - the error message
+        - class_name - the name of the class where the error occured
+        - method_name = the name of the method where the error ocured
+    """
+
+    pass
+
+
+class TokenInvalidError(BusinessError):
+    """
+    The error raised when the authentication token is invalid.
 
     Arguments:
         - message - the error message
