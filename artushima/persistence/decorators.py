@@ -4,6 +4,7 @@ The module providing decorators related to the persistence process.
 
 import functools
 
+from artushima import constants
 from artushima.persistence import pu
 
 
@@ -23,7 +24,7 @@ def transactional_service_method(func):
         try:
             response = func(*args, **kwargs)
 
-            if response["status"] == "success":
+            if response["status"] == constants.RESPONSE_STATUS_SUCCESS:
                 pu.current_session.commit()
             else:
                 pu.current_session.rollback()
