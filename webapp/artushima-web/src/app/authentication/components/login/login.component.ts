@@ -1,31 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 
 import { RequestStatus } from 'src/app/model/request-status';
 
+/**
+ * The component containing a form for user authentication.
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
-  /**
-   * The variable for the input field for the user name.
-   */
-  userName: string;
+  @Input()
+  public userName: string;
 
-  /**
-   * The variable for the input field for the password.
-   */
-  password: string;
+  @Input()
+  public password: string;
 
-  constructor(
+  public constructor(
     private router: Router,
     private authService: AuthService
-  ) {
+  ) { }
+
+  public ngOnInit() {
 
     // if the user has been already authenticated, navigate to the dashboard
     if (this.authService.isUserLoggedIn()) {
@@ -36,15 +37,14 @@ export class LoginComponent {
   /**
    * The callback for the button 'login'.
    */
-  loginOnClick() {
+  public loginOnClick() {
 
     this.authService.login(this.userName, this.password)
       .subscribe(status => {
         if (status === RequestStatus.SUCCESS) {
           this.router.navigate([this.authService.postAuthRedirectRoute]);
         } else {
-          // TODO change this into a message
-          console.log("Login status failure.");
+          this.password = '';
         }
       });
   }
