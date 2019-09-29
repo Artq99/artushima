@@ -11,6 +11,7 @@ import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
 import { CurrentUser } from 'src/app/model/current-user';
 import { RequestStatus } from 'src/app/model/request-status';
 import { BlacklistedToken } from 'src/app/model/blacklisted-token';
+import { DecodedToken } from 'src/app/model/decoded-token';
 
 describe('AuthService', () => {
 
@@ -19,6 +20,16 @@ describe('AuthService', () => {
   TEST_USER.userName = 'testUser';
   TEST_USER.role = 'role_player';
   TEST_USER.token = 'test_token';
+
+  const TEST_DECODED_TOKEN_VALID: DecodedToken = new DecodedToken();
+  TEST_DECODED_TOKEN_VALID.sub = 'testUser';
+  TEST_DECODED_TOKEN_VALID.iat = new Date('2010-01-01');
+  TEST_DECODED_TOKEN_VALID.exp = new Date('2090-12-31');
+
+  const TEST_DECODED_TOKEN_EXPIRED: DecodedToken = new DecodedToken();
+  TEST_DECODED_TOKEN_EXPIRED.sub = 'testUser';
+  TEST_DECODED_TOKEN_EXPIRED.iat = new Date('2010-01-01');
+  TEST_DECODED_TOKEN_EXPIRED.exp = new Date('2010-12-31');
 
   const TEST_AUTH_LOGIN_RESPONSE_SUCCESS: AuthLoginResponse = new AuthLoginResponse();
   TEST_AUTH_LOGIN_RESPONSE_SUCCESS.status = RequestStatus.SUCCESS;
@@ -69,7 +80,8 @@ describe('AuthService', () => {
     it('should return true when the user has been authenticated', () => {
 
       // given
-      spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_USER));
+      spyOn<any>(authService, 'getDecodedToken')
+        .and.returnValue(TEST_DECODED_TOKEN_VALID);
 
       // when
       let result: boolean = authService.isUserLoggedIn();
@@ -81,13 +93,75 @@ describe('AuthService', () => {
     it('should return false when the user has not been authenticated', () => {
 
       // given
-      spyOn(localStorage, 'getItem').and.returnValue(null);
+      spyOn(localStorage, 'getItem')
+        .and.returnValue(null);
 
       // when
       let result: boolean = authService.isUserLoggedIn();
 
       // then
       expect(result).toBeFalsy();
+    });
+
+    it('should return false when the user has been authenticated, but the token has expired', () => {
+
+      // given
+      spyOn<any>(authService, 'getDecodedToken')
+        .and.returnValue(TEST_DECODED_TOKEN_EXPIRED);
+
+      // when
+      let result: boolean = authService.isUserLoggedIn();
+
+      // then
+      expect(result).toBeFalsy();
+    });
+  });
+
+  describe('validateInitialLogin', () => {
+
+    it('should do nothing if the user has not been authenticated', () => {
+
+      // given
+      spyOn<any>(authService, 'getDecodedToken')
+        .and.returnValue(undefined);
+
+      let clearCurrentUserSpy: jasmine.Spy = spyOn<any>(authService, 'clearCurrentUser');
+
+      // when
+      authService.validateInitialLogin();
+
+      // then
+      expect(clearCurrentUserSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not remove the current user from the local storage if the token is valid', () => {
+
+      // given
+      spyOn<any>(authService, 'getDecodedToken')
+        .and.returnValue(TEST_DECODED_TOKEN_VALID);
+
+      let clearCurrentUserSpy: jasmine.Spy = spyOn<any>(authService, 'clearCurrentUser');
+
+      // when
+      authService.validateInitialLogin();
+
+      // then
+      expect(clearCurrentUserSpy).not.toHaveBeenCalled();
+    });
+
+    it('should remove the current user from the local storage it the token has expired', () => {
+
+      // given
+      spyOn<any>(authService, 'getDecodedToken')
+        .and.returnValue(TEST_DECODED_TOKEN_EXPIRED);
+
+      let clearCurrentUserSpy: jasmine.Spy = spyOn<any>(authService, 'clearCurrentUser');
+
+      // when
+      authService.validateInitialLogin();
+
+      // then
+      expect(clearCurrentUserSpy).toHaveBeenCalled();
     });
   });
 

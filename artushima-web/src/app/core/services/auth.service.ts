@@ -8,6 +8,7 @@ import { AuthLoginRequest } from 'src/app/model/auth-login-request';
 import { AuthLoginResponse } from 'src/app/model/auth-login-response';
 import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
 import { CurrentUser } from 'src/app/model/current-user';
+import { DecodedToken } from 'src/app/model/decoded-token';
 
 export const URL_AUTH_LOGIN = '/api/auth/login';
 export const URL_AUTH_LOGOUT = '/api/auth/logout';
@@ -49,6 +50,7 @@ export class AuthService {
   }
 
   public set postAuthRedirectRoute(route: string) {
+
     this.redirectRoute = route;
   }
 
@@ -59,7 +61,31 @@ export class AuthService {
    */
   public isUserLoggedIn(): boolean {
 
-    return this.getCurrentUserFromLocalStorage() !== undefined;
+    let decodedToken: DecodedToken = this.getDecodedToken();
+
+    if (decodedToken === undefined) {
+      return false;
+    }
+
+    if (this.checkIfTokenExpired(decodedToken)) {
+      this.clearCurrentUser();
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Validates, if the authentication token in the local storage has not
+   * expired.
+   */
+  public validateInitialLogin(): void {
+
+    let decodedToken: DecodedToken = this.getDecodedToken();
+
+    if ((decodedToken !== undefined) && (this.checkIfTokenExpired(decodedToken))) {
+      this.clearCurrentUser();
+    }
   }
 
   /**
@@ -69,8 +95,10 @@ export class AuthService {
    */
   public getAuthToken(): string {
 
-    if (this.isUserLoggedIn()) {
-      return this.getCurrentUserFromLocalStorage().token;
+    let currentUser: CurrentUser = this.getCurrentUserFromLocalStorage();
+
+    if (currentUser !== undefined) {
+      return currentUser.token;
     } else {
       return undefined;
     }
@@ -97,8 +125,7 @@ export class AuthService {
       .subscribe(
         response => {
           if (response.status === RequestStatus.SUCCESS) {
-            localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(response.currentUser));
-            this.currentUserBehaviorSubject.next(response.currentUser);
+            this.setCurrentUser(response.currentUser);
           } else {
             // TODO change into message
             console.log(response.message);
@@ -135,8 +162,7 @@ export class AuthService {
       .subscribe(
         response => {
           if (response.status === RequestStatus.SUCCESS) {
-            localStorage.removeItem(KEY_CURRENT_USER);
-            this.currentUserBehaviorSubject.next(undefined);
+            this.clearCurrentUser();
           } else {
             // TODO change into message
             console.log(response.message);
@@ -154,6 +180,18 @@ export class AuthService {
       );
 
     return response$;
+  }
+
+  private setCurrentUser(currentUser: CurrentUser): void {
+
+    localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(currentUser));
+    this.currentUserBehaviorSubject.next(currentUser);
+  }
+
+  private clearCurrentUser(): void {
+
+    localStorage.removeItem(KEY_CURRENT_USER);
+    this.currentUserBehaviorSubject.next(undefined);
   }
 
   private createAuthLogin$(requestBody: AuthLoginRequest): Observable<AuthLoginResponse> {
@@ -175,6 +213,28 @@ export class AuthService {
     }
 
     return currentUser;
+  }
+
+  private getDecodedToken(): DecodedToken {
+
+    let currentUser: CurrentUser = this.getCurrentUserFromLocalStorage();
+
+    if (currentUser === undefined) {
+      return undefined;
+    }
+
+    return new DecodedToken(currentUser.token);
+  }
+
+  private checkIfTokenExpired(token: DecodedToken): boolean {
+
+    let now: Date = new Date();
+
+    if (token.exp.valueOf() < now.valueOf()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
