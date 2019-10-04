@@ -3,17 +3,23 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
+import { MessagesService } from './messages.service';
+
 import { RequestStatus } from 'src/app/model/request-status';
 import { AuthLoginRequest } from 'src/app/model/auth-login-request';
 import { AuthLoginResponse } from 'src/app/model/auth-login-response';
 import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
 import { CurrentUser } from 'src/app/model/current-user';
 import { DecodedToken } from 'src/app/model/decoded-token';
+import { MessageLevel } from 'src/app/model/message-level';
 
 export const URL_AUTH_LOGIN = '/api/auth/login';
 export const URL_AUTH_LOGOUT = '/api/auth/logout';
 export const KEY_CURRENT_USER = 'currentUser';
 export const DEFAULT_POST_AUTH_REDIRECT_ROUTE = 'dashboard';
+export const MSG_LOGIN = 'Zalogowano: ';
+export const MSG_LOGOUT = 'Wylogowano: ';
+export const MSG_AUTH_ERROR = 'Błąd autentykacji.';
 
 /**
  * A service for the user authentication management.
@@ -33,6 +39,7 @@ export class AuthService {
 
   public constructor(
     private httpClient: HttpClient,
+    private messagesService: MessagesService
   ) {
     this.currentUserBehaviorSubject = new BehaviorSubject(this.getCurrentUserFromLocalStorage());
     this.currentUser$ = this.currentUserBehaviorSubject.asObservable();
@@ -126,17 +133,16 @@ export class AuthService {
         response => {
           if (response.status === RequestStatus.SUCCESS) {
             this.setCurrentUser(response.currentUser);
+            this.messagesService.showMessage(`${MSG_LOGIN}${response.currentUser.userName}`, MessageLevel.INFO);
           } else {
-            // TODO change into message
-            console.log(response.message);
+            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
           }
 
           responseSubject.next(response.status);
           responseSubject.complete();
         },
         error => {
-          // TODO change into message
-          console.log(error);
+          this.messagesService.showMessage(MSG_AUTH_ERROR, MessageLevel.ERROR);
           responseSubject.next(RequestStatus.FAILURE);
           responseSubject.complete();
         });
@@ -162,18 +168,20 @@ export class AuthService {
       .subscribe(
         response => {
           if (response.status === RequestStatus.SUCCESS) {
+            this.messagesService.showMessage(
+              `${MSG_LOGOUT}${this.getCurrentUserFromLocalStorage().userName}`,
+              MessageLevel.INFO
+            );
             this.clearCurrentUser();
           } else {
-            // TODO change into message
-            console.log(response.message);
+            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
           }
 
           responseSubject.next(response.status);
           responseSubject.complete()
         },
         error => {
-          // TODO change into message
-          console.log(error);
+          this.messagesService.showMessage(MSG_AUTH_ERROR, MessageLevel.ERROR);
           responseSubject.next(RequestStatus.FAILURE);
           responseSubject.complete();
         }

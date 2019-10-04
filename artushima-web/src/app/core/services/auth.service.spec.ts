@@ -4,7 +4,16 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@an
 import { AuthenticationModule } from 'src/app/authentication/authentication.module';
 import { DashboardModule } from 'src/app/dashboard/dashboard.module';
 
-import { AuthService, URL_AUTH_LOGIN, KEY_CURRENT_USER, URL_AUTH_LOGOUT } from './auth.service';
+import {
+  AuthService,
+  URL_AUTH_LOGIN,
+  KEY_CURRENT_USER,
+  URL_AUTH_LOGOUT,
+  MSG_LOGIN,
+  MSG_LOGOUT,
+  MSG_AUTH_ERROR
+} from './auth.service';
+import { MessagesService } from './messages.service';
 
 import { AuthLoginResponse } from 'src/app/model/auth-login-response';
 import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
@@ -12,6 +21,7 @@ import { CurrentUser } from 'src/app/model/current-user';
 import { RequestStatus } from 'src/app/model/request-status';
 import { BlacklistedToken } from 'src/app/model/blacklisted-token';
 import { DecodedToken } from 'src/app/model/decoded-token';
+import { MessageLevel } from 'src/app/model/message-level';
 
 describe('AuthService', () => {
 
@@ -53,6 +63,7 @@ describe('AuthService', () => {
 
   let httpTestingController: HttpTestingController;
   let authService: AuthService;
+  let messagesService: MessagesService;
 
   beforeEach(() => {
 
@@ -63,10 +74,11 @@ describe('AuthService', () => {
         DashboardModule,
         AuthenticationModule
       ]
-    })
+    });
 
     httpTestingController = TestBed.get(HttpTestingController);
     authService = TestBed.get(AuthService);
+    messagesService = TestBed.get(MessagesService);
   });
 
   it('should be created', () => {
@@ -198,6 +210,7 @@ describe('AuthService', () => {
 
       // given
       spyOn(localStorage, 'setItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.login('testUser', 'password')
@@ -208,12 +221,14 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).toHaveBeenCalledWith(KEY_CURRENT_USER, JSON.stringify(TEST_USER));
+      expect(messagesService.showMessage).toHaveBeenCalledWith(`${MSG_LOGIN}${TEST_USER.userName}`, MessageLevel.INFO);
     });
 
     it('should process failed response', () => {
 
       // given
       spyOn(localStorage, 'setItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.login('testUser', 'password')
@@ -224,12 +239,15 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).not.toHaveBeenCalled();
+      expect(messagesService.showMessage)
+        .toHaveBeenCalledWith(TEST_AUTH_LOGIN_RESPONSE_FAILURE.message, MessageLevel.ERROR);
     });
 
     it('should process http error', () => {
 
       // given
       spyOn(localStorage, 'setItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.login('testUser', 'password')
@@ -240,6 +258,7 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).not.toHaveBeenCalled();
+      expect(messagesService.showMessage).toHaveBeenCalledWith(MSG_AUTH_ERROR, MessageLevel.ERROR);
     });
   });
 
@@ -248,7 +267,10 @@ describe('AuthService', () => {
     it('should log out a user', () => {
 
       // given
+      spyOn(localStorage, 'getItem')
+        .and.returnValue(JSON.stringify(TEST_USER));
       spyOn(localStorage, 'removeItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.logout()
@@ -259,12 +281,15 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.removeItem).toHaveBeenCalledWith(KEY_CURRENT_USER);
+      expect(messagesService.showMessage)
+        .toHaveBeenCalledWith(`${MSG_LOGOUT}${TEST_USER.userName}`, MessageLevel.INFO);
     });
 
     it('should process failed response', () => {
 
       // given
       spyOn(localStorage, 'removeItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.logout()
@@ -275,12 +300,15 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.removeItem).not.toHaveBeenCalled();
+      expect(messagesService.showMessage)
+        .toHaveBeenCalledWith(TEST_AUTH_LOGOUT_RESPONSE_FAILURE.message, MessageLevel.ERROR);
     });
 
     it('should process http error', () => {
 
       // given
       spyOn(localStorage, 'setItem');
+      spyOn(messagesService, 'showMessage');
 
       // when then
       authService.logout()
@@ -291,6 +319,7 @@ describe('AuthService', () => {
 
       httpTestingController.verify();
       expect(localStorage.setItem).not.toHaveBeenCalled();
+      expect(messagesService.showMessage).toHaveBeenCalledWith(MSG_AUTH_ERROR, MessageLevel.ERROR);
     });
   });
 });

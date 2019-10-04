@@ -1,1 +1,9 @@
-<p>messages works!</p>
+<div class="art-message-box">
+  <div class="alert" [ngClass]="{
+    'alert-primary': message.level === 0,
+    'alert-warning': message.level === 1,
+    'alert-danger': message.level === 2
+  }" *ngFor="let message of messages">
+    {{ message.text }}
+  </div>
+</div>
