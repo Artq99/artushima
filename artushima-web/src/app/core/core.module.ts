@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MessagesComponent } from './components/messages/messages.component';
 
 /**
  * A module containing core application functionalities, including singleton
@@ -12,7 +13,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
  */
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    MessagesComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     FontAwesomeModule
   ],
   exports: [
-    NavbarComponent
+    NavbarComponent,
+    MessagesComponent
   ]
 })
 export class CoreModule { }
