@@ -2,8 +2,6 @@
 The service providing methods for user to log in, log out and authenticate.
 """
 
-import werkzeug
-
 from artushima import constants
 from artushima import messages
 from artushima.commons import logger
@@ -34,30 +32,26 @@ def log_in(user_name: str, password: str) -> dict:
     """
 
     try:
-
-        if not password:
-            return service_utils.create_response_failure(messages.PASSWORD_MISSING)
-
         user = user_internal_service.read_user_by_user_name(user_name)
 
-        if user is None:
+        if (user is None) or (not auth_internal_service.check_password(password, user["password_hash"])):
             return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
-        if not werkzeug.check_password_hash(user["password_hash"], password):
-            return service_utils.create_response_failure(messages.LOGIN_ERROR)
+        token = auth_internal_service.generate_token(user)
 
-        token = auth_internal_service.generate_token(user).decode()
-
-        current_user = {
-            "userName": user["user_name"],
-            "role": user["role"],
-            "token": token
-        }
-
-        return service_utils.create_response_success(currentUser=current_user)
+        return service_utils.create_response_success(currentUser=_create_current_user_data(user, token))
 
     except ArtushimaError as e:
         return service_utils.create_response_failure(error_handler.handle(e))
+
+
+def _create_current_user_data(user: dict, token: bytes):
+
+    return {
+        "userName": user["user_name"],
+        "role": user["role"],
+        "token": token.decode()
+    }
 
 
 @transactional_service_method

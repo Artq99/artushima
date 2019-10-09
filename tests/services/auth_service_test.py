@@ -5,7 +5,6 @@ The test module for the auth_service module.
 from unittest import mock
 
 import flask
-import werkzeug
 
 from tests import abstracts
 from tests import test_utils
@@ -29,12 +28,10 @@ class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
         super().setUp()
 
         self.flask_mock = mock.create_autospec(flask)
-        self.werkzeug_mock = mock.create_autospec(werkzeug)
         self.properties_mock = mock.create_autospec(properties)
         self.user_internal_service_mock = mock.create_autospec(user_internal_service)
         self.auth_internal_service_mock = mock.create_autospec(auth_internal_service)
         auth_service.flask = self.flask_mock
-        auth_service.werkzeug = self.werkzeug_mock
         auth_service.properties = self.properties_mock
         auth_service.user_internal_service = self.user_internal_service_mock
         auth_service.auth_internal_service = self.auth_internal_service_mock
@@ -43,7 +40,6 @@ class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
         super().tearDown()
 
         auth_service.flask = flask
-        auth_service.werkzeug = werkzeug
         auth_service.properties = properties
         auth_service.user_internal_service = user_internal_service
         auth_service.auth_internal_service = auth_internal_service
@@ -65,7 +61,7 @@ class LogInTest(_TestCaseWithMocks):
         token = b"test_token_1"
 
         self.user_internal_service_mock.read_user_by_user_name.return_value = user.map_to_dict()
-        self.werkzeug_mock.check_password_hash.return_value = True
+        self.auth_internal_service_mock.check_password.return_value = True
         self.auth_internal_service_mock.generate_token.return_value = token
 
         # when
@@ -144,7 +140,7 @@ class LogInTest(_TestCaseWithMocks):
         user = test_data_creator.create_test_user(1)
 
         self.user_internal_service_mock.read_user_by_user_name.return_value = user.map_to_dict()
-        self.werkzeug_mock.check_password_hash.return_value = False
+        self.auth_internal_service_mock.check_password.return_value = False
 
         # when
         response = auth_service.log_in(user.user_name, "password")
@@ -154,25 +150,15 @@ class LogInTest(_TestCaseWithMocks):
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
         self.assertEqual(messages.LOGIN_ERROR, response["message"])
 
-    def test_password_is_none(self):
-        """
-        The test checks if the method returns a response with the status failure and a correct error message, when
-        the given password is None.
-        """
-
-        # when
-        response = auth_service.log_in("test_user", None)
-
-        # then
-        self.assertIsNotNone(response)
-        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.PASSWORD_MISSING, response["message"])
-
-    def test_password_is_empty_string(self):
+    def test_password_is_missing(self):
         """
         The test checks if the method returns a response with the status failure and a correct error message, when
         the give password is an empty string.
         """
+
+        # given
+        self.auth_internal_service_mock.check_password.side_effect = \
+            test_utils.create_missing_input_data_error("password")
 
         # when
         response = auth_service.log_in("test_user", "")
@@ -180,7 +166,7 @@ class LogInTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.PASSWORD_MISSING, response["message"])
+        self.assertEqual(messages.INPUT_DATA_MISSING.format(messages.ARG_NAMES["password"]), response["message"])
 
 
 class LogOutTest(_TestCaseWithMocks):
