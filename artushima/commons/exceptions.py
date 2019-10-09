@@ -88,3 +88,4 @@ class MissingInputDataError(BusinessError):
     def __init__(self, arg_name, class_name, method_name):
 
         super().__init__(error_messages.ON_NONE_ARGUMENT.format(arg_name), class_name, method_name)
+        self.arg_name = arg_name

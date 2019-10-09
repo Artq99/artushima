@@ -5,10 +5,15 @@ The module containing messages - all the texts in Polish returned by the applica
 PERSISTENCE_ERROR = "Błąd odczytu danych."
 APPLICATION_ERROR = "Błąd aplikacji."
 
-USERNAME_MISSING = "Brakująca nazwa użytkownika."
+INPUT_DATA_MISSING = "Brakujące dane: {}."
+
 PASSWORD_MISSING = "Brakujące hasło."
 LOGIN_ERROR = "Niepoprawny login lub hasło."
 
 TOKEN_EXPIRED = "Autentykacja wygasła."
 AUTHENTICATION_FAILED = "Niepowodzenie autentykacji."
 ACCESS_DENIED = "Nie masz wystarczających uprawnień dla tej akcji."
+
+ARG_NAMES = {
+    "user_name": "nazwa użytkownika"
+}

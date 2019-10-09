@@ -6,6 +6,11 @@ from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
+from artushima.commons.exceptions import MissingInputDataError
+
+
+_TEST_CLASS = "TestClass"
+_TEST_METHOD = "test_method"
 
 
 def create_persistence_error() -> PersistenceError:
@@ -16,7 +21,7 @@ def create_persistence_error() -> PersistenceError:
         an instance of the PersitenceError class
     """
 
-    return PersistenceError("Persistence error.", "TestClass", "test_method")
+    return PersistenceError("Persistence error.", _TEST_CLASS, _TEST_METHOD)
 
 
 def create_business_error() -> BusinessError:
@@ -27,7 +32,7 @@ def create_business_error() -> BusinessError:
         an instance of the BusinessError class
     """
 
-    return BusinessError("Business error.", "TestClass", "test_method")
+    return BusinessError("Business error.", _TEST_CLASS, _TEST_METHOD)
 
 
 def create_token_expiration_error() -> BusinessError:
@@ -38,7 +43,7 @@ def create_token_expiration_error() -> BusinessError:
         an instance of the TokenExpirationError class
     """
 
-    return TokenExpirationError("Token expiration error.", "TestClass", "test_method")
+    return TokenExpirationError("Token expiration error.", _TEST_CLASS, _TEST_METHOD)
 
 
 def create_token_invalid_error() -> BusinessError:
@@ -49,4 +54,18 @@ def create_token_invalid_error() -> BusinessError:
         an instance of the TokenInvalidError class
     """
 
-    return TokenInvalidError("Token invalid error.", "TestClass", "test_method")
+    return TokenInvalidError("Token invalid error.", _TEST_CLASS, _TEST_METHOD)
+
+
+def create_missing_input_data_error(arg_name: str) -> MissingInputDataError:
+    """
+    Create an instance of the MissingInputDataError class for tests.
+
+    Arguments:
+        - arg_name - the name of the missing argument
+
+    Returns:
+        an instance of the MissingInputDataError class
+    """
+
+    return MissingInputDataError(arg_name, _TEST_CLASS, _TEST_METHOD)

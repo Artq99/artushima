@@ -35,9 +35,6 @@ def log_in(user_name: str, password: str) -> dict:
 
     try:
 
-        if not user_name:
-            return service_utils.create_response_failure(messages.USERNAME_MISSING)
-
         if not password:
             return service_utils.create_response_failure(messages.PASSWORD_MISSING)
 

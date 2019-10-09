@@ -9,6 +9,7 @@ from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
+from artushima.commons.exceptions import MissingInputDataError
 
 
 def handle(error: ArtushimaError) -> str:
@@ -22,8 +23,9 @@ def handle(error: ArtushimaError) -> str:
         an error message related to the given error
     """
 
+    logger.log_error(str(error))
+
     if isinstance(error, PersistenceError):
-        logger.log_error(str(error))
         return messages.PERSISTENCE_ERROR
 
     elif isinstance(error, TokenExpirationError):
@@ -32,8 +34,15 @@ def handle(error: ArtushimaError) -> str:
     elif isinstance(error, TokenInvalidError):
         return messages.AUTHENTICATION_FAILED
 
+    elif isinstance(error, MissingInputDataError):
+        arg_name = error.arg_name
+
+        if arg_name in messages.ARG_NAMES.keys():
+            arg_name = messages.ARG_NAMES[arg_name]
+
+        return messages.INPUT_DATA_MISSING.format(arg_name)
+
     elif isinstance(error, BusinessError):
-        logger.log_error(str(error))
         return messages.APPLICATION_ERROR
 
     return None

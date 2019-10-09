@@ -82,25 +82,15 @@ class LogInTest(_TestCaseWithMocks):
         }
         self.assertEqual(expected_data, response["currentUser"])
 
-    def test_user_name_is_none(self):
-        """
-        The test checks if the method returns a response with the status failure and a correct error message, when
-        the given user_name parameter is None.
-        """
-
-        # when
-        response = auth_service.log_in(None, "password")
-
-        # then
-        self.assertIsNotNone(response)
-        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.USERNAME_MISSING, response["message"])
-
-    def test_user_name_is_empty_string(self):
+    def test_user_name_is_missing(self):
         """
         The test checks if the method returns a response with the status failure and a correct error message, when
         the given user_name parameter is an empty string.
         """
+
+        # given
+        self.user_internal_service_mock.read_user_by_user_name.side_effect = \
+            test_utils.create_missing_input_data_error("user_name")
 
         # when
         response = auth_service.log_in("", "password")
@@ -108,7 +98,7 @@ class LogInTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.USERNAME_MISSING, response["message"])
+        self.assertEqual(messages.INPUT_DATA_MISSING.format(messages.ARG_NAMES["user_name"]), response["message"])
 
     def test_persistence_error_on_getting_user(self):
         """
