@@ -7,11 +7,13 @@ import datetime
 import jwt
 from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
+import werkzeug
 
 from artushima import error_messages
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
+from artushima.commons.exceptions import MissingInputDataError
 from artushima.commons import properties
 from artushima.persistence.dao import blacklisted_token_dao
 
@@ -101,3 +103,24 @@ def decode_token(token: str) -> dict:
         raise TokenInvalidError("The token is invalid.", __name__, decode_token.__name__) from e
 
     return decoded_token
+
+
+def check_password(password: str, pwhash: str) -> bool:
+    """
+    Check if the given password corresponds to the given hash.
+
+    Arguments:
+        - password - the user password
+        - pwhash - the password hash
+
+    Returns:
+        True, if the password can be authenticated with the given hash, False otherwise
+    """
+
+    if not password:
+        raise MissingInputDataError("password", __name__, check_password.__name__)
+
+    if not pwhash:
+        raise MissingInputDataError("pwhash", __name__, check_password.__name__)
+
+    return werkzeug.check_password_hash(pwhash, password)
