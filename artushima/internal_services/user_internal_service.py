@@ -3,6 +3,7 @@ The internal service dealing with data of the user entity.
 """
 
 from artushima.commons.exceptions import BusinessError
+from artushima.commons.exceptions import MissingInputDataError
 from artushima.persistence.dao import user_dao
 
 
@@ -54,5 +55,8 @@ def read_user_by_user_name(user_name: str) -> dict:
     Returns:
         a dictionary containing data of the user, if it could be found, None otherwise
     """
+
+    if not user_name:
+        raise MissingInputDataError("user_name", __name__, read_user_by_user_name.__name__)
 
     return user_dao.read_by_user_name(user_name)
