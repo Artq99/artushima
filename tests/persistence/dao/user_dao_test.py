@@ -3,7 +3,7 @@ The test module for the user_dao module.
 """
 
 from tests import abstracts
-from tests import persistence_tests_utils
+from tests import test_data_creator
 
 from artushima import constants
 from artushima.commons.exceptions import PersistenceError
@@ -196,7 +196,7 @@ class ReadByUsernameTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        test_user = persistence_tests_utils.create_test_user(1234, "test_user")
+        test_user = test_data_creator.create_test_user(1234, "test_user")
 
         self.session.add(test_user)
         self.session.commit()

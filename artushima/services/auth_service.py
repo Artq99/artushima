@@ -8,6 +8,8 @@ from artushima import constants
 from artushima import messages
 from artushima.commons import logger
 from artushima.commons import properties
+from artushima.commons import error_handler
+from artushima.commons.exceptions import ArtushimaError
 from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
@@ -31,37 +33,34 @@ def log_in(user_name: str, password: str) -> dict:
         a service response containing the authentication token.
     """
 
-    if not user_name:
-        return service_utils.create_response_failure(messages.USERNAME_MISSING)
-
-    if not password:
-        return service_utils.create_response_failure(messages.PASSWORD_MISSING)
-
     try:
+
+        if not user_name:
+            return service_utils.create_response_failure(messages.USERNAME_MISSING)
+
+        if not password:
+            return service_utils.create_response_failure(messages.PASSWORD_MISSING)
+
         user = user_internal_service.read_user_by_user_name(user_name)
-    except PersistenceError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
-    except BusinessError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.APPLICATION_ERROR)
 
-    if user is None:
-        return service_utils.create_response_failure(messages.LOGIN_ERROR)
+        if user is None:
+            return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
-    if not werkzeug.check_password_hash(user["password_hash"], password):
-        return service_utils.create_response_failure(messages.LOGIN_ERROR)
+        if not werkzeug.check_password_hash(user["password_hash"], password):
+            return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
-    # TODO try ... except
-    token = auth_internal_service.generate_token(user).decode()
+        token = auth_internal_service.generate_token(user).decode()
 
-    current_user = {
-        "userName": user["user_name"],
-        "role": user["role"],
-        "token": token
-    }
+        current_user = {
+            "userName": user["user_name"],
+            "role": user["role"],
+            "token": token
+        }
 
-    return service_utils.create_response_success(currentUser=current_user)
+        return service_utils.create_response_success(currentUser=current_user)
+
+    except ArtushimaError as e:
+        return service_utils.create_response_failure(error_handler.handle(e))
 
 
 @transactional_service_method

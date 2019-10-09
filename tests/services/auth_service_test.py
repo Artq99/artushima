@@ -9,6 +9,7 @@ import werkzeug
 
 from tests import abstracts
 from tests import test_utils
+from tests import test_data_creator
 
 from artushima import constants
 from artushima import messages
@@ -59,27 +60,72 @@ class LogInTest(_TestCaseWithMocks):
         """
 
         # given
-        self.user_internal_service_mock.read_user_by_user_name.return_value = {
-            "user_name": "test_user",
-            "role": constants.ROLE_PLAYER,
-            "password_hash": "test_hash"
-        }
+        user = test_data_creator.create_test_user(1)
+        password = "test_password_1"
+        token = b"test_token_1"
+
+        self.user_internal_service_mock.read_user_by_user_name.return_value = user.map_to_dict()
         self.werkzeug_mock.check_password_hash.return_value = True
-        self.auth_internal_service_mock.generate_token.return_value = b'test_token'
+        self.auth_internal_service_mock.generate_token.return_value = token
+
+        # when
+        response = auth_service.log_in(user.user_name, password)
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
+
+        expected_data = {
+            "userName": user.user_name,
+            "role": user.role,
+            "token": token.decode()
+        }
+        self.assertEqual(expected_data, response["currentUser"])
+
+    def test_user_name_is_none(self):
+        """
+        The test checks if the method returns a response with the status failure and a correct error message, when
+        the given user_name parameter is None.
+        """
+
+        # when
+        response = auth_service.log_in(None, "password")
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.USERNAME_MISSING, response["message"])
+
+    def test_user_name_is_empty_string(self):
+        """
+        The test checks if the method returns a response with the status failure and a correct error message, when
+        the given user_name parameter is an empty string.
+        """
+
+        # when
+        response = auth_service.log_in("", "password")
+
+        # then
+        self.assertIsNotNone(response)
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.USERNAME_MISSING, response["message"])
+
+    def test_persistence_error_on_getting_user(self):
+        """
+        The test checks if the method returns a response with the status failure and a correct error message, when
+        a PersistenceError occurs on getting the user.
+        """
+
+        # given
+        self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_persistence_error()
 
         # when
         response = auth_service.log_in("test_user", "password")
 
         # then
         self.assertIsNotNone(response)
-        self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
-        self.assertEqual({
-            "userName": "test_user",
-            "role": "role_player",
-            "token": 'test_token'
-        }, response["currentUser"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with("test_user")
-        self.werkzeug_mock.check_password_hash.assert_called_once_with("test_hash", "password")
+        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
 
     def test_user_does_not_exist(self):
         """
@@ -96,10 +142,7 @@ class LogInTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Niepoprawny login lub hasło.", response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with("test_user")
-        self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.assert_not_called()
+        self.assertEqual(messages.LOGIN_ERROR, response["message"])
 
     def test_incorrect_password(self):
         """
@@ -108,39 +151,18 @@ class LogInTest(_TestCaseWithMocks):
         """
 
         # given
-        self.user_internal_service_mock.read_user_by_user_name.return_value = {
-            "user_name": "test_user",
-            "password_hash": "test_hash"
-        }
+        user = test_data_creator.create_test_user(1)
+
+        self.user_internal_service_mock.read_user_by_user_name.return_value = user.map_to_dict()
         self.werkzeug_mock.check_password_hash.return_value = False
 
         # when
-        response = auth_service.log_in("test_user", "password")
+        response = auth_service.log_in(user.user_name, "password")
 
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Niepoprawny login lub hasło.", response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with("test_user")
-        self.werkzeug_mock.check_password_hash.assert_called_once_with("test_hash", "password")
-        self.auth_internal_service_mock.assert_not_called()
-
-    def test_user_name_is_none(self):
-        """
-        The test checks if the method returns a response with the status failure and a correct error message, when
-        the given user_name parameter is None.
-        """
-
-        # when
-        response = auth_service.log_in(None, "password")
-
-        # then
-        self.assertIsNotNone(response)
-        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Brakująca nazwa użytkownika.", response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_not_called()
-        self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.assert_not_called()
+        self.assertEqual(messages.LOGIN_ERROR, response["message"])
 
     def test_password_is_none(self):
         """
@@ -154,56 +176,21 @@ class LogInTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Brakujące hasło.", response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_not_called()
-        self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.generate_token.assert_not_called()
+        self.assertEqual(messages.PASSWORD_MISSING, response["message"])
 
-    def test_persistence_error_on_getting_user(self):
+    def test_password_is_empty_string(self):
         """
         The test checks if the method returns a response with the status failure and a correct error message, when
-        a PersistenceError occurs.
+        the give password is an empty string.
         """
 
-        # given
-        user_name = "test_user"
-        password = "test_password"
-
-        self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_persistence_error()
-
         # when
-        response = auth_service.log_in(user_name, password)
+        response = auth_service.log_in("test_user", "")
 
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with(user_name)
-        self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.generate_token.assert_not_called()
-
-    def test_business_error_on_getting_user(self):
-        """
-        The test checks if the method returns a response with the status failure and a correct error message, when
-        a BusinessError occurs.
-        """
-
-        # given
-        user_name = "test_user"
-        password = "test_password"
-
-        self.user_internal_service_mock.read_user_by_user_name.side_effect = test_utils.create_business_error()
-
-        # when
-        response = auth_service.log_in(user_name, password)
-
-        # then
-        self.assertIsNotNone(response)
-        self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual(messages.APPLICATION_ERROR, response["message"])
-        self.user_internal_service_mock.read_user_by_user_name.assert_called_once_with(user_name)
-        self.werkzeug_mock.check_password_hash.assert_not_called()
-        self.auth_internal_service_mock.generate_token.assert_not_called()
+        self.assertEqual(messages.PASSWORD_MISSING, response["message"])
 
 
 class LogOutTest(_TestCaseWithMocks):
