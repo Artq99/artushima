@@ -152,6 +152,25 @@ class BlacklistTokenTest(_TestCaseWithMocks):
         self.assertEqual(persisted_token, response)
         self.blacklisted_token_dao_mock.create.assert_called_once_with(token)
 
+    def test_token_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given token is None.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            auth_internal_service.blacklist_token(None)
+
+    def test_token_is_empty(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given token is an empty
+        string.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            auth_internal_service.blacklist_token("")
+
 
 class CheckIfTokenIsBlacklistedTest(_TestCaseWithMocks):
     """

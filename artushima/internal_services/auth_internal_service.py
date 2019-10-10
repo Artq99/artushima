@@ -57,6 +57,9 @@ def blacklist_token(token: str) -> dict:
         a dictionary containing the blacklisted token data
     """
 
+    if not token:
+        raise MissingInputDataError("token", __name__, blacklist_token.__name__)
+
     return blacklisted_token_dao.create(token)
 
 
