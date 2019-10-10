@@ -43,3 +43,23 @@ def create_test_user(id: int, user_name: str = None, role: str = constants.ROLE_
     user.opt_lock = 0
 
     return user
+
+
+def create_test_blacklisted_token(id: int) -> model.BlacklistedTokenEntity:
+    """
+    Create an instance of the blacklisted token entity.
+
+    The atribute 'token' is set to 'token_<id>'.
+
+    Arguments:
+        - id - the ID of the new blacklisted token
+
+    Returns:
+        an instance of the BlacklistedTokenEntity class
+    """
+
+    blacklisted_token = model.BlacklistedTokenEntity()
+    blacklisted_token.id = id
+    blacklisted_token.token = "token_{}".format(blacklisted_token.id)
+
+    return blacklisted_token

@@ -9,6 +9,7 @@ import jwt
 import werkzeug
 
 from tests import abstracts
+from tests import test_data_creator
 
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import MissingInputDataError
@@ -183,15 +184,10 @@ class CheckIfTokenIsBlacklistedTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
-
-        self.blacklisted_token_dao_mock.read_by_token.return_value = {
-            "id": 1,
-            "token": token
-        }
+        self.blacklisted_token_dao_mock.read_by_token.return_value = test_data_creator.create_test_blacklisted_token(1)
 
         # when
-        response = auth_internal_service.check_if_token_is_blacklisted(token)
+        response = auth_internal_service.check_if_token_is_blacklisted("token_1")
 
         # then
         self.assertTrue(response)
@@ -202,24 +198,32 @@ class CheckIfTokenIsBlacklistedTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
-
         self.blacklisted_token_dao_mock.read_by_token.return_value = None
 
         # when
-        response = auth_internal_service.check_if_token_is_blacklisted(token)
+        response = auth_internal_service.check_if_token_is_blacklisted("token_1")
 
         # then
         self.assertFalse(response)
 
-    def test_argument_token_is_none(self):
+    def test_token_is_none(self):
         """
-        The test checks if the method raises a BusinessError when the argument 'token' is None.
+        The test checks if the method raises an instance of MissingInputDataError when the given token is None.
         """
 
         # when then
-        with self.assertRaises(BusinessError):
+        with self.assertRaises(MissingInputDataError):
             auth_internal_service.check_if_token_is_blacklisted(None)
+
+    def test_token_is_empty(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given token is an empty
+        string.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            auth_internal_service.check_if_token_is_blacklisted("")
 
 
 class DecodeTokenTest(_TestCaseWithMocks):

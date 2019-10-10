@@ -74,16 +74,12 @@ def check_if_token_is_blacklisted(token: str) -> bool:
         True, if the token has been blacklisted, False otherwise
     """
 
-    _validate_argument_token(token)
+    if not token:
+        raise MissingInputDataError("token", __name__, check_if_token_is_blacklisted.__name__)
+
     blacklisted_token = blacklisted_token_dao.read_by_token(token)
 
     return blacklisted_token is not None
-
-
-def _validate_argument_token(token: str) -> None:
-    if token is None:
-        error_message = error_messages.ON_NONE_ARGUMENT.format("token")
-        raise BusinessError(error_message, __name__, check_if_token_is_blacklisted.__name__)
 
 
 def decode_token(token: str) -> dict:
