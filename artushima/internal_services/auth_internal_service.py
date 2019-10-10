@@ -9,7 +9,6 @@ from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
 import werkzeug
 
-from artushima import error_messages
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError

@@ -180,22 +180,16 @@ class LogOutTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
-        peristed_token = {
-            "id": 1,
-            "token": token
-        }
-
-        self.auth_internal_service_mock.blacklist_token.return_value = peristed_token
+        blacklisted_token = test_data_creator.create_test_blacklisted_token(1)
+        self.auth_internal_service_mock.blacklist_token.return_value = blacklisted_token.map_to_dict()
 
         # when
-        response = auth_service.log_out(token)
+        response = auth_service.log_out(blacklisted_token.token)
 
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_SUCCESS, response["status"])
-        self.assertEqual(peristed_token, response["token"])
-        self.auth_internal_service_mock.blacklist_token.assert_called_once_with(token)
+        self.assertEqual(blacklisted_token.map_to_dict(), response["token"])
 
     def test_persistence_error(self):
         """
@@ -203,18 +197,15 @@ class LogOutTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
-
-        self.auth_internal_service_mock.blacklist_token.side_effect = PersistenceError("Test.", "TestClass", "test")
+        self.auth_internal_service_mock.blacklist_token.side_effect = test_utils.create_persistence_error()
 
         # when
-        response = auth_service.log_out(token)
+        response = auth_service.log_out("token")
 
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
         self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
-        self.auth_internal_service_mock.blacklist_token.assert_called_once_with(token)
 
 
 class AuthenticateTest(_TestCaseWithMocks):

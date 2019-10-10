@@ -68,11 +68,11 @@ def log_out(token: str) -> dict:
 
     try:
         persisted_token = auth_internal_service.blacklist_token(token)
-    except PersistenceError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
 
-    return service_utils.create_response_success(token=persisted_token)
+        return service_utils.create_response_success(token=persisted_token)
+
+    except ArtushimaError as e:
+        return service_utils.create_response_failure(error_handler.handle(e))
 
 
 @transactional_service_method
