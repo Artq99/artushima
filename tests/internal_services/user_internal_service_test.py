@@ -5,9 +5,11 @@ The test module for the user_internal_service module.
 from unittest import mock
 
 from tests import abstracts
+from tests import test_data_creator
 
 from artushima import constants
 from artushima.commons.exceptions import BusinessError
+from artushima.commons.exceptions import MissingInputDataError
 from artushima.persistence.dao import user_dao
 from artushima.internal_services import user_internal_service
 
@@ -128,22 +130,37 @@ class ReadUserByUserNameTest(_TestCaseWithMocks):
     Tests for the method user_internal_service_test.read_user_by_user_name.
     """
 
-    def test_positive_output(self):
+    def test_read_user_successful(self):
         """
         The test checks if the method correctly calls the corresponding repository.
         """
 
         # given
-        self.user_dao_mock.read_by_user_name.return_value = {
-            "id": 1,
-            "user_name": "test_user",
-            "password_hash": "test_hash",
-            "role": constants.ROLE_PLAYER
-        }
+        user = test_data_creator.create_test_user(1)
+        self.user_dao_mock.read_by_user_name.return_value = user.map_to_dict()
 
         # when
-        user = user_internal_service.read_user_by_user_name("test_user")
+        user_data = user_internal_service.read_user_by_user_name(user.user_name)
 
         # then
-        self.assertIsNotNone(user)
-        self.user_dao_mock.read_by_user_name.assert_called_once_with("test_user")
+        self.assertIsNotNone(user_data)
+        self.assertEqual(user.map_to_dict(), user_data)
+        self.user_dao_mock.read_by_user_name.assert_called_once_with(user.user_name)
+
+    def test_user_name_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given user name is None.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.read_user_by_user_name(None)
+
+    def test_user_name_is_empty(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given user name is None.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.read_user_by_user_name("")

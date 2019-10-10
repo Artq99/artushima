@@ -2,7 +2,9 @@
 The module contains exception classes for the application.
 """
 
-_ERROR_MESSAGE_TEMPLATE = "%s (%s.%s)"
+from artushima import error_messages
+
+_ERROR_MESSAGE_TEMPLATE = "{} ({}.{})"
 
 
 class ArtushimaError(Exception):
@@ -16,7 +18,8 @@ class ArtushimaError(Exception):
     """
 
     def __init__(self, message, class_name, method_name):
-        super().__init__(_ERROR_MESSAGE_TEMPLATE % (message, class_name, method_name))
+
+        super().__init__(_ERROR_MESSAGE_TEMPLATE.format(message, class_name, method_name))
         self.message = self.args[0]
 
 
@@ -27,7 +30,7 @@ class PersistenceError(ArtushimaError):
     Arguments:
         - message - the error message
         - class_name - the name of the class where the error occured
-        - method_name = the name of the method where the error ocured
+        - method_name - the name of the method where the error ocured
     """
 
     pass
@@ -40,7 +43,7 @@ class BusinessError(ArtushimaError):
     Arguments:
         - message - the error message
         - class_name - the name of the class where the error occured
-        - method_name = the name of the method where the error ocured
+        - method_name - the name of the method where the error ocured
     """
 
     pass
@@ -53,7 +56,7 @@ class TokenExpirationError(BusinessError):
     Arguments:
         - message - the error message
         - class_name - the name of the class where the error occured
-        - method_name = the name of the method where the error ocured
+        - method_name - the name of the method where the error ocured
     """
 
     pass
@@ -66,7 +69,23 @@ class TokenInvalidError(BusinessError):
     Arguments:
         - message - the error message
         - class_name - the name of the class where the error occured
-        - method_name = the name of the method where the error ocured
+        - method_name - the name of the method where the error ocured
     """
 
     pass
+
+
+class MissingInputDataError(BusinessError):
+    """
+    The error raised when an argument passed to a method is None or an empty string.
+
+    Arguments:
+        - arg_name - the name of the None-argument
+        - class_name - the name of the class where the error occured
+        - method_name - the name of the methord where the error occured
+    """
+
+    def __init__(self, arg_name, class_name, method_name):
+
+        super().__init__(error_messages.ON_NONE_ARGUMENT.format(arg_name), class_name, method_name)
+        self.arg_name = arg_name

@@ -4,6 +4,7 @@ The data access object for the user entity.
 
 from sqlalchemy.exc import SQLAlchemyError
 
+from artushima import error_messages
 from artushima.commons import roles_utils
 from artushima.commons.exceptions import PersistenceError
 from artushima.persistence import pu
@@ -71,7 +72,7 @@ def _get_value_from_create_data(data: dict, key: str):
     return data[key]
 
 
-def read_by_user_name(user_name: str):
+def read_by_user_name(user_name: str) -> dict:
     """
     Read a single user by its name.
 
@@ -87,7 +88,7 @@ def read_by_user_name(user_name: str):
             .filter_by(user_name=user_name) \
             .first()
     except SQLAlchemyError as e:
-        raise PersistenceError("Error on reading data from the database.", __name__, read_by_user_name.__name__) from e
+        raise PersistenceError(error_messages.ON_READING_DATA, __name__, read_by_user_name.__name__) from e
 
     if user is None:
         return None

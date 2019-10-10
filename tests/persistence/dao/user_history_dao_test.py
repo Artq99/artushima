@@ -5,7 +5,7 @@ The test module for the user_history_dao module.
 from sqlalchemy.exc import IntegrityError
 
 from tests import abstracts
-from tests import persistence_tests_utils
+from tests import test_data_creator
 
 from artushima.commons.exceptions import PersistenceError
 from artushima.persistence import model
@@ -23,7 +23,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -51,7 +51,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -77,7 +77,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -101,7 +101,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -127,7 +127,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -151,7 +151,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 
@@ -177,7 +177,7 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user = persistence_tests_utils.create_test_user(1, "test_user")
+        user = test_data_creator.create_test_user(1, "test_user")
         self.session.add(user)
         self.session.flush()
 

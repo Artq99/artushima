@@ -3,7 +3,7 @@ The test module for the persistence decorators.
 """
 
 from tests import abstracts
-from tests import persistence_tests_utils
+from tests import test_data_creator
 
 from artushima.persistence import pu
 from artushima.persistence import model
@@ -25,12 +25,12 @@ class TransactionalServiceMethodTest(abstracts.AbstractPersistenceTestClass):
         # given
 
         def repository_method_1():
-            user = persistence_tests_utils.create_test_user(1, "test_user_1")
+            user = test_data_creator.create_test_user(1, "test_user_1")
             pu.current_session.add(user)
             return str(pu.current_session)
 
         def repository_method_2():
-            user = persistence_tests_utils.create_test_user(2, "test_user_2")
+            user = test_data_creator.create_test_user(2, "test_user_2")
             pu.current_session.add(user)
             return str(pu.current_session)
 
@@ -59,12 +59,12 @@ class TransactionalServiceMethodTest(abstracts.AbstractPersistenceTestClass):
         # given
 
         def repository_method_1():
-            user = persistence_tests_utils.create_test_user(1, "test_user_1")
+            user = test_data_creator.create_test_user(1, "test_user_1")
             pu.current_session.add(user)
             return str(pu.current_session)
 
         def repository_method_2():
-            user = persistence_tests_utils.create_test_user(2, "test_user_2")
+            user = test_data_creator.create_test_user(2, "test_user_2")
             pu.current_session.add(user)
             return str(pu.current_session)
 
@@ -93,12 +93,12 @@ class TransactionalServiceMethodTest(abstracts.AbstractPersistenceTestClass):
         # given
 
         def repository_method_1():
-            user = persistence_tests_utils.create_test_user(1, "test_user_1")
+            user = test_data_creator.create_test_user(1, "test_user_1")
             pu.current_session.add(user)
             return str(pu.current_session)
 
         def repository_method_2():
-            user = persistence_tests_utils.create_test_user(2, "test_user_2")
+            user = test_data_creator.create_test_user(2, "test_user_2")
             pu.current_session.add(user)
             return str(pu.current_session)
 
@@ -126,14 +126,14 @@ class TransactionalServiceMethodTest(abstracts.AbstractPersistenceTestClass):
         """
 
         # given
-        user_1 = persistence_tests_utils.create_test_user(1, "test_user_1")
+        user_1 = test_data_creator.create_test_user(1, "test_user_1")
         pu.current_session.add(user_1)
         pu.current_session.flush()
 
         session_1 = str(pu.current_session)
 
         def repository_method():
-            user_2 = persistence_tests_utils.create_test_user(2, "test_user_2")
+            user_2 = test_data_creator.create_test_user(2, "test_user_2")
             pu.current_session.add(user_2)
             pu.current_session.flush()
             return str(pu.current_session)

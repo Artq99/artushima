@@ -21,9 +21,6 @@ def create(token: str) -> dict:
         a dictionary containing data of the newly persisted blacklisted token
     """
 
-    if token is None:
-        raise PersistenceError("The argument 'token' cannot be None.", __name__, create.__name__)
-
     blacklisted_token = model.BlacklistedTokenEntity()
     blacklisted_token.token = token
 
@@ -31,7 +28,7 @@ def create(token: str) -> dict:
         pu.current_session.add(blacklisted_token)
         pu.current_session.flush()
     except SQLAlchemyError as e:
-        raise PersistenceError("Error on persisting data.", __name__, create.__name__) from e
+        raise PersistenceError(error_messages.ON_PERSISTING_DATA, __name__, create.__name__) from e
 
     return blacklisted_token.map_to_dict()
 

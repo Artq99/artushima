@@ -7,11 +7,12 @@ import datetime
 import jwt
 from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
+import werkzeug
 
-from artushima import error_messages
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
+from artushima.commons.exceptions import MissingInputDataError
 from artushima.commons import properties
 from artushima.persistence.dao import blacklisted_token_dao
 
@@ -55,6 +56,9 @@ def blacklist_token(token: str) -> dict:
         a dictionary containing the blacklisted token data
     """
 
+    if not token:
+        raise MissingInputDataError("token", __name__, blacklist_token.__name__)
+
     return blacklisted_token_dao.create(token)
 
 
@@ -69,16 +73,12 @@ def check_if_token_is_blacklisted(token: str) -> bool:
         True, if the token has been blacklisted, False otherwise
     """
 
-    _validate_argument_token(token)
+    if not token:
+        raise MissingInputDataError("token", __name__, check_if_token_is_blacklisted.__name__)
+
     blacklisted_token = blacklisted_token_dao.read_by_token(token)
 
     return blacklisted_token is not None
-
-
-def _validate_argument_token(token: str) -> None:
-    if token is None:
-        error_message = error_messages.ON_NONE_ARGUMENT.format("token")
-        raise BusinessError(error_message, __name__, check_if_token_is_blacklisted.__name__)
 
 
 def decode_token(token: str) -> dict:
@@ -101,3 +101,24 @@ def decode_token(token: str) -> dict:
         raise TokenInvalidError("The token is invalid.", __name__, decode_token.__name__) from e
 
     return decoded_token
+
+
+def check_password(password: str, pwhash: str) -> bool:
+    """
+    Check if the given password corresponds to the given hash.
+
+    Arguments:
+        - password - the user password
+        - pwhash - the password hash
+
+    Returns:
+        True, if the password can be authenticated with the given hash, False otherwise
+    """
+
+    if not password:
+        raise MissingInputDataError("password", __name__, check_password.__name__)
+
+    if not pwhash:
+        raise MissingInputDataError("pwhash", __name__, check_password.__name__)
+
+    return werkzeug.check_password_hash(pwhash, password)
