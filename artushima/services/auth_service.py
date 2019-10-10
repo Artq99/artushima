@@ -4,14 +4,9 @@ The service providing methods for user to log in, log out and authenticate.
 
 from artushima import constants
 from artushima import messages
-from artushima.commons import logger
 from artushima.commons import properties
 from artushima.commons import error_handler
 from artushima.commons.exceptions import ArtushimaError
-from artushima.commons.exceptions import PersistenceError
-from artushima.commons.exceptions import BusinessError
-from artushima.commons.exceptions import TokenExpirationError
-from artushima.commons.exceptions import TokenInvalidError
 from artushima.persistence.decorators import transactional_service_method
 from artushima.internal_services import user_internal_service
 from artushima.internal_services import auth_internal_service
@@ -97,39 +92,20 @@ def authenticate(token: str, required_roles: list) -> dict:
         else:
             return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
-    # checking if the token has not been blacklisted
     try:
-        token_is_blacklisted = auth_internal_service.check_if_token_is_blacklisted(token)
-    except PersistenceError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
-    except BusinessError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.APPLICATION_ERROR)
+        if auth_internal_service.check_if_token_is_blacklisted(token):
+            return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
-    if token_is_blacklisted:
-        return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
-
-    # decoding the token
-    try:
         decoded_token = auth_internal_service.decode_token(token)
-    except TokenExpirationError:
-        return service_utils.create_response_failure(messages.TOKEN_EXPIRED)
-    except TokenInvalidError:
-        return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
-
-    # getting the user
-    try:
         user = user_internal_service.read_user_by_user_name(decoded_token["sub"])
-    except PersistenceError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure(messages.PERSISTENCE_ERROR)
 
-    if user is None:
-        return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
+        if user is None:
+            return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
-    # checking required roles, if specified
-    if (len(required_roles) > 0) and (user["role"] not in required_roles):
-        return service_utils.create_response_failure(messages.ACCESS_DENIED)
+        if (len(required_roles) > 0) and (user["role"] not in required_roles):
+            return service_utils.create_response_failure(messages.ACCESS_DENIED)
 
-    return service_utils.create_response_success()
+        return service_utils.create_response_success()
+
+    except ArtushimaError as e:
+        return service_utils.create_response_failure(error_handler.handle(e))
