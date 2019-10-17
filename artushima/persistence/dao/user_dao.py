@@ -11,7 +11,7 @@ from artushima.persistence import model
 from artushima.persistence.dao import dao_utils
 
 
-def create(data: dict):
+def create(data: dict) -> dict:
     """
     Create a new user.
 
@@ -36,30 +36,17 @@ def create(data: dict):
     return user.map_to_dict()
 
 
-def _map_to_new_entity(data: dict):
+def _map_to_new_entity(data: dict) -> model.UserEntity:
     """
     Map the given data to a newly created entity.
     """
 
     user = dao_utils.init_entity(model.UserEntity)
-    user.user_name = _get_value_from_create_data(data, "user_name")
-    user.password_hash = _get_value_from_create_data(data, "password_hash")
-    user.role = _get_value_from_create_data(data, "role")
+    user.user_name = data["user_name"]
+    user.password_hash = data["password_hash"]
+    user.role = data["role"]
 
     return user
-
-
-def _get_value_from_create_data(data: dict, key: str):
-    """
-    Get the value from the given data dict under the given key.
-
-    Raises a PersistenceError when the key is missing.
-    """
-
-    if key not in data.keys():
-        raise PersistenceError("The key '{}' is missing.".format(key), __name__, create.__name__)
-
-    return data[key]
 
 
 def read_by_user_name(user_name: str) -> dict:
