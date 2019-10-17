@@ -5,7 +5,6 @@ The data access object for the user entity.
 from sqlalchemy.exc import SQLAlchemyError
 
 from artushima import error_messages
-from artushima.commons import roles_utils
 from artushima.commons.exceptions import PersistenceError
 from artushima.persistence import pu
 from artushima.persistence import model
@@ -28,20 +27,11 @@ def create(data: dict):
 
     user = _map_to_new_entity(data)
 
-    if user.user_name is None:
-        raise PersistenceError("The argument 'user_name' cannot be None.", __name__, create.__name__)
-
-    if user.role is None:
-        raise PersistenceError("The argument 'role' cannot be None.", __name__, create.__name__)
-
-    if not roles_utils.check_if_role_exists(user.role):
-        raise PersistenceError("The role is invalid.", __name__, create.__name__)
-
     try:
         pu.current_session.add(user)
         pu.current_session.flush()
     except SQLAlchemyError as e:
-        raise PersistenceError("Error on persisting data.", __name__, create.__name__) from e
+        raise PersistenceError(error_messages.ON_PERSISTING_DATA, __name__, create.__name__) from e
 
     return user.map_to_dict()
 
