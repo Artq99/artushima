@@ -2,10 +2,13 @@
 The test module for the user_dao module.
 """
 
+from sqlalchemy.exc import IntegrityError
+
 from tests import abstracts
 from tests import test_data_creator
 
 from artushima import constants
+from artushima.commons.exceptions import PersistenceError
 from artushima.persistence.dao import user_dao
 
 
@@ -36,6 +39,69 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         self.assertEqual("test_hash", persisted_data["password_hash"])
         self.assertEqual(constants.ROLE_PLAYER, persisted_data["role"])
         self.assertEqual(0, persisted_data["opt_lock"])
+
+    def test_user_name_is_none(self):
+        """
+        The test checks if the method raises a PersistenceError when the value for the key 'user_name' is None.
+        """
+
+        # given
+        data = {
+            "user_name": None,
+            "password_hash": "test_hash",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(PersistenceError) as ctx:
+            user_dao.create(data)
+
+        self.assertEqual(
+            "Error on persisting data. (artushima.persistence.dao.user_dao.create)",
+            ctx.exception.message
+        )
+        self.assertIsInstance(ctx.exception.__cause__, IntegrityError)
+
+    def test_password_hash_is_none(self):
+        """
+        The test checks if the method persists a new user without a password hash.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user",
+            "password_hash": None,
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when
+        persisted_data = user_dao.create(data)
+
+        # then
+        self.assertIsNotNone(persisted_data)
+        self.assertEqual(None, persisted_data["password_hash"])
+
+    def test_role_is_none(self):
+        """
+        The test checks if the method raises a PersistenceError when the value for the key 'role' is None.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user",
+            "password_hash": "test_hash",
+            "role": None
+        }
+
+        # when then
+        with self.assertRaises(PersistenceError) as ctx:
+            user_dao.create(data)
+
+        self.assertEqual(
+            "Error on persisting data. (artushima.persistence.dao.user_dao.create)",
+            ctx.exception.message
+        )
+        self.assertIsInstance(ctx.exception.__cause__, IntegrityError)
 
 
 class ReadByUsernameTest(abstracts.AbstractPersistenceTestClass):
