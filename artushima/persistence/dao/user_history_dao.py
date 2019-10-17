@@ -10,7 +10,7 @@ from artushima.persistence import pu
 from artushima.persistence.dao import dao_utils
 
 
-def create(data: dict):
+def create(data: dict) -> dict:
     """
     Create a new entry for the history of an user entity.
 
@@ -35,27 +35,14 @@ def create(data: dict):
     return user_history.map_to_dict()
 
 
-def _map_to_new_entity(data: dict):
+def _map_to_new_entity(data: dict) -> model.UserHistoryEntity:
     """
     Map the given data to a newly created entity.
     """
 
     user_history = dao_utils.init_entity(model.UserHistoryEntity)
-    user_history.editor_name = _get_value_from_create_data(data, "editor_name")
-    user_history.message = _get_value_from_create_data(data, "message")
-    user_history.user_id = _get_value_from_create_data(data, "user_id")
+    user_history.editor_name = data["editor_name"]
+    user_history.message = data["message"]
+    user_history.user_id = data["user_id"]
 
     return user_history
-
-
-def _get_value_from_create_data(data: dict, key: str):
-    """
-    Get the value from the given data dict under the given key.
-
-    Raises a PersistenceError when the key is missing; The error location is set to the create method of this module.
-    """
-
-    if key not in data.keys():
-        raise PersistenceError("The argument '{}' is missing.".format(key), __name__, create.__name__)
-
-    return data[key]

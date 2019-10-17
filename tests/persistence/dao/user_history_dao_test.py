@@ -71,30 +71,6 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         )
         self.assertIsInstance(ctx.exception.__cause__, IntegrityError)
 
-    def test_editor_name_is_missing(self):
-        """
-        The test checks if a PersistenceError is raised when the entry 'editor_name' is missing.
-        """
-
-        # given
-        user = test_data_creator.create_test_user(1, "test_user")
-        self.session.add(user)
-        self.session.flush()
-
-        data = {
-            "message": "test message",
-            "user_id": user.id
-        }
-
-        # when then
-        with self.assertRaises(PersistenceError) as ctx:
-            user_history_dao.create(data)
-
-        self.assertEqual(
-            "The argument 'editor_name' is missing. (artushima.persistence.dao.user_history_dao.create)",
-            ctx.exception.message
-        )
-
     def test_message_is_none(self):
         """
         The test checks if a PersistenceError is raised when the argument 'message' is None."
@@ -121,30 +97,6 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
         )
         self.assertIsInstance(ctx.exception.__cause__, IntegrityError)
 
-    def test_message_is_missing(self):
-        """
-        The test checks if a PersistenceError is raised when the argument 'message' is missing.
-        """
-
-        # given
-        user = test_data_creator.create_test_user(1, "test_user")
-        self.session.add(user)
-        self.session.flush()
-
-        data = {
-            "editor_name": "test_editor",
-            "user_id": user.id
-        }
-
-        # when then
-        with self.assertRaises(PersistenceError) as ctx:
-            user_history_dao.create(data)
-
-        self.assertEquals(
-            "The argument 'message' is missing. (artushima.persistence.dao.user_history_dao.create)",
-            ctx.exception.message
-        )
-
     def test_user_id_is_none(self):
         """
         The test checks if a PersistenceError is raised when the argument 'user_id' is None.
@@ -170,30 +122,6 @@ class CreateTest(abstracts.AbstractPersistenceTestClass):
             ctx.exception.message
         )
         self.assertIsInstance(ctx.exception.__cause__, IntegrityError)
-
-    def test_user_id_is_missing(self):
-        """
-        The test checks if a PersistenceError is raised when the argument 'user_id' is missing.
-        """
-
-        # given
-        user = test_data_creator.create_test_user(1, "test_user")
-        self.session.add(user)
-        self.session.flush()
-
-        data = {
-            "editor_name": "test_editor",
-            "message": "test message",
-        }
-
-        # when then
-        with self.assertRaises(PersistenceError) as ctx:
-            user_history_dao.create(data)
-
-        self.assertEqual(
-            "The argument 'user_id' is missing. (artushima.persistence.dao.user_history_dao.create)",
-            ctx.exception.message
-        )
 
     def test_user_does_not_exists(self):
         """
