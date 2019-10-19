@@ -7,6 +7,7 @@ from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
 from artushima.commons.exceptions import MissingInputDataError
+from artushima.commons.exceptions import InvalidInputDataError
 
 
 _TEST_CLASS = "TestClass"
@@ -69,3 +70,17 @@ def create_missing_input_data_error(arg_name: str) -> MissingInputDataError:
     """
 
     return MissingInputDataError(arg_name, _TEST_CLASS, _TEST_METHOD)
+
+
+def create_invalid_input_data_error(arg_name: str) -> InvalidInputDataError:
+    """
+    Create an instance of the InvalidInputDataError class for tests.
+
+    Arguments:
+        - arg_name - the name of the invalid argument
+
+    Returns:
+        an instance of the InvalidInputDataError class
+    """
+
+    return InvalidInputDataError(arg_name, _TEST_CLASS, _TEST_METHOD)

@@ -6,6 +6,7 @@ PERSISTENCE_ERROR = "Błąd odczytu danych."
 APPLICATION_ERROR = "Błąd aplikacji."
 
 INPUT_DATA_MISSING = "Brakujące dane: {}."
+INPUT_DATA_INVALID = "Niepoprawne dane: {}."
 
 LOGIN_ERROR = "Niepoprawny login lub hasło."
 

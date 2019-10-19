@@ -82,10 +82,26 @@ class MissingInputDataError(BusinessError):
     Arguments:
         - arg_name - the name of the None-argument
         - class_name - the name of the class where the error occured
-        - method_name - the name of the methord where the error occured
+        - method_name - the name of the method where the error occured
     """
 
     def __init__(self, arg_name, class_name, method_name):
 
         super().__init__(error_messages.ON_NONE_ARGUMENT.format(arg_name), class_name, method_name)
+        self.arg_name = arg_name
+
+
+class InvalidInputDataError(BusinessError):
+    """
+    The error raised when an argument passed to a method is invalid.
+
+    Arguments:
+        - arg_name - the name of the invalid argument
+        - class_name - the name of the class where the error occured
+        - method_name - the name of the method where the error occured
+    """
+
+    def __init__(self, arg_name, class_name, method_name):
+
+        super().__init__(error_messages.ON_INVALID_ARGUMENT.format(arg_name), class_name, method_name)
         self.arg_name = arg_name

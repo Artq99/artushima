@@ -10,6 +10,7 @@ from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
 from artushima.commons.exceptions import MissingInputDataError
+from artushima.commons.exceptions import InvalidInputDataError
 
 
 def handle(error: ArtushimaError) -> str:
@@ -41,6 +42,9 @@ def handle(error: ArtushimaError) -> str:
             arg_name = messages.ARG_NAMES[arg_name]
 
         return messages.INPUT_DATA_MISSING.format(arg_name)
+
+    elif isinstance(error, InvalidInputDataError):
+        return messages.INPUT_DATA_INVALID.format(error.arg_name)
 
     elif isinstance(error, BusinessError):
         return messages.APPLICATION_ERROR

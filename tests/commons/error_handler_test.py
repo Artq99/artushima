@@ -88,6 +88,22 @@ class HandleTest(abstracts.AbstractTestClass):
         # then
         self.assertEqual(messages.INPUT_DATA_MISSING.format(arg_name), message)
 
+    def test_invalid_input_data_error(self):
+        """
+        The test checks if the method returns a correct error message including an argument name for an instace of
+        the InvalidInputDataError.
+        """
+
+        # given
+        arg_name = "test_arg"
+        error = test_utils.create_invalid_input_data_error(arg_name)
+
+        # when
+        message = error_handler.handle(error)
+
+        # then
+        self.assertEqual(messages.INPUT_DATA_INVALID.format(arg_name), message)
+
     def test_business_error(self):
         """
         The test checks if the method returns a correct error message for an instance of the BusinessError.

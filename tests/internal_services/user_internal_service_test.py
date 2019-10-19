@@ -10,6 +10,7 @@ from tests import test_data_creator
 from artushima import constants
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import MissingInputDataError
+from artushima.commons.exceptions import InvalidInputDataError
 from artushima.persistence.dao import user_dao
 from artushima.internal_services import user_internal_service
 
@@ -99,30 +100,201 @@ class CreateUserTest(_TestCaseWithMocks):
     Tests for the method user_internal_service_test.create_user.
     """
 
-    def test_positive_output(self):
+    def test_new_user(self):
         """
         The test checks if the method correctly calls the corresponding repository.
         """
 
         # given
         data = {
-            "user_name": "test_user",
-            "password_hash": "test_hash",
+            "user_name": "test_user_1",
+            "password_hash": "test_hash_1",
             "role": constants.ROLE_PLAYER
         }
 
-        self.user_dao_mock.create.return_value = {
-            "id": 1,
-            "user_name": "test_user",
-            "password_hash": "test_hash",
-            "role": constants.ROLE_PLAYER
-        }
+        self.user_dao_mock.create.return_value = test_data_creator.create_test_user(1)
 
         # when
         user_internal_service.create_user(data)
 
         # then
         self.user_dao_mock.create.assert_called_once_with(data)
+
+    def test_data_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the given input data is None.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(None)
+
+    def test_user_name_is_missing(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the user name is missing
+        in the input data.
+        """
+
+        # given
+        data = {
+            "password_hash": "test_hash_1",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_user_name_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the user name given in the input
+        data is None.
+        """
+
+        # given
+        data = {
+            "user_name": None,
+            "password_hash": "test_hash_1",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_user_name_is_empty_string(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the user name given in the input
+        data is an empty string.
+        """
+
+        # given
+        data = {
+            "user_name": "",
+            "password_hasn": "test_hash_1",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_password_hash_is_missing(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the password hash is missing
+        in the input data.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_password_hash_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the password hash given
+        in the input data is None.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": None,
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_password_hash_is_empty_string(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the password hash given
+        in the input data is an empty string.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": "",
+            "role": constants.ROLE_PLAYER
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_role_is_missing(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the role is missing in the input
+        data.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": "test_hash_1"
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_role_is_none(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the role given in the input data
+        is None.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": "test_hash_1",
+            "role": None
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_role_is_empty_string(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError, when the role given in the input data
+        is an empty string.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": "test_hash_1",
+            "role": ""
+        }
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            user_internal_service.create_user(data)
+
+    def test_role_is_invalid(self):
+        """
+        The test checks if the method raises an instance of InvalidInputDataError, when the role given in the input data
+        does not match any of the known roles.
+        """
+
+        # given
+        data = {
+            "user_name": "test_user_1",
+            "password_hash": "test_hash_1",
+            "role": "invalid_role"
+        }
+
+        # when then
+        with self.assertRaises(InvalidInputDataError):
+            user_internal_service.create_user(data)
 
 
 class ReadUserByUserNameTest(_TestCaseWithMocks):

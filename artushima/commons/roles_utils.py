@@ -13,12 +13,12 @@ _roles = [
 ]
 
 
-def check_if_role_exists(role: int) -> bool:
+def check_if_role_exists(role: str) -> bool:
     """
     Check if the given role int value corresponds to any existing role.
 
     Arguments:
-        - role - the role int value to check
+        - role - the role to check
 
     Returns:
         True if the role exists, False otherwise
