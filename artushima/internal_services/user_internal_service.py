@@ -82,6 +82,6 @@ def read_user_by_user_name(user_name: str) -> dict:
     """
 
     if not user_name:
-        raise MissingInputDataError("user_name", __name__, read_user_by_user_name.__name__)
+        raise MissingInputDataError(_ARG_USER_NAME, __name__, read_user_by_user_name.__name__)
 
     return user_dao.read_by_user_name(user_name)
