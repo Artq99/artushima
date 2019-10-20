@@ -45,6 +45,38 @@ def create_test_user(id: int, user_name: str = None, role: str = constants.ROLE_
     return user
 
 
+def create_test_user_history(id: int, user_id: int, editor_name: str = "TEST") -> model.UserHistoryEntity:
+    """
+    Create an instance of the user history entity.
+
+    The method requires an ID for the new entity and the ID of the user. The name of the editor, if not specified, is
+    set to the default 'TEST'. The rest of the fields are set to the following default values:
+        - message is set to 'Test message <ID>.'
+        - created_on is set to the current date and time
+        - modified_on is set to the current date and time
+        - opt_lock is set to 0
+
+    Arguments:
+        - id - the ID for the newly created test entity
+        - user_id - the ID of the user for whom the entry is created
+        - editor_name - the name of the subject that caused the change (optional)
+
+    Returns:
+        an instance of the UserHistoryEntity class
+    """
+
+    user_history = model.UserHistoryEntity()
+    user_history.id = id
+    user_history.user_id = user_id
+    user_history.editor_name = editor_name
+    user_history.message = "Test message {}.".format(user_history.id)
+    user_history.created_on = datetime.now()
+    user_history.modified_on = datetime.now()
+    user_history.opt_lock = 0
+
+    return user_history
+
+
 def create_test_blacklisted_token(id: int) -> model.BlacklistedTokenEntity:
     """
     Create an instance of the blacklisted token entity.
