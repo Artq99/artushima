@@ -13,7 +13,6 @@ from tests import test_data_creator
 from artushima import constants
 from artushima import messages
 from artushima.commons import properties
-from artushima.commons.exceptions import PersistenceError
 from artushima.internal_services import user_internal_service
 from artushima.internal_services import auth_internal_service
 from artushima.services import auth_service

@@ -13,6 +13,8 @@ from tests import test_data_creator
 
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import MissingInputDataError
+from artushima.commons.exceptions import MissingApplicationPropertyError
+from artushima.commons.exceptions import InvalidApplicationPropertyValueError
 from artushima.commons import properties
 from artushima.persistence.dao import blacklisted_token_dao
 from artushima.internal_services import auth_internal_service
@@ -51,8 +53,6 @@ class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
 class GenerateTokenTest(_TestCaseWithMocks):
     """
     Tests for the method auth_internal_service.generate_token.
-
-    The user data used in the tests contains only the user name, while the method does not need anything else in fact.
     """
 
     def test_token_generated_correctly(self):
@@ -61,9 +61,7 @@ class GenerateTokenTest(_TestCaseWithMocks):
         """
 
         # given
-        user_data = {
-            "user_name": "test_user"
-        }
+        user_name = "test_user"
 
         payload = {
             "sub": "test_user",
@@ -76,7 +74,7 @@ class GenerateTokenTest(_TestCaseWithMocks):
         self.datetime_mock.datetime.utcnow.return_value = datetime.datetime(2019, 1, 1)
 
         # when
-        token = auth_internal_service.generate_token(user_data)
+        token = auth_internal_service.generate_token(user_name)
 
         # then
         self.assertEqual("test token", token)
@@ -85,46 +83,52 @@ class GenerateTokenTest(_TestCaseWithMocks):
         args = self.jwt_mock.encode.call_args[0]
         self.assertEqual((payload), args[0])
 
-    def test_user_data_is_none(self):
+    def test_user_name_is_none(self):
         """
-        The test checks if the method raises an instance of BusinessError, when the given user_data is none.
+        The test checks if the method raises an instance of MissingInputDataError when the given user name is None.
         """
 
         # when then
-        with self.assertRaises(BusinessError) as ctx:
+        with self.assertRaises(MissingInputDataError):
             auth_internal_service.generate_token(None)
 
-        self.assertEqual(
-            "The argument 'user_data' cannot be None. "
-            + "(artushima.internal_services.auth_internal_service.generate_token)",
-            ctx.exception.message
-        )
-        self.properties_mock.get_token_expiration_time.assert_not_called()
-        self.jwt_mock.encode.assert_not_called()
+    def test_user_name_is_empty_string(self):
+        """
+        The test checks if the method raises an instance of MissingInputDataError when the given user name is an empty
+        string.
+        """
+
+        # when then
+        with self.assertRaises(MissingInputDataError):
+            auth_internal_service.generate_token("")
 
     def test_property_token_expiration_time_is_absent(self):
         """
-        The test checks if the method raises an instance of BusinessError, when the property token_expiration_time
-        is absent in the .env file.
+        The test checks if the method raises an instance of MissingApplicationPropertyError when the property
+        token_expiration_time is absent in the .env file.
         """
 
         # given
-        user_data = {
-            "user_name": "test_user"
-        }
+        user_name = "test_user"
         self.properties_mock.get_token_expiration_time.return_value = None
 
         # when then
-        with self.assertRaises(BusinessError) as ctx:
-            auth_internal_service.generate_token(user_data)
+        with self.assertRaises(MissingApplicationPropertyError):
+            auth_internal_service.generate_token(user_name)
 
-        self.assertEqual(
-            "The property 'token_expiration_time' is not present. "
-            + "(artushima.internal_services.auth_internal_service.generate_token)",
-            ctx.exception.message
-        )
-        self.properties_mock.get_token_expiration_time.assert_called_once()
-        self.jwt_mock.encode.assert_not_called()
+    def test_property_token_expiration_time_has_invalid_value(self):
+        """
+        The test checks if the method raises an instance of InvalidApplicationPropertyValueError when the property
+        token_expiration_time has an invalid value assigned.
+        """
+
+        # given
+        user_name: str = "test_user"
+        self.properties_mock.get_token_expiration_time.return_value = "invalid"
+
+        # when then
+        with self.assertRaises(InvalidApplicationPropertyValueError):
+            auth_internal_service.generate_token(user_name)
 
 
 class BlacklistTokenTest(_TestCaseWithMocks):

@@ -9,15 +9,25 @@ from jwt import InvalidTokenError
 from jwt import ExpiredSignatureError
 import werkzeug
 
-from artushima.commons.exceptions import BusinessError
+from artushima import error_messages
 from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
 from artushima.commons.exceptions import MissingInputDataError
+from artushima.commons.exceptions import MissingApplicationPropertyError
+from artushima.commons.exceptions import InvalidApplicationPropertyValueError
 from artushima.commons import properties
 from artushima.persistence.dao import blacklisted_token_dao
 
 
-def generate_token(user_data: dict) -> bytes:
+_ARG_USER_NAME: str = "user_name"
+_ARG_TOKEN: str = "token"
+_ARG_PASSWORD: str = "password"
+_ARG_PWHASH: str = "pwhash"
+_PROPERTY_TOKEN_EXPIRATION_TIME: str = "token_expiration_time"
+_HS256: str = "HS256"
+
+
+def generate_token(user_name: str) -> bytes:
     """
     Generate a new authentication token for the given user.
 
@@ -28,21 +38,39 @@ def generate_token(user_data: dict) -> bytes:
         a new authentication token
     """
 
-    if user_data is None:
-        raise BusinessError("The argument 'user_data' cannot be None.", __name__, generate_token.__name__)
+    _validate_user_name(user_name)
+    token_expiration_time: int = _get_token_expiration_time()
+    payload: dict = _create_token_payload(user_name, token_expiration_time)
 
-    token_expiration_time = properties.get_token_expiration_time()
+    return jwt.encode(payload, properties.get_app_secret_key(), algorithm=_HS256)
+
+
+def _validate_user_name(user_name: str) -> str:
+
+    if not user_name:
+        raise MissingInputDataError(_ARG_USER_NAME, __name__, generate_token.__name__)
+
+
+def _get_token_expiration_time() -> int:
+
+    token_expiration_time: str = properties.get_token_expiration_time()
 
     if token_expiration_time is None:
-        raise BusinessError("The property 'token_expiration_time' is not present.", __name__, generate_token.__name__)
+        raise MissingApplicationPropertyError(_PROPERTY_TOKEN_EXPIRATION_TIME, __name__, generate_token.__name__)
 
-    payload = {
-        "sub": user_data["user_name"],
+    try:
+        return int(token_expiration_time)
+    except ValueError:
+        raise InvalidApplicationPropertyValueError(_PROPERTY_TOKEN_EXPIRATION_TIME, __name__, generate_token.__name__)
+
+
+def _create_token_payload(user_name: str, token_expiration_time: int) -> dict:
+
+    return {
+        "sub": user_name,
         "iat": datetime.datetime.utcnow(),
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=int(token_expiration_time))
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=token_expiration_time)
     }
-
-    return jwt.encode(payload, properties.get_app_secret_key(), algorithm="HS256")
 
 
 def blacklist_token(token: str) -> dict:
@@ -57,7 +85,7 @@ def blacklist_token(token: str) -> dict:
     """
 
     if not token:
-        raise MissingInputDataError("token", __name__, blacklist_token.__name__)
+        raise MissingInputDataError(_ARG_TOKEN, __name__, blacklist_token.__name__)
 
     return blacklisted_token_dao.create(token)
 
@@ -74,7 +102,7 @@ def check_if_token_is_blacklisted(token: str) -> bool:
     """
 
     if not token:
-        raise MissingInputDataError("token", __name__, check_if_token_is_blacklisted.__name__)
+        raise MissingInputDataError(_ARG_TOKEN, __name__, check_if_token_is_blacklisted.__name__)
 
     blacklisted_token = blacklisted_token_dao.read_by_token(token)
 
@@ -93,12 +121,11 @@ def decode_token(token: str) -> dict:
     """
 
     try:
-        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
+        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm=_HS256)
     except ExpiredSignatureError as e:
-        raise TokenExpirationError("Authentication token signature has expired.",
-                                   __name__, decode_token.__name__) from e
+        raise TokenExpirationError(error_messages.ON_EXPIRED_SIGNATURE, __name__, decode_token.__name__) from e
     except InvalidTokenError as e:
-        raise TokenInvalidError("The token is invalid.", __name__, decode_token.__name__) from e
+        raise TokenInvalidError(error_messages.ON_INVALID_TOKEN, __name__, decode_token.__name__) from e
 
     return decoded_token
 
@@ -116,9 +143,9 @@ def check_password(password: str, pwhash: str) -> bool:
     """
 
     if not password:
-        raise MissingInputDataError("password", __name__, check_password.__name__)
+        raise MissingInputDataError(_ARG_PASSWORD, __name__, check_password.__name__)
 
     if not pwhash:
-        raise MissingInputDataError("pwhash", __name__, check_password.__name__)
+        raise MissingInputDataError(_ARG_PWHASH, __name__, check_password.__name__)
 
     return werkzeug.check_password_hash(pwhash, password)

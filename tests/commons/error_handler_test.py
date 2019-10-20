@@ -7,6 +7,8 @@ from tests import test_utils
 
 from artushima import messages
 from artushima.commons import error_handler
+from artushima.commons.exceptions import MissingApplicationPropertyError
+from artushima.commons.exceptions import InvalidApplicationPropertyValueError
 
 
 class HandleTest(abstracts.AbstractTestClass):
@@ -103,6 +105,39 @@ class HandleTest(abstracts.AbstractTestClass):
 
         # then
         self.assertEqual(messages.INPUT_DATA_INVALID.format(arg_name), message)
+
+    def test_missing_application_property_error(self):
+        """
+        The test checks if the method returns a correct error message for an instance of
+        the MissingApplicationPropertyError class.
+        """
+
+        # given
+        property_name: str = "test_property"
+        error: MissingApplicationPropertyError = test_utils.create_missing_application_property_error(property_name)
+
+        # when
+        message: str = error_handler.handle(error)
+
+        # then
+        self.assertEqual(messages.APPLICATION_ERROR, message)
+
+    def test_invalid_application_property_value_error(self):
+        """
+        The test checks if the method returns a correct error message for an instance of
+        InvalidApplicationPropertyValueError class.
+        """
+
+        # given
+        property_name: str = "test_property"
+        error: InvalidApplicationPropertyValueError = test_utils \
+            .create_invalid_application_property_value_error(property_name)
+
+        # when
+        message: str = error_handler.handle(error)
+
+        # then
+        self.assertEqual(messages.APPLICATION_ERROR, message)
 
     def test_business_error(self):
         """

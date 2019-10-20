@@ -17,7 +17,7 @@ class ArtushimaError(Exception):
         - method_name - the name of the method where the error occured
     """
 
-    def __init__(self, message, class_name, method_name):
+    def __init__(self, message: str, class_name: str, method_name: str):
 
         super().__init__(_ERROR_MESSAGE_TEMPLATE.format(message, class_name, method_name))
         self.message = self.args[0]
@@ -85,7 +85,7 @@ class MissingInputDataError(BusinessError):
         - method_name - the name of the method where the error occured
     """
 
-    def __init__(self, arg_name, class_name, method_name):
+    def __init__(self, arg_name: str, class_name: str, method_name: str):
 
         super().__init__(error_messages.ON_NONE_ARGUMENT.format(arg_name), class_name, method_name)
         self.arg_name = arg_name
@@ -101,7 +101,56 @@ class InvalidInputDataError(BusinessError):
         - method_name - the name of the method where the error occured
     """
 
-    def __init__(self, arg_name, class_name, method_name):
+    def __init__(self, arg_name: str, class_name: str, method_name: str):
 
         super().__init__(error_messages.ON_INVALID_ARGUMENT.format(arg_name), class_name, method_name)
         self.arg_name = arg_name
+
+
+class PropertyError(BusinessError):
+    """
+    The base class for all the errors related to properties.
+
+    Arguments:
+        - message - the error message
+        - property_name - the name of the property the error is related to
+        - class_name - the name of the class where the error occured
+        - method_name - the name of the method where the error occured
+    """
+
+    def __init__(self, message: str, property_name: str, class_name: str, method_name: str):
+
+        super().__init__(message, class_name, method_name)
+        self.property_name: str = property_name
+
+
+class MissingApplicationPropertyError(PropertyError):
+    """
+    The error raised when a required property has not been given in the application environment.
+
+    Arguments:
+        - property_name - the name of the missing property
+        - class_name - the name of the class where the error occured
+        - method_name - the name of the method where the error occured
+    """
+
+    def __init__(self, property_name: str, class_name: str, method_name: str):
+
+        error_message: str = error_messages.ON_PROPERTY_MISSING.format(property_name)
+        super().__init__(error_message, property_name, class_name, method_name)
+
+
+class InvalidApplicationPropertyValueError(PropertyError):
+    """
+    The error raised when a property has been given an invalid value.
+
+    Arguments:
+        - property_name - the name of the invalid property
+        - class_name - the name of the class where the error occured
+        - method_name - the name of the method where the error occured
+    """
+
+    def __init__(self, property_name: str, class_name: str, method_name: str):
+
+        error_message: str = error_messages.ON_INVALID_PROPERTY_VALUE.format(property_name)
+        super().__init__(error_message, property_name, class_name, method_name)

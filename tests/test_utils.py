@@ -8,6 +8,8 @@ from artushima.commons.exceptions import TokenExpirationError
 from artushima.commons.exceptions import TokenInvalidError
 from artushima.commons.exceptions import MissingInputDataError
 from artushima.commons.exceptions import InvalidInputDataError
+from artushima.commons.exceptions import MissingApplicationPropertyError
+from artushima.commons.exceptions import InvalidApplicationPropertyValueError
 
 
 _TEST_CLASS = "TestClass"
@@ -84,3 +86,31 @@ def create_invalid_input_data_error(arg_name: str) -> InvalidInputDataError:
     """
 
     return InvalidInputDataError(arg_name, _TEST_CLASS, _TEST_METHOD)
+
+
+def create_missing_application_property_error(property_name: str) -> MissingApplicationPropertyError:
+    """
+    Create an instance of the MissingApplicationPropertyError class for tests.
+
+    Arguments:
+        - property_name - the name of the missing property
+
+    Returns:
+        an instance of the MissingApplicationPropertyError class
+    """
+
+    return MissingApplicationPropertyError(property_name, _TEST_CLASS, _TEST_METHOD)
+
+
+def create_invalid_application_property_value_error(property_name: str) -> InvalidApplicationPropertyValueError:
+    """
+    Create an instance of the InvalidApplicationPropertyValueError class for tests.
+
+    Arguments:
+        - property_name - the name of the invalid property
+
+    Returns:
+        an instance of the InvalidApplicationPropertyValueError class
+    """
+
+    return InvalidApplicationPropertyValueError(property_name, _TEST_CLASS, _TEST_METHOD)

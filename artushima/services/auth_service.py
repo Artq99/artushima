@@ -32,7 +32,7 @@ def log_in(user_name: str, password: str) -> dict:
         if (user is None) or (not auth_internal_service.check_password(password, user["password_hash"])):
             return service_utils.create_response_failure(messages.LOGIN_ERROR)
 
-        token = auth_internal_service.generate_token(user)
+        token = auth_internal_service.generate_token(user["user_name"])
 
         return service_utils.create_response_success(currentUser=_create_current_user_data(user, token))
 
