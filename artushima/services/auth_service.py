@@ -96,13 +96,13 @@ def authenticate(token: str, required_roles: list) -> dict:
         if auth_internal_service.check_if_token_is_blacklisted(token):
             return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
-        decoded_token = auth_internal_service.decode_token(token)
-        user = user_internal_service.read_user_by_user_name(decoded_token["sub"])
+        decoded_token: dict = auth_internal_service.decode_token(token)
+        user: dict = user_internal_service.read_user_by_user_name(decoded_token["sub"])
 
         if user is None:
             return service_utils.create_response_failure(messages.AUTHENTICATION_FAILED)
 
-        if (len(required_roles) > 0) and (user["role"] not in required_roles):
+        if not auth_internal_service.check_role(user, required_roles):
             return service_utils.create_response_failure(messages.ACCESS_DENIED)
 
         return service_utils.create_response_success()

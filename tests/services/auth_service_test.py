@@ -218,19 +218,20 @@ class AuthenticateTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
+        token: str = "test_token"
 
-        decoded_token = {
+        decoded_token: dict = {
             "sub": "test_user"
         }
 
-        user = {
+        user: dict = {
             "id": 1,
             "user_name": "test_user"
         }
 
         self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
+        self.auth_internal_service_mock.check_role.return_value = True
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 
         # when
@@ -381,13 +382,13 @@ class AuthenticateTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
+        token: str = "test_token"
 
-        decoded_token = {
+        decoded_token: dict = {
             "sub": "test_user"
         }
 
-        user = {
+        user: dict = {
             "id": 1,
             "user_name": "test_user",
             "role": constants.ROLE_PLAYER
@@ -395,6 +396,7 @@ class AuthenticateTest(_TestCaseWithMocks):
 
         self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
+        self.auth_internal_service_mock.check_role.return_value = True
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 
         # when
@@ -409,13 +411,13 @@ class AuthenticateTest(_TestCaseWithMocks):
         """
 
         # given
-        token = "test_token"
+        token: str = "test_token"
 
-        decoded_token = {
+        decoded_token: dict = {
             "sub": "test_user"
         }
 
-        user = {
+        user: dict = {
             "id": 1,
             "user_name": "test_user",
             "role": constants.ROLE_PLAYER
@@ -423,10 +425,11 @@ class AuthenticateTest(_TestCaseWithMocks):
 
         self.auth_internal_service_mock.check_if_token_is_blacklisted.return_value = False
         self.auth_internal_service_mock.decode_token.return_value = decoded_token
+        self.auth_internal_service_mock.check_role.return_value = False
         self.user_internal_service_mock.read_user_by_user_name.return_value = user
 
         # when
-        response = auth_service.authenticate(token, [constants.ROLE_GAME_MASTER])
+        response: dict = auth_service.authenticate(token, [constants.ROLE_GAME_MASTER])
 
         # then
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
