@@ -7,6 +7,8 @@ from werkzeug import security
 from artushima import constants
 from artushima.commons import logger
 from artushima.commons import properties
+from artushima.commons import error_handler
+from artushima.commons.exceptions import ArtushimaError
 from artushima.commons.exceptions import PersistenceError
 from artushima.commons.exceptions import BusinessError
 from artushima.persistence.decorators import transactional_service_method
@@ -16,7 +18,7 @@ from artushima.services import service_utils
 
 
 @transactional_service_method
-def check_if_superuser_exists():
+def check_if_superuser_exists() -> dict:
     """
     Check if the superuser exists.
 
@@ -27,12 +29,8 @@ def check_if_superuser_exists():
 
     try:
         superuser_exists = user_internal_service.check_if_user_exists("superuser")
-    except PersistenceError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure("Błąd odczytu danych.")
-    except BusinessError as e:
-        logger.log_error(str(e))
-        return service_utils.create_response_failure("Błąd aplikacji.")
+    except ArtushimaError as e:
+        return service_utils.create_response_failure(error_handler.handle(e))
 
     return service_utils.create_response_success(superuser_exists=superuser_exists)
 

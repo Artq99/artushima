@@ -7,8 +7,11 @@ from unittest import mock
 from werkzeug import security
 
 from tests import abstracts
+from tests import test_data_creator
+from tests import test_utils
 
 from artushima import constants
+from artushima import messages
 from artushima.commons import properties
 from artushima.commons.exceptions import PersistenceError
 from artushima.internal_services import user_internal_service
@@ -54,7 +57,7 @@ class CheckIfSuperuserExistsTest(_TestCaseWithMocks):
         self.user_internal_service_mock.check_if_user_exists.return_value = True
 
         # when
-        response = startup_service.check_if_superuser_exists()
+        response: dict = startup_service.check_if_superuser_exists()
 
         # then
         self.assertIsNotNone(response)
@@ -71,7 +74,7 @@ class CheckIfSuperuserExistsTest(_TestCaseWithMocks):
         self.user_internal_service_mock.check_if_user_exists.return_value = False
 
         # when
-        response = startup_service.check_if_superuser_exists()
+        response: dict = startup_service.check_if_superuser_exists()
 
         # then
         self.assertIsNotNone(response)
@@ -85,17 +88,15 @@ class CheckIfSuperuserExistsTest(_TestCaseWithMocks):
         """
 
         # given
-        self.user_internal_service_mock.check_if_user_exists.side_effect = PersistenceError(
-            "test", "TestClass", "test_method"
-        )
+        self.user_internal_service_mock.check_if_user_exists.side_effect = test_utils.create_persistence_error()
 
         # when
-        response = startup_service.check_if_superuser_exists()
+        response: dict = startup_service.check_if_superuser_exists()
 
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Błąd odczytu danych.", response["message"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
         self.user_internal_service_mock.check_if_user_exists.assert_called_once_with("superuser")
 
 
