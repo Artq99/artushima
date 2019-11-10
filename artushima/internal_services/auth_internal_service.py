@@ -149,3 +149,23 @@ def check_password(password: str, pwhash: str) -> bool:
         raise MissingInputDataError(_ARG_PWHASH, __name__, check_password.__name__)
 
     return werkzeug.check_password_hash(pwhash, password)
+
+
+def check_role(user: dict, roles: list) -> bool:
+    """
+    Check if the given user has one of the required roles.
+
+    If the roles list is empty, it means that no roles are required.
+
+    Arguments:
+        - user - the user to check
+        - roles - the list of roles granting access to a functionality
+    
+    Returns:
+        True, if the user has one of the required roles or no roles have been provided, False otherwise
+    """
+
+    if len(roles) == 0:
+        return True
+
+    return user["role"] in roles

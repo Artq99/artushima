@@ -11,6 +11,7 @@ import werkzeug
 from tests import abstracts
 from tests import test_data_creator
 
+from artushima import constants
 from artushima.commons.exceptions import BusinessError
 from artushima.commons.exceptions import MissingInputDataError
 from artushima.commons.exceptions import MissingApplicationPropertyError
@@ -349,3 +350,63 @@ class CheckPasswordTest(_TestCaseWithMocks):
         # when then
         with self.assertRaises(MissingInputDataError):
             auth_internal_service.check_password("password", "")
+
+
+class CheckRoleTest(_TestCaseWithMocks):
+    """
+    Tests for the method auth_internal_service_test.check_role.
+    """
+
+    def test_required_role_met(self):
+        """
+        The test checks if the method returns True when the user meets one of the given roles.
+        """
+
+        # given
+        user: dict = test_data_creator.create_test_user(1, role=constants.ROLE_ADMIN).map_to_dict()
+
+        roles: list = [
+            constants.ROLE_ADMIN,
+            constants.ROLE_GAME_MASTER
+        ]
+
+        # when
+        result: bool = auth_internal_service.check_role(user, roles)
+
+        # then
+        self.assertTrue(result)
+
+    def test_required_role_not_met(self):
+        """
+        The test checks if the method returns False when the user does not meet one of the given roles.
+        """
+
+        # given
+        user: dict = test_data_creator.create_test_user(1, role=constants.ROLE_PLAYER).map_to_dict()
+
+        roles: list = [
+            constants.ROLE_ADMIN,
+            constants.ROLE_GAME_MASTER
+        ]
+
+        # when
+        result: bool = auth_internal_service.check_role(user, roles)
+
+        # then
+        self.assertFalse(result)
+
+    def test_no_roles_specified(self):
+        """
+        The test checks if the method returns True when no roles have been specified.
+        """
+
+        # given
+        user: dict = test_data_creator.create_test_user(1)
+
+        roles: list = list()
+
+        # when
+        result: bool = auth_internal_service.check_role(user, roles)
+
+        # then
+        self.assertTrue(result)
