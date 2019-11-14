@@ -159,7 +159,7 @@ class CreateSuperuserTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Brakujące dane: hasło dla superużytkownika.", response["message"])
+        self.assertEqual(messages.APPLICATION_ERROR, response["message"])
         self.security_mock.generate_password_hash.assert_not_called()
         self.user_internal_service_mock.create_user.assert_not_called()
         self.user_history_internal_service_mock.create_user_history_entry.assert_not_called()
@@ -182,7 +182,7 @@ class CreateSuperuserTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Superużytkownik nie mógł zostać utworzony.", response["message"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
         self.security_mock.generate_password_hash.assert_called_once()
         self.user_internal_service_mock.create_user.assert_called_once()
         self.user_history_internal_service_mock.create_user_history_entry.assert_not_called()
@@ -210,7 +210,7 @@ class CreateSuperuserTest(_TestCaseWithMocks):
         # then
         self.assertIsNotNone(response)
         self.assertEqual(constants.RESPONSE_STATUS_FAILURE, response["status"])
-        self.assertEqual("Wpis do historii dla superużytkownika nie mógł zostać utworzony.", response["message"])
+        self.assertEqual(messages.PERSISTENCE_ERROR, response["message"])
         self.security_mock.generate_password_hash.assert_called_once()
         self.user_internal_service_mock.create_user.assert_called_once()
         self.user_history_internal_service_mock.create_user_history_entry.assert_called_once()

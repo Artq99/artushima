@@ -2,19 +2,21 @@
 The module containing messages - all the texts in Polish returned by the application.
 """
 
-PERSISTENCE_ERROR = "Błąd odczytu danych."
-APPLICATION_ERROR = "Błąd aplikacji."
+PERSISTENCE_ERROR: str = "Błąd bazy danych."
+APPLICATION_ERROR: str = "Błąd aplikacji."
 
-INPUT_DATA_MISSING = "Brakujące dane: {}."
-INPUT_DATA_INVALID = "Niepoprawne dane: {}."
+INPUT_DATA_MISSING: str = "Brakujące dane: {}."
+INPUT_DATA_INVALID: str = "Niepoprawne dane: {}."
 
-LOGIN_ERROR = "Niepoprawny login lub hasło."
+LOGIN_ERROR: str = "Niepoprawny login lub hasło."
 
-TOKEN_EXPIRED = "Autentykacja wygasła."
-AUTHENTICATION_FAILED = "Niepowodzenie autentykacji."
-ACCESS_DENIED = "Nie masz wystarczających uprawnień dla tej akcji."
+TOKEN_EXPIRED: str = "Autentykacja wygasła."
+AUTHENTICATION_FAILED: str = "Niepowodzenie autentykacji."
+ACCESS_DENIED: str = "Nie masz wystarczających uprawnień dla tej akcji."
 
-ARG_NAMES = {
+ARG_NAMES: dict = {
     "user_name": "nazwa użytkownika",
     "password": "Hasło"
 }
+
+DBMSG_SUPERUSER_CREATED: str = "Superużytkownik został utworzony."
