@@ -40,7 +40,10 @@ class _TestCaseWithMocks(abstracts.AbstractServiceTestClass):
     def tearDown(self):
         super().tearDown()
 
+        startup_service.security = security
+        startup_service.properties = properties
         startup_service.user_internal_service = user_internal_service
+        startup_service.user_history_internal_service = user_history_internal_service
 
 
 class CheckIfSuperuserExistsTest(_TestCaseWithMocks):

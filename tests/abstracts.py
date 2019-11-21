@@ -7,6 +7,7 @@ from unittest import mock
 
 from sqlalchemy import orm
 
+from artushima import application
 from artushima.commons import logger
 from artushima.commons.logger import log as log_default  # backup
 from artushima.persistence import pu
@@ -81,3 +82,30 @@ class AbstractServiceTestClass(AbstractTestClass):
         super().tearDown()
 
         pu.current_session = None
+
+
+class AbstractIntegrativeTestClass(AbstractTestClass):
+    """
+    The base class for all integrative tests.
+    """
+
+    def setUp(self):
+        app = application.get_app()
+        app.config["TESTING"] = True
+        self.client = app.test_client()
+
+        # the session used for creating test data
+        self.session = pu.Session()
+
+        pu.current_session = pu.Session()
+
+    def tearDown(self):
+        self.session.commit()
+        self.session.close()
+        self.session = None
+
+        model.Base.metadata.drop_all(pu.SqlEngine)
+
+        if pu.current_session is not None:
+            pu.current_session.close()
+            pu.current_session = None
