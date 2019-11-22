@@ -4,6 +4,8 @@ The factory module for the application object.
 
 import flask
 
+from artushima.commons import logger
+
 
 class App:
     """
@@ -18,6 +20,8 @@ class App:
 
         self.host = "localhost"
         self.port = 5000
+
+        logger.log_info("Application initialized.")
 
     def run(self):
         self.flask_app.run(self.host, self.port)
