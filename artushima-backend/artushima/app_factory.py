@@ -5,6 +5,7 @@ The factory module for the application object.
 import flask
 
 from artushima.commons import logger
+from artushima.core import properties
 
 
 class App:
@@ -18,8 +19,10 @@ class App:
 
         self.flask_app = flask.Flask(__name__)
 
-        self.host = "localhost"
-        self.port = 5000
+        properties.init()
+
+        self.host = properties.get_app_host()
+        self.port = properties.get_app_port()
 
         logger.log_info("Application initialized.")
 
