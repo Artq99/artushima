@@ -1,0 +1,6 @@
+CREATE TABLE db_version (
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	version VARCHAR(255)
+);
+
+INSERT INTO db_version (version) VALUES ('0000 - INITIAL');
