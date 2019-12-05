@@ -1,4 +1,0 @@
-# static files and templates are generated from the Angular app and they should
-# not be commited
-static/
-templates/

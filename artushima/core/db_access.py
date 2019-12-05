@@ -23,7 +23,7 @@ def init():
     db_uri = properties.get_db_uri()
 
     if not db_uri:
-        raise RuntimeError("DB_URI not provided.")
+        raise RuntimeError("Property 'DB_URI' not provided.")
 
     SqlEngine = sqlalchemy.create_engine(db_uri)
-    Session = orm.sessionmaker(SqlEngine)
+    Session = orm.scoped_session(orm.sessionmaker(SqlEngine))
