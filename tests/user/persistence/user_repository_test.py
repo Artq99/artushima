@@ -69,3 +69,40 @@ class PersistTest(TestCase):
         # when then
         with self.assertRaises(ValueError):
             user_repository.persist(user)
+
+
+class ReadByUserNameTest(TestCase):
+
+    def setUp(self):
+        properties.init()
+        db_access.init()
+        self.session = db_access.Session()
+
+    def tearDown(self):
+        self.session.rollback()
+        self.session.close()
+
+    def test_should_get_user_by_user_name(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.now()
+        user.modified_on = datetime.now()
+        user.opt_lock = 0
+
+        self.session.add(user)
+        self.session.flush()
+
+        # when
+        found_user = user_repository.read_by_user_name("test_user")
+
+        # then
+        self.assertIsNotNone(found_user)
+        self.assertEqual(user, found_user)
+
+    def test_should_get_null_when_user_does_not_exist(self):
+        # when
+        found_user = user_repository.read_by_user_name("test_user")
+
+        # then
+        self.assertIsNone(found_user)
