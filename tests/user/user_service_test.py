@@ -1,0 +1,74 @@
+"""
+The testing module for the user service.
+"""
+
+from datetime import datetime
+from unittest import TestCase
+from unittest.mock import create_autospec
+
+from artushima.core.exceptions import BusinessError
+from artushima.user import user_service
+from artushima.user.persistence import user_repository
+from artushima.user.persistence.model import UserEntity
+
+
+class GetUserByUserNameTest(TestCase):
+
+    def setUp(self):
+        self.user_repository_mock = create_autospec(user_repository)
+        user_service.user_repository = self.user_repository_mock
+
+    def tearDown(self):
+        user_service.user_repository = user_repository
+
+    def test_should_get_user_by_user_name(self):
+        # given
+        user = UserEntity()
+        user.id = 1
+        user.user_name = "test_user"
+        user.created_on = datetime.now()
+        user.modified_on = datetime.now()
+        user.opt_lock = 0
+        user.password_hash = "test_hash"
+
+        self.user_repository_mock.read_by_user_name.return_value = user
+
+        # when
+        user_data = user_service.get_user_by_user_name("test_user")
+
+        # then
+        self.assertIsNotNone(user_data)
+        self.assertIsInstance(user_data, dict)
+        self.assertEqual(user.id, user_data["id"])
+        self.assertEqual(user.user_name, user_data["user_name"])
+        self.assertEqual(user.created_on, user_data["created_on"])
+        self.assertEqual(user.modified_on, user_data["modified_on"])
+        self.assertEqual(user.opt_lock, user_data["opt_lock"])
+        self.assertEqual(user.password_hash, user_data["password_hash"])
+
+        self.user_repository_mock.read_by_user_name.assert_called_once_with("test_user")
+
+    def test_should_get_none_when_user_does_not_exist(self):
+        # given
+        self.user_repository_mock.read_by_user_name.return_value = None
+
+        # when
+        user_data = user_service.get_user_by_user_name("test_user")
+
+        # then
+        self.assertIsNone(user_data)
+
+    def test_should_raise_value_error_when_user_name_is_not_string(self):
+        # when then
+        with self.assertRaises(ValueError):
+            user_service.get_user_by_user_name(1)
+
+    def test_should_raise_business_error_when_user_name_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.get_user_by_user_name(None)
+
+    def test_should_raise_business_error_when_user_name_is_empty_string(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.get_user_by_user_name("")
