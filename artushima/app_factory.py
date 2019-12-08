@@ -6,6 +6,7 @@ import flask
 
 from artushima.commons import logger
 from artushima.core import db_access, properties
+from artushima.startup import startup_service
 
 
 class App:
@@ -25,6 +26,18 @@ class App:
         self.port = properties.get_app_port()
 
         db_access.init()
+
+        session = db_access.Session()
+        try:
+            if not startup_service.superuser_exists():
+                startup_service.create_superuser()
+                session.commit()
+        except Exception as err:
+            session.rollback()
+            logger.log_error("Error on application startup: {}".format(str(err)))
+            raise err
+        finally:
+            session.close()
 
         logger.log_info("Application initialized.")
 
