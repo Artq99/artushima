@@ -8,7 +8,8 @@ from unittest import TestCase
 from artushima.core import db_access, properties
 from artushima.core.exceptions import PersistenceError
 from artushima.user.persistence import user_repository
-from artushima.user.persistence.model import UserEntity
+from artushima.user.persistence.model import (UserEntity, UserHistoryEntity,
+                                              UserRoleEntity)
 
 
 class PersistTest(TestCase):
@@ -35,6 +36,51 @@ class PersistTest(TestCase):
 
         # then
         self.assertEqual(1, self.session.query(UserEntity).count())
+
+    def test_should_persist_new_user_with_history_entry(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.now()
+        user.modified_on = datetime.now()
+        user.opt_lock = 0
+
+        user_history_entry = UserHistoryEntity()
+        user_history_entry.created_on = datetime.now()
+        user_history_entry.modified_on = datetime.now()
+        user_history_entry.opt_lock = 0
+        user_history_entry.editor_name = "test"
+        user_history_entry.message = "test message"
+        user_history_entry.user = user
+
+        # when
+        user_repository.persist(user)
+
+        # then
+        self.assertIsNotNone(self.session.query(UserEntity).filter_by(user_name="test_user").first())
+        self.assertIsNotNone(self.session.query(UserHistoryEntity).filter_by(user=user).first())
+
+    def test_should_persist_new_user_with_role(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.now()
+        user.modified_on = datetime.now()
+        user.opt_lock = 0
+
+        user_role = UserRoleEntity()
+        user_role.created_on = datetime.now()
+        user_role.modified_on = datetime.now()
+        user_role.opt_lock = 0
+        user_role.role_name = "test_role"
+        user_role.user = user
+
+        # when
+        user_repository.persist(user)
+
+        # then
+        self.assertIsNotNone(self.session.query(UserEntity).filter_by(user_name="test_user").first())
+        self.assertIsNotNone(self.session.query(UserRoleEntity).filter_by(user=user).first)
 
     def test_should_update_user(self):
         # given
