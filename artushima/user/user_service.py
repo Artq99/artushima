@@ -7,6 +7,7 @@ from datetime import datetime
 from werkzeug import security
 
 from artushima.core.exceptions import BusinessError
+from artushima.core.utils.argument_validator import validate_str_arg
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import (UserEntity, UserHistoryEntity,
                                               UserRoleEntity)
@@ -17,7 +18,7 @@ def get_user_by_user_name(name):
     Get the user data by his/her user name.
     """
 
-    _check_arg_name(name)
+    validate_str_arg(name, "Name")
 
     user = user_repository.read_by_user_name(name)
 
