@@ -15,7 +15,7 @@ from artushima.user import user_roles_service, user_service
 
 def log_in(user_name, password):
     """
-    Authenticate the user and return an authentication token.
+    Authenticate the user and return the current user data with authentication token.
     """
 
     user = user_service.get_user_by_user_name(user_name)
@@ -55,11 +55,7 @@ def _get_and_validate_exp_time():
 
 def _create_log_in_response(user_name, user_roles, token):
     return {
-        "status": "success",
-        "message": "",
-        "currentUser": {
-            "userName": user_name,
-            "roles": user_roles,
-            "token": token
-        }
+        "user_name": user_name,
+        "roles": user_roles,
+        "token": token.decode()
     }

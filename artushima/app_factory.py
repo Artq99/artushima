@@ -7,6 +7,7 @@ import flask
 from artushima.commons import logger
 from artushima.core import db_access, properties
 from artushima.startup import startup_service
+from artushima.web_api import auth_endpoint
 
 
 class App:
@@ -26,6 +27,9 @@ class App:
         self.port = properties.get_app_port()
 
         db_access.init()
+
+        # Registering web-service endpoints
+        self.flask_app.register_blueprint(auth_endpoint.AUTH_BLUEPRINT)
 
         session = db_access.Session()
         try:

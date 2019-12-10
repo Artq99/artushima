@@ -40,7 +40,7 @@ class LogInTest(TestCase):
         self.properties_mock.get_token_expiration_time.return_value = "60"
         self.properties_mock.get_app_secret_key.return_value = "secret"
 
-        self.jwt_mock.encode.return_value = "test_token"
+        self.jwt_mock.encode.return_value = b"test_token"
 
         self.user_roles_service_mock.get_user_roles.return_value = {
             "test_role_1",
@@ -51,13 +51,11 @@ class LogInTest(TestCase):
         response = auth_service.log_in("test_user", "password")
 
         # then
-        self.assertEqual("success", response["status"])
-        self.assertEqual("", response["message"])
-        self.assertEqual("test_user", response["currentUser"]["userName"])
-        self.assertEqual("test_token", response["currentUser"]["token"])
-        self.assertEqual(2, len(response["currentUser"]["roles"]))
-        self.assertIn("test_role_1", response["currentUser"]["roles"])
-        self.assertIn("test_role_2", response["currentUser"]["roles"])
+        self.assertEqual("test_user", response["user_name"])
+        self.assertEqual("test_token", response["token"])
+        self.assertEqual(2, len(response["roles"]))
+        self.assertIn("test_role_1", response["roles"])
+        self.assertIn("test_role_2", response["roles"])
 
     def test_should_raise_error_when_user_does_not_exist(self):
         # given
