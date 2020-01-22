@@ -69,3 +69,31 @@ def log_in():
             "roles": current_user["roles"]
         }
     }), 200
+
+
+@AUTH_BLUEPRINT.route("/logout", methods=["POST"])
+def log_out():
+    """
+    Blacklist the token.
+
+    Requires the user to be logged in.
+    """
+
+    token = flask.request.headers.get("Authorization")
+
+    if token is None:
+        return flask.jsonify({
+            "status": "failure",
+            "message": "Błąd autoryzacji"
+        })
+
+    token = token.split(" ")[1]
+
+    # TODO authorize token
+
+    # TODO persist a blacklisted token
+
+    return flask.jsonify({
+        "status": "success",
+        "message": ""
+    })
