@@ -1,4 +1,8 @@
-from artushima import application
+"""
+Runs the Artushima Backend.
+"""
+
+from artushima import app_factory
 
 if __name__ == "__main__":
-    application.start_app()
+    app_factory.create_and_run()

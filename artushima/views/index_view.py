@@ -3,13 +3,14 @@ The module contains the endpoint for the index page.
 """
 
 import flask
+from flask import Blueprint
 
-index_blueprint = flask.Blueprint("index_view", __name__, url_prefix="/")
+INDEX_BLUEPRINT = Blueprint("index_view", __name__, url_prefix="/")
 
 
-@index_blueprint.route("/")
-@index_blueprint.route("/dashboard")
-@index_blueprint.route("/login")
+@INDEX_BLUEPRINT.route("/")
+@INDEX_BLUEPRINT.route("/dashboard")
+@INDEX_BLUEPRINT.route("/login")
 def index():
     """
     The endpoint for '/'.
