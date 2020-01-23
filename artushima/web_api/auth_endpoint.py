@@ -81,19 +81,32 @@ def log_out():
 
     token = flask.request.headers.get("Authorization")
 
-    if token is None:
+    db_session = db_access.Session()
+
+    try:
+        if not auth_service.is_token_ok(token):
+
+            return flask.jsonify({
+                "status": "failure",
+                "message": "Błąd autoryzacji"
+            }), 401
+
+        auth_service.blacklist_token(token)
+        db_session.commit()
+
+    except Exception as err:
+        logger.log_error(str(err))
+        db_session.rollback()
+
         return flask.jsonify({
             "status": "failure",
-            "message": "Błąd autoryzacji"
-        })
+            "message": "Błąd aplikacji"
+        }), 500
 
-    token = token.split(" ")[1]
-
-    # TODO authorize token
-
-    # TODO persist a blacklisted token
+    finally:
+        db_session.close()
 
     return flask.jsonify({
         "status": "success",
         "message": ""
-    })
+    }), 200

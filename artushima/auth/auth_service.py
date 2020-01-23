@@ -6,11 +6,17 @@ from datetime import datetime, timedelta
 
 import jwt
 import werkzeug
+from jwt import InvalidTokenError
 
+from artushima.auth.persistence import blacklisted_token_repository
+from artushima.auth.persistence.model import BlacklistedTokenEntity
 from artushima.core import properties
 from artushima.core.exceptions import BusinessError
-from artushima.core.properties import PROPERTY_TOKEN_EXPIRATION_TIME
+from artushima.core.properties import (PROPERTY_TEST_BEARER_ENABLED,
+                                       PROPERTY_TOKEN_EXPIRATION_TIME)
 from artushima.user import user_roles_service, user_service
+
+TEST_BEARER_TOKEN = "test-9999"
 
 
 def log_in(user_name, password):
@@ -59,3 +65,63 @@ def _create_log_in_response(user_name, user_roles, token):
         "roles": user_roles,
         "token": token.decode()
     }
+
+
+def is_token_ok(token):
+    """
+    Authenticate the token.
+    """
+
+    if token is None:
+        return False
+
+    token = token.split(" ")[1]
+
+    if token == TEST_BEARER_TOKEN:
+        if _is_test_bearer_enabled():
+            return True
+        else:
+            return False
+
+    if _is_token_blacklisted(token):
+        return False
+
+    try:
+        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
+    except InvalidTokenError:
+        return False
+
+    user = user_service.get_user_by_user_name(decoded_token["sub"])
+
+    if user is None:
+        return False
+
+    return True
+
+
+def _is_test_bearer_enabled():
+    test_bearer_enabled = properties.get_test_bearer_enabled()
+
+    if test_bearer_enabled is None:
+        raise BusinessError(f"Property {PROPERTY_TEST_BEARER_ENABLED} missing!")
+
+    return bool(test_bearer_enabled)
+
+
+def _is_token_blacklisted(token):
+    blacklisted_token = blacklisted_token_repository.read_by_token(token)
+
+    return blacklisted_token is not None
+
+
+def blacklist_token(token):
+    """
+    Persist the given token as blacklisted.
+    """
+
+    token = token.split(" ")[1]
+
+    blacklisted_token = BlacklistedTokenEntity()
+    blacklisted_token.token = token
+
+    blacklisted_token_repository.persist(blacklisted_token)

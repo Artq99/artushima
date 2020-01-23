@@ -33,4 +33,9 @@ CREATE TABLE user_role (
         REFERENCES `user`(id)
 );
 
+CREATE TABLE blacklisted_token (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL
+);
+
 INSERT INTO db_version (version) VALUES ('0001 - V1.0 CREATE TABLES');

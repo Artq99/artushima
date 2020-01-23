@@ -149,7 +149,7 @@ class ReadByUserNameTest(TestCase):
         self.assertIsNotNone(found_user)
         self.assertEqual(user, found_user)
 
-    def test_should_get_null_when_user_does_not_exist(self):
+    def test_should_get_none_when_user_does_not_exist(self):
         # when
         found_user = user_repository.read_by_user_name("test_user")
 
