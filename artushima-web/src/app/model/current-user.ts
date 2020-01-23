@@ -4,6 +4,6 @@
 export class CurrentUser {
 
   userName: string;
-  role: string; // TODO create enum for roles
+  roles: string[];
   token: string;
 }
