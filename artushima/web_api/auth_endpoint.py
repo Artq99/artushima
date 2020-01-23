@@ -7,6 +7,7 @@ import flask
 from artushima.auth import auth_service
 from artushima.commons import logger
 from artushima.core import db_access
+from artushima.core.exceptions import BusinessError
 
 AUTH_BLUEPRINT = flask.Blueprint("auth_endpoint", __name__, url_prefix="/api/auth")
 
@@ -47,6 +48,12 @@ def log_in():
     try:
         current_user = auth_service.log_in(user_name, password)
         db_session.commit()
+
+    except BusinessError:
+        return flask.jsonify({
+            "status": "failure",
+            "message": "Błąd autentykacji"
+        }), 401
 
     except Exception as err:
         logger.log_error(str(err))
