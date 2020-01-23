@@ -35,7 +35,7 @@ class PersistTest(TestCase):
         user_repository.persist(user)
 
         # then
-        self.assertEqual(1, self.session.query(UserEntity).count())
+        self.assertIn(user, self.session.query(UserEntity).all())
 
     def test_should_persist_new_user_with_history_entry(self):
         # given
@@ -98,7 +98,10 @@ class PersistTest(TestCase):
         user_repository.persist(user)
 
         # then
-        self.assertEqual("test_hash", self.session.query(UserEntity).first().password_hash)
+        self.assertEqual(
+            "test_hash",
+            self.session.query(UserEntity).filter_by(user_name="test_user").first().password_hash
+        )
 
     def test_should_raise_persistence_error_on_constraint_violation(self):
         # given
