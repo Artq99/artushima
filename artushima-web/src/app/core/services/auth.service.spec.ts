@@ -19,7 +19,6 @@ import { AuthLoginResponse } from 'src/app/model/auth-login-response';
 import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
 import { CurrentUser } from 'src/app/model/current-user';
 import { RequestStatus } from 'src/app/model/request-status';
-import { BlacklistedToken } from 'src/app/model/blacklisted-token';
 import { DecodedToken } from 'src/app/model/decoded-token';
 import { MessageLevel } from 'src/app/model/message-level';
 
@@ -28,7 +27,7 @@ describe('AuthService', () => {
   // test data
   const TEST_USER: CurrentUser = new CurrentUser();
   TEST_USER.userName = 'testUser';
-  TEST_USER.role = 'role_player';
+  TEST_USER.roles = ['role_player'];
   TEST_USER.token = 'test_token';
 
   const TEST_DECODED_TOKEN_VALID: DecodedToken = new DecodedToken();
@@ -49,13 +48,8 @@ describe('AuthService', () => {
   TEST_AUTH_LOGIN_RESPONSE_FAILURE.status = RequestStatus.FAILURE;
   TEST_AUTH_LOGIN_RESPONSE_FAILURE.message = 'Error';
 
-  const TEST_BLACKLISTED_TOKEN: BlacklistedToken = new BlacklistedToken();
-  TEST_BLACKLISTED_TOKEN.id = 1;
-  TEST_BLACKLISTED_TOKEN.token = 'test_token';
-
   const TEST_AUTH_LOGOUT_RESPONSE_SUCCESS: AuthLogoutResponse = new AuthLogoutResponse();
   TEST_AUTH_LOGOUT_RESPONSE_SUCCESS.status = RequestStatus.SUCCESS;
-  TEST_AUTH_LOGOUT_RESPONSE_SUCCESS.token = TEST_BLACKLISTED_TOKEN;
 
   const TEST_AUTH_LOGOUT_RESPONSE_FAILURE: AuthLogoutResponse = new AuthLogoutResponse();
   TEST_AUTH_LOGOUT_RESPONSE_FAILURE.status = RequestStatus.FAILURE;
