@@ -99,6 +99,49 @@ def is_token_ok(token):
     return True
 
 
+def are_roles_sufficient(token, required_roles):
+    """
+    Check if the user for whom the token has been issued has required roles.
+
+    The user has to have only one of the required roles -- each role grants the access to the resource separately.
+    """
+
+    if token is None:
+        return False
+
+    token = token.split(" ")[1]
+
+    if token == TEST_BEARER_TOKEN:
+        if _is_test_bearer_enabled():
+            return True
+        else:
+            return False
+
+    if required_roles is None or len(required_roles) == 0:
+        return True
+
+    if _is_token_blacklisted(token):
+        return False
+
+    try:
+        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
+    except InvalidTokenError:
+        return False
+
+    user = user_service.get_user_by_user_name(decoded_token["sub"])
+
+    if user is None:
+        return False
+
+    user_roles = user_roles_service.get_user_roles(user["user_name"])
+
+    for user_role in user_roles:
+        if user_role in required_roles:
+            return True
+
+    return False
+
+
 def _is_test_bearer_enabled():
     test_bearer_enabled = properties.get_test_bearer_enabled()
 
