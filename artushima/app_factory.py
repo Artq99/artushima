@@ -65,6 +65,15 @@ def create():
     return App()
 
 
+def create_for_debug():
+    """
+    Create and return the inner flask app for debug.
+    """
+
+    app = App()
+    return app.flask_app
+
+
 def create_and_run():
     """
     Create the application object and run it immediately.
