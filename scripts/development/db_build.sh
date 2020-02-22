@@ -49,6 +49,14 @@ then
     exit 1
 fi
 
+DB_FLYWAY_PASSWORD=$(grep "DB_FLYWAY_PASSWORD" properties.txt | sed "s/DB_FLYWAY_PASSWORD=//g")
+
+if [ "$DB_FLYWAY_PASSWORD" == "" ];
+then
+	echo "[ERROR] Property DB_FLYWAY_PASSWORD not provided!"
+	exit 1
+fi
+
 DB_APP_PASSWORD=$(grep "DB_APP_PASSWORD" properties.txt | sed "s/DB_APP_PASSWORD=//g")
 
 if [ "$DB_APP_PASSWORD" == "" ];
@@ -145,6 +153,19 @@ echo "[INFO] User created: admin"
 docker exec $DB_CONTAINER_NAME mysql \
 	--user=root \
 	--password=$DB_ROOT_PASSWORD \
+	--execute "CREATE USER 'flyway'@'%' IDENTIFIED BY '$DB_FLYWAY_PASSWORD';" \
+	&> /dev/null
+
+if [ "$?" != "0" ];
+then
+	echo "[ERROR] Error while creating user flyway!"
+	exit 1
+fi
+echo "[INFO] User created: flyway"
+
+docker exec $DB_CONTAINER_NAME mysql \
+	--user=root \
+	--password=$DB_ROOT_PASSWORD \
 	--execute "CREATE USER 'app'@'%' IDENTIFIED BY '$DB_APP_PASSWORD';" \
 	&> /dev/null
 
@@ -169,6 +190,19 @@ docker exec $DB_CONTAINER_NAME mysql \
 if [ "$?" != "0" ];
 then
 	echo "[ERROR] Error while granting privileges to user admin!"
+	exit 1
+fi
+echo "[INFO] Privileges granted to user admin."
+
+docker exec $DB_CONTAINER_NAME mysql \
+	--user=root \
+	--password=$DB_ROOT_PASSWORD \
+	--execute "GRANT ALL PRIVILEGES ON *.* TO 'flyway'@'%';" \
+	&> /dev/null
+
+if [ "$?" != "0" ];
+then
+	echo "[ERROR] Error while granting privileges to user flyway!"
 	exit 1
 fi
 echo "[INFO] Privileges granted to user admin."

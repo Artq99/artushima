@@ -1,0 +1,3 @@
+# All Flyway files should be excluded except the database migrations
+flyway/*
+!flyway/sql
