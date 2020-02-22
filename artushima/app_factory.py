@@ -7,8 +7,9 @@ import flask
 from artushima.commons import logger
 from artushima.core import db_access, properties
 from artushima.startup import startup_service
+from artushima.user import roles, user_roles_service
 from artushima.views import index_view
-from artushima.web_api import auth_endpoint
+from artushima.web_api import auth_endpoint, users_endpoint
 
 
 class App:
@@ -31,6 +32,7 @@ class App:
 
         # Registering web-service endpoints
         self.flask_app.register_blueprint(auth_endpoint.AUTH_BLUEPRINT)
+        self.flask_app.register_blueprint(users_endpoint.USERS_BLUEPRINT)
 
         # Registering views
         self.flask_app.register_blueprint(index_view.INDEX_BLUEPRINT)
@@ -39,7 +41,20 @@ class App:
         try:
             if not startup_service.superuser_exists():
                 startup_service.create_superuser()
-                session.commit()
+            else:
+                superuser_roles = user_roles_service.get_user_roles("superuser")
+
+                grant_required = False
+                for role in roles.ALL_ROLES:
+                    if role not in superuser_roles:
+                        grant_required = True
+                        break
+
+                if grant_required:
+                    user_roles_service.grant_roles("SYSTEM", "superuser", roles.ALL_ROLES)
+
+            session.commit()
+
         except Exception as err:
             session.rollback()
             logger.log_error("Error on application startup: {}".format(str(err)))
