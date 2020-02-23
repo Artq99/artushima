@@ -38,3 +38,16 @@ def read_by_user_name(name):
         return user
     except SQLAlchemyError as err:
         raise PersistenceError("Error on reading user: {}".format(str(err))) from err
+
+
+def read_all():
+    """
+    Read all users.
+    """
+
+    try:
+        session: Session = db_access.Session()
+        users = session.query(UserEntity).all()
+        return users
+    except SQLAlchemyError as err:
+        raise PersistenceError(f"Error on reading all users: {str(err)}") from err

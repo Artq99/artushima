@@ -155,3 +155,41 @@ class ReadByUserNameTest(TestCase):
 
         # then
         self.assertIsNone(found_user)
+
+
+class ReadAllTest(TestCase):
+
+    def setUp(self):
+        properties.init()
+        db_access.init()
+        self.session = db_access.Session()
+
+    def tearDown(self):
+        self.session.rollback()
+        self.session.close()
+
+    def test_should_read_all_users(self):
+        # given
+        user_1 = UserEntity()
+        user_1.user_name = "test_user_1"
+        user_1.created_on = datetime.now()
+        user_1.modified_on = datetime.now()
+        user_1.opt_lock = 0
+
+        user_2 = UserEntity()
+        user_2.user_name = "test_user_2"
+        user_2.created_on = datetime.now()
+        user_2.modified_on = datetime.now()
+        user_2.opt_lock = 0
+
+        self.session.add(user_1)
+        self.session.add(user_2)
+        self.session.flush()
+
+        # when
+        found_users = user_repository.read_all()
+
+        # then
+        self.assertIsNotNone(found_users)
+        self.assertIn(user_1, found_users)
+        self.assertIn(user_2, found_users)
