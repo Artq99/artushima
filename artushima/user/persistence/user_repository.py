@@ -45,8 +45,9 @@ def read_all():
     Read all users.
     """
 
+    session: Session = db_access.Session()
+
     try:
-        session: Session = db_access.Session()
         users = session.query(UserEntity).all()
         return users
     except SQLAlchemyError as err:
