@@ -76,6 +76,41 @@ class GetUserByUserNameTest(TestCase):
             user_service.get_user_by_user_name("")
 
 
+class GetAllUsersTest(TestCase):
+
+    def setUp(self):
+        self.user_repository_mock = create_autospec(user_repository)
+        user_service.user_repository = self.user_repository_mock
+
+    def tearDown(self):
+        user_service.user_repository = user_repository
+
+    def test_should_get_all_users(self):
+        # given
+        user_1 = UserEntity()
+        user_1.user_name = "test_user_1"
+        user_1.created_on = datetime.now()
+        user_1.modified_on = datetime.now()
+        user_1.opt_lock = 0
+
+        user_2 = UserEntity()
+        user_2.user_name = "test_user_2"
+        user_2.created_on = datetime.now()
+        user_2.modified_on = datetime.now()
+        user_2.opt_lock = 0
+
+        self.user_repository_mock.read_all.return_value = [user_1, user_2]
+
+        # when
+        found_users = user_service.get_all_users()
+
+        # then
+        self.assertIsNotNone(found_users)
+        self.assertEqual(2, len(found_users))
+        self.assertEqual("test_user_1", found_users[0]["user_name"])
+        self.assertEqual("test_user_2", found_users[1]["user_name"])
+
+
 class CreateUserTest(TestCase):
 
     def setUp(self):

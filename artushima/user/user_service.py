@@ -29,6 +29,21 @@ def get_user_by_user_name(name):
     return _map_user_entity_to_dict(user)
 
 
+def get_all_users():
+    """
+    Get all users.
+    """
+
+    users = user_repository.read_all()
+
+    result = list()
+
+    for user in users:
+        result.append(_map_user_entity_to_dict(user))
+
+    return result
+
+
 def _map_user_entity_to_dict(user):
     return {
         "id": user.id,
