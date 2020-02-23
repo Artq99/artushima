@@ -125,6 +125,36 @@ class CreateUserTest(TestCase):
         self.assertEqual("role_1", user.user_roles[0].role_name)
         self.assertEqual("role_2", user.user_roles[1].role_name)
 
+    def test_should_raise_exception_when_editor_name_is_not_str(self):
+        # when then
+        with self.assertRaises(ValueError):
+            user_service.create_user(1, "test_user", "test_password")
+
+    def test_should_raise_exception_when_editor_name_is_empty(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.create_user("", "test_user", "test_password")
+
+    def test_should_raise_exception_when_editor_name_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.create_user(None, "test_user", "test_password")
+
+    def test_should_raise_exception_when_user_name_is_not_str(self):
+        # when then
+        with self.assertRaises(ValueError):
+            user_service.create_user("test_editor", 1, "test_password")
+
+    def test_should_raise_exception_when_user_name_is_empty(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.create_user("test_editor", "", "test_password")
+
+    def test_should_raise_exception_when_user_name_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            user_service.create_user("test_editor", None, "test_password")
+
     def test_should_raise_error_when_password_is_not_str(self):
         # given
         self.user_repository_mock.read_by_user_name.return_value = None
@@ -148,6 +178,11 @@ class CreateUserTest(TestCase):
         # when then
         with self.assertRaises(BusinessError):
             user_service.create_user("test_editor", "test_user", "")
+
+    def test_should_raise_exception_when_roles_arg_is_not_list(self):
+        # when then
+        with self.assertRaises(ValueError):
+            user_service.create_user("test_editor", "test_user", "test_password", 1)
 
     def test_should_raise_error_when_user_already_exists(self):
         # given

@@ -7,7 +7,8 @@ from datetime import datetime
 from werkzeug import security
 
 from artushima.core.exceptions import BusinessError
-from artushima.core.utils.argument_validator import validate_str_arg
+from artushima.core.utils.argument_validator import (
+    validate_list_arg_nullable, validate_str_arg)
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import (UserEntity, UserHistoryEntity,
                                               UserRoleEntity)
@@ -28,17 +29,6 @@ def get_user_by_user_name(name):
     return _map_user_entity_to_dict(user)
 
 
-def _check_arg_name(name):
-    if name is None:
-        raise BusinessError("Name must be provided!")
-
-    if not isinstance(name, str):
-        raise ValueError("Name must be a string value!")
-
-    if not name:
-        raise BusinessError("Name must be provided!")
-
-
 def _map_user_entity_to_dict(user):
     return {
         "id": user.id,
@@ -55,7 +45,10 @@ def create_user(editor_name, user_name, password, roles=None):
     Create a new user with the given name and password, granting him/her the given roles.
     """
 
-    _check_arg_password(password)
+    validate_str_arg(editor_name, "Editor name")
+    validate_str_arg(user_name, "User name")
+    validate_str_arg(password, "Password")
+    validate_list_arg_nullable(roles, "Roles")
 
     if user_repository.read_by_user_name(user_name) is not None:
         raise BusinessError("User {} already exists!".format(user_name))
@@ -66,17 +59,6 @@ def create_user(editor_name, user_name, password, roles=None):
     _create_and_assing_history_entry_creation(user, editor_name, timestamp)
 
     user_repository.persist(user)
-
-
-def _check_arg_password(password):
-    if password is None:
-        raise BusinessError("Password must be provided!")
-
-    if not isinstance(password, str):
-        raise ValueError("Password must be a string value!")
-
-    if not password:
-        raise BusinessError("Password must be provided!")
 
 
 def _create_user_entity(user_name, password, timestamp):

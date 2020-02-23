@@ -30,3 +30,12 @@ def validate_list_arg(arg, arg_name):
 
     if not isinstance(arg, list):
         raise ValueError(f"{arg_name} must be a list!")
+
+
+def validate_list_arg_nullable(arg, arg_name):
+    """
+    Check if the argument is a list or None.
+    """
+
+    if (arg is not None) and (not isinstance(arg, list)):
+        raise ValueError(f"{arg_name} must be a list!")
