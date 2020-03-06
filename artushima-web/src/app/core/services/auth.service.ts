@@ -83,6 +83,19 @@ export class AuthService {
   }
 
   /**
+   * Checks if the currently logged in user has the required roles.
+   *
+   * @param requiredRoles a list with the roles that allow authentication
+   *
+   * @returns true if the user has one of the required roles, false otherwise
+   */
+  public hasUserGotRoles(requiredRoles: String[]): boolean {
+
+    // TODO
+    return true;
+  }
+
+  /**
    * Validates, if the authentication token in the local storage has not
    * expired.
    */

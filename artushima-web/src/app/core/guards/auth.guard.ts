@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
+import { MessageLevel } from 'src/app/model/message-level';
+
 import { AuthService } from '../services/auth.service';
+import { MessagesService } from '../services/messages.service';
 
 /**
  * A guard that ensures, that only an authenitcated user can access a given
@@ -16,7 +19,8 @@ export class AuthGuard implements CanActivate {
 
   public constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private messagesService: MessagesService
   ) { }
 
   public canActivate(
@@ -24,12 +28,18 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (this.authService.isUserLoggedIn()) {
-      return true;
-    } else {
+    if (!this.authService.isUserLoggedIn()) {
       this.authService.postAuthRedirectRoute = next.url[0].path;
       this.router.navigate(["login"]);
       return false;
+
+    } else if (next.data !== undefined && !this.authService.hasUserGotRoles(next.data.roles)) {
+      this.messagesService.showMessage("Nie masz odpowiednich uprawnień.", MessageLevel.ERROR);
+      this.router.navigate(["dashboard"]);
+      return false;
+
+    } else {
+      return true;
     }
   }
 

@@ -39,11 +39,13 @@ describe('AuthGuard', () => {
     it('should return true when the user has authenticated', () => {
 
       // given
+      let activatedRouteSnapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot();
+      activatedRouteSnapshot.url = [new UrlSegment('test_route', {})];
       spyOn(authService, 'isUserLoggedIn')
         .and.returnValue(true);
 
       // when
-      let result = authGuard.canActivate(undefined, undefined);
+      let result = authGuard.canActivate(activatedRouteSnapshot, undefined);
 
       // then
       expect(result).toBeTruthy();
@@ -62,6 +64,44 @@ describe('AuthGuard', () => {
 
       // then
       expect(result).toBeFalsy();
+    });
+
+    it('should return true when the user has authenticated and has got required roles', () => {
+
+      // given
+      let activatedRouteSnapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot();
+      activatedRouteSnapshot.url = [new UrlSegment('test_route', {})];
+      activatedRouteSnapshot.data = { roles: ["test_role"] };
+      spyOn(authService, 'isUserLoggedIn')
+        .and.returnValue(true);
+      spyOn(authService, 'hasUserGotRoles')
+        .and.returnValue(true);
+
+      // when
+      let result = authGuard.canActivate(activatedRouteSnapshot, undefined);
+
+      // then
+      expect(result).toBeTruthy();
+      expect(authService.hasUserGotRoles).toHaveBeenCalledWith(['test_role']);
+    });
+
+    it('should return false when the user has not got required roles', () => {
+
+      // given
+      let activatedRouteSnapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot();
+      activatedRouteSnapshot.url = [new UrlSegment('test_route', {})];
+      activatedRouteSnapshot.data = { roles: ["test_role"] };
+      spyOn(authService, 'isUserLoggedIn')
+        .and.returnValue(true);
+      spyOn(authService, 'hasUserGotRoles')
+        .and.returnValue(false);
+
+      // when
+      let result = authGuard.canActivate(activatedRouteSnapshot, undefined);
+
+      // then
+      expect(result).toBeFalsy();
+      expect(authService.hasUserGotRoles).toHaveBeenCalledWith(['test_role']);
     });
   });
 });
