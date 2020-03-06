@@ -91,6 +91,10 @@ export class AuthService {
    */
   public hasUserGotRoles(requiredRoles: string[]): boolean {
 
+    if (requiredRoles === undefined) {
+      return true;
+    }
+
     let currentUser: CurrentUser = this.getCurrentUserFromLocalStorage();
 
     if (currentUser === undefined) {

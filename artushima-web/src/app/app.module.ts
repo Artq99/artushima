@@ -19,9 +19,21 @@ import { UsersModule } from './users/users.module';
  * The definitions of all the routes existing in the application.
  */
 export const appRoutes: Routes = [
-  { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: "login", component: LoginComponent },
-  { path: "users/list", component: UserListComponent },
+  {
+    path: "dashboard",
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "login",
+    component: LoginComponent
+  },
+  {
+    path: "users/list",
+    component: UserListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['role_show_users'] }
+  },
   {
     path: '',
     redirectTo: '/dashboard',

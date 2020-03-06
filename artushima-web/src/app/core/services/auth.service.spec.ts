@@ -156,6 +156,15 @@ describe('AuthService', () => {
       expect(response).toBeFalsy();
     });
 
+    it('should return true if the required roles are undefined', () => {
+
+      // when
+      let response: boolean = authService.hasUserGotRoles(undefined);
+
+      // then
+      expect(response).toBeTruthy();
+    });
+
     it('should return false if the user is undefined', () => {
 
       // given
