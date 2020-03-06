@@ -12,6 +12,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { CoreModule } from './core/core.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { UserListComponent } from './users/components/user-list/user-list.component';
+import { UsersModule } from './users/users.module';
 
 /**
  * The definitions of all the routes existing in the application.
@@ -19,6 +21,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 export const appRoutes: Routes = [
   { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginComponent },
+  { path: "users/list", component: UserListComponent },
   {
     path: '',
     redirectTo: '/dashboard',
@@ -36,6 +39,7 @@ export const appRoutes: Routes = [
     CoreModule,
     AuthenticationModule,
     DashboardModule,
+    UsersModule
   ],
   providers: [
     {
