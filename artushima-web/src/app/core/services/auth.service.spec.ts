@@ -27,8 +27,13 @@ describe('AuthService', () => {
   // test data
   const TEST_USER: CurrentUser = new CurrentUser();
   TEST_USER.userName = 'testUser';
-  TEST_USER.roles = ['role_player'];
+  TEST_USER.roles = ['test_role_1'];
   TEST_USER.token = 'test_token';
+
+  const TEST_USER_2: CurrentUser = new CurrentUser();
+  TEST_USER_2.userName = 'testUser2';
+  TEST_USER_2.roles = ['test_role_3'];
+  TEST_USER_2.token = 'test_roken';
 
   const TEST_DECODED_TOKEN_VALID: DecodedToken = new DecodedToken();
   TEST_DECODED_TOKEN_VALID.sub = 'testUser';
@@ -120,6 +125,48 @@ describe('AuthService', () => {
 
       // then
       expect(result).toBeFalsy();
+    });
+  });
+
+  describe('hasUserGotRoles', () => {
+
+    it('should return true if the user has one of the required roles', () => {
+
+      // given
+      spyOn<any>(authService, 'getCurrentUserFromLocalStorage')
+        .and.returnValue(TEST_USER);
+
+      // when
+      let response: boolean = authService.hasUserGotRoles(['test_role_1', 'test_role_2']);
+
+      // then
+      expect(response).toBeTruthy();
+    });
+
+    it('should return false if the user has not got any of the required roles', () => {
+
+      // given
+      spyOn<any>(authService, 'getCurrentUserFromLocalStorage')
+        .and.returnValue(TEST_USER_2);
+
+      // when
+      let response: boolean = authService.hasUserGotRoles(['test_role_1', 'test_role_2']);
+
+      // then
+      expect(response).toBeFalsy();
+    });
+
+    it('should return false if the user is undefined', () => {
+
+      // given
+      spyOn<any>(authService, 'getCurrentUserFromLocalStorage')
+        .and.returnValue(undefined);
+
+      // when
+      let response: boolean = authService.hasUserGotRoles(['test_role_1', 'test_role_2']);
+
+      // then
+      expect(response).toBeFalsy();
     });
   });
 

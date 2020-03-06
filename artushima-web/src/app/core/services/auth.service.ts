@@ -89,10 +89,23 @@ export class AuthService {
    *
    * @returns true if the user has one of the required roles, false otherwise
    */
-  public hasUserGotRoles(requiredRoles: String[]): boolean {
+  public hasUserGotRoles(requiredRoles: string[]): boolean {
 
-    // TODO
-    return true;
+    let currentUser: CurrentUser = this.getCurrentUserFromLocalStorage();
+
+    if (currentUser === undefined) {
+      return false;
+    }
+
+    let result: boolean = false;
+
+    currentUser.roles.forEach((role) => {
+      if (requiredRoles.includes(role)) {
+        result = true;
+      }
+    });
+
+    return result;
   }
 
   /**
