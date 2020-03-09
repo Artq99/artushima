@@ -1,1 +1,30 @@
-<p>user-list works!</p>
+<!-- header -->
+<div class="container mb-4">
+  <div class="row">
+    <div class="col">
+      <h1>Użytkownicy</h1>
+    </div>
+    <div class="col">
+      <!-- button redirecting to creating a new user -->
+      <button class="btn btn-primary float-right">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- table with users -->
+<div class="container">
+  <table id="user-data-table" class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nazwa użytkownika</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{user.id}}</td>
+        <td>{{user.userName}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
