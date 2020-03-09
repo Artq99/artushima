@@ -3,11 +3,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardModule } from './dashboard/dashboard.module';
-import { AuthenticationModule } from './authentication/authentication.module';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
-import { LoginComponent } from './authentication/components/login/login.component';
+import { LoginComponent } from './core/components/login/login.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { CoreModule } from './core/core.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -49,7 +48,6 @@ export const appRoutes: Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     CoreModule,
-    AuthenticationModule,
     DashboardModule,
     UsersModule
   ],

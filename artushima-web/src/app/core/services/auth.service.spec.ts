@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing'
 
-import { AuthenticationModule } from 'src/app/authentication/authentication.module';
 import { DashboardModule } from 'src/app/dashboard/dashboard.module';
 
 import {
@@ -70,8 +69,7 @@ describe('AuthService', () => {
       providers: [AuthService],
       imports: [
         HttpClientTestingModule,
-        DashboardModule,
-        AuthenticationModule
+        DashboardModule
       ]
     });
 

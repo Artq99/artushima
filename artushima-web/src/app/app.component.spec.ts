@@ -2,7 +2,6 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CoreModule } from './core/core.module';
-import { AuthenticationModule } from './authentication/authentication.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 
 import { AuthService } from './core/services/auth.service';
@@ -22,7 +21,6 @@ describe('AppComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        AuthenticationModule,
         CoreModule,
         DashboardModule
       ]
