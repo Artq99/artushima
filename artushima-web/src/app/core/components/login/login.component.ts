@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 
-import { RequestStatus } from 'src/app/model/request-status';
+import { RequestStatus } from 'src/app/core/model/request-status';
 
 /**
  * The component containing a form for user authentication.

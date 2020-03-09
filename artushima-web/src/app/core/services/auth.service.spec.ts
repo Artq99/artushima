@@ -14,12 +14,12 @@ import {
 } from './auth.service';
 import { MessagesService } from './messages.service';
 
-import { AuthLoginResponse } from 'src/app/model/auth-login-response';
-import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
-import { CurrentUser } from 'src/app/model/current-user';
-import { RequestStatus } from 'src/app/model/request-status';
-import { DecodedToken } from 'src/app/model/decoded-token';
-import { MessageLevel } from 'src/app/model/message-level';
+import { AuthLoginResponse } from 'src/app/core/model/auth-login-response';
+import { AuthLogoutResponse } from 'src/app/core/model/auth-logout-response';
+import { CurrentUser } from 'src/app/core/model/current-user';
+import { RequestStatus } from 'src/app/core/model/request-status';
+import { DecodedToken } from 'src/app/core/model/decoded-token';
+import { MessageLevel } from 'src/app/core/model/message-level';
 
 describe('AuthService', () => {
 

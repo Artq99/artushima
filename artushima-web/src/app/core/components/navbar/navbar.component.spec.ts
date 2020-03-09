@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
 
 import { NavbarComponent } from './navbar.component';
 
-import { RequestStatus } from 'src/app/model/request-status';
+import { RequestStatus } from 'src/app/core/model/request-status';
 
 describe('NavbarComponent', () => {
 

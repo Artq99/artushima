@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 
 import { LoginComponent } from './login.component';
 import { Observable } from 'rxjs';
-import { RequestStatus } from 'src/app/model/request-status';
+import { RequestStatus } from 'src/app/core/model/request-status';
 
 describe('LoginComponent', () => {
 

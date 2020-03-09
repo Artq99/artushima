@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
-import { Message } from 'src/app/model/message';
-import { MessageLevel } from 'src/app/model/message-level';
+import { Message } from 'src/app/core/model/message';
+import { MessageLevel } from 'src/app/core/model/message-level';
 
 /**
  * The service for managing messages (alerts) shown to the user.

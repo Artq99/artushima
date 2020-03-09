@@ -5,13 +5,13 @@ import { first } from 'rxjs/operators';
 
 import { MessagesService } from './messages.service';
 
-import { RequestStatus } from 'src/app/model/request-status';
-import { AuthLoginRequest } from 'src/app/model/auth-login-request';
-import { AuthLoginResponse } from 'src/app/model/auth-login-response';
-import { AuthLogoutResponse } from 'src/app/model/auth-logout-response';
-import { CurrentUser } from 'src/app/model/current-user';
-import { DecodedToken } from 'src/app/model/decoded-token';
-import { MessageLevel } from 'src/app/model/message-level';
+import { RequestStatus } from 'src/app/core/model/request-status';
+import { AuthLoginRequest } from 'src/app/core/model/auth-login-request';
+import { AuthLoginResponse } from 'src/app/core/model/auth-login-response';
+import { AuthLogoutResponse } from 'src/app/core/model/auth-logout-response';
+import { CurrentUser } from 'src/app/core/model/current-user';
+import { DecodedToken } from 'src/app/core/model/decoded-token';
+import { MessageLevel } from 'src/app/core/model/message-level';
 
 export const URL_AUTH_LOGIN = '/api/auth/login';
 export const URL_AUTH_LOGOUT = '/api/auth/logout';

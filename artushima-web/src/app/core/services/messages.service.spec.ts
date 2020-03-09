@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { MessagesService } from './messages.service';
 
-import { MessageLevel } from 'src/app/model/message-level';
-import { Message } from 'src/app/model/message';
+import { MessageLevel } from 'src/app/core/model/message-level';
+import { Message } from 'src/app/core/model/message';
 
 describe('MessagesService', () => {
 

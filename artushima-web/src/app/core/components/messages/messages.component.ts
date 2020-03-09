@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { MessagesService } from '../../services/messages.service';
 
-import { Message } from 'src/app/model/message';
+import { Message } from 'src/app/core/model/message';
 
 export const MESSAGE_TIMEOUT = 5000;
 

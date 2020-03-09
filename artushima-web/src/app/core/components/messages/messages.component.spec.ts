@@ -9,7 +9,7 @@ import {
   MESSAGE_TIMEOUT
 } from './messages.component';
 
-import { MessageLevel } from 'src/app/model/message-level';
+import { MessageLevel } from 'src/app/core/model/message-level';
 
 describe('MessagesComponent', () => {
 

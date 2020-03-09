@@ -12,8 +12,8 @@ import {
 
 import { AuthService } from '../../services/auth.service';
 
-import { RequestStatus } from 'src/app/model/request-status';
-import { CurrentUser } from 'src/app/model/current-user';
+import { RequestStatus } from 'src/app/core/model/request-status';
+import { CurrentUser } from 'src/app/core/model/current-user';
 
 /**
  * The navbar component for the application.
