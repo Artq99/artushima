@@ -11,13 +11,13 @@ def validate_str_arg(arg, arg_name):
     """
 
     if arg is None:
-        raise BusinessError(f"{arg_name} must be provided!")
+        raise BusinessError(f"Brakujące dane: {arg_name}")
 
     if not isinstance(arg, str):
         raise ValueError(f"{arg_name} must be a string value!")
 
     if not arg:
-        raise BusinessError(f"{arg_name} must be provided!")
+        raise BusinessError(f"Brakujące dane: {arg_name}")
 
 
 def validate_list_arg(arg, arg_name):
@@ -26,7 +26,7 @@ def validate_list_arg(arg, arg_name):
     """
 
     if arg is None:
-        raise BusinessError(f"{arg_name} must be provided!")
+        raise BusinessError(f"Brakujące dane: {arg_name}")
 
     if not isinstance(arg, list):
         raise ValueError(f"{arg_name} must be a list!")

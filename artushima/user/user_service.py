@@ -60,13 +60,13 @@ def create_user(editor_name, user_name, password, roles=None):
     Create a new user with the given name and password, granting him/her the given roles.
     """
 
-    validate_str_arg(editor_name, "Editor name")
-    validate_str_arg(user_name, "User name")
-    validate_str_arg(password, "Password")
-    validate_list_arg_nullable(roles, "Roles")
+    validate_str_arg(editor_name, "Nazwa użytkownika wprowadzającego zmianę")
+    validate_str_arg(user_name, "Nazwa użytkownika")
+    validate_str_arg(password, "Hasło")
+    validate_list_arg_nullable(roles, "Role")
 
     if user_repository.read_by_user_name(user_name) is not None:
-        raise BusinessError("User {} already exists!".format(user_name))
+        raise BusinessError("Użytkownik {} już istnieje!".format(user_name))
 
     timestamp = datetime.now()
     user = _create_user_entity(user_name, password, timestamp)

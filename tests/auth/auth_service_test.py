@@ -209,6 +209,58 @@ class IsTokenOkTest(TestCase):
         self.assertTrue(response)
 
 
+class GetUserNameTest(TestCase):
+
+    def setUp(self):
+        self.jwt_mock = create_autospec(jwt)
+        auth_service.jwt = self.jwt_mock
+
+    def tearDown(self):
+        auth_service.jwt = jwt
+
+    def test_should_return_none_when_token_is_none(self):
+        # given
+        token = None
+
+        # when
+        result = auth_service.get_user_name(token)
+
+        # then
+        self.assertIsNone(result)
+
+    def test_should_return_test_when_token_is_test_bearer_token(self):
+        # given
+        token = f"Bearer {auth_service.TEST_BEARER_TOKEN}"
+
+        # when
+        result = auth_service.get_user_name(token)
+
+        # then
+        self.assertEqual("Test", result)
+
+    def test_should_return_none_when_token_is_invalid(self):
+        # given
+        token = "Bearer test"
+        self.jwt_mock.decode.side_effect = InvalidTokenError()
+
+        # when
+        result = auth_service.get_user_name(token)
+
+        # then
+        self.assertIsNone(result)
+
+    def test_should_return_user_name(self):
+        # given
+        token = "Bearer test"
+        self.jwt_mock.decode.return_value = {"sub": "test_user"}
+
+        # when
+        result = auth_service.get_user_name(token)
+
+        # then
+        self.assertEqual("test_user", result)
+
+
 class AreRolesSufficientTest(TestCase):
 
     def setUp(self):

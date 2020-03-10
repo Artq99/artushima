@@ -99,6 +99,27 @@ def is_token_ok(token):
     return True
 
 
+def get_user_name(token):
+    """
+    Get the user name from the token.
+    """
+
+    if token is None:
+        return None
+
+    token = token.split(" ")[1]
+
+    if token == TEST_BEARER_TOKEN:
+        return "Test"
+
+    try:
+        decoded_token = jwt.decode(token, properties.get_app_secret_key(), algorithm="HS256")
+    except InvalidTokenError:
+        return None
+
+    return decoded_token["sub"]
+
+
 def are_roles_sufficient(token, required_roles):
     """
     Check if the user for whom the token has been issued has required roles.
