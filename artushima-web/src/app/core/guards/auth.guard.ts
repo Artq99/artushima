@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     if (!this.authService.isUserLoggedIn()) {
-      this.authService.postAuthRedirectRoute = next.url[0].path;
+      this.authService.postAuthRedirectRoute = this.createRedirectRoute(next);
       this.router.navigate(["login"]);
       return false;
 
@@ -41,6 +41,18 @@ export class AuthGuard implements CanActivate {
     } else {
       return true;
     }
+  }
+
+  private createRedirectRoute(next: ActivatedRouteSnapshot): string {
+
+    let redirectRoute: string = next.url[0].path;
+    next.url.forEach(segment => {
+      if (segment !== next.url[0]) {
+        redirectRoute += '/' + segment.path
+      }
+    });
+
+    return redirectRoute;
   }
 
 }
