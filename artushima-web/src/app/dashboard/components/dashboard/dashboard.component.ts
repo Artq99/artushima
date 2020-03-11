@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AuthService } from 'src/app/core/services/auth.service';
+
+/**
+ * The dashboard component - the main page of the application.
+ */
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,9 +12,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  public hasRoleShowUsers: boolean = false;
 
-  ngOnInit() {
+  public constructor(
+    private authService: AuthService
+  ) { }
+
+  public ngOnInit() {
+    this.hasRoleShowUsers = this.authService.hasUserGotRoles(['role_show_users']);
   }
 
 }
