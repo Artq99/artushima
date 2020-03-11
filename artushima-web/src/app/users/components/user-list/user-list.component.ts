@@ -13,7 +13,7 @@ import { User } from '../../model/user';
 })
 export class UserListComponent implements OnInit {
 
-  private users: User[] = [];
+  public users: User[] = [];
 
   public constructor(private userService: UserService) { }
 
