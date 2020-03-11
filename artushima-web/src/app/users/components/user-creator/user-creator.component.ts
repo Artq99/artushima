@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { RequestStatus } from 'src/app/core/model/request-status';
-import { MessagesService } from 'src/app/core/services/messages.service';
 import { Router } from '@angular/router';
+
+import { UserService } from '../../services/user.service';
+import { MessagesService } from 'src/app/core/services/messages.service';
+import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
 
 /**
@@ -28,10 +29,10 @@ export const ROLES_DESCRIPTION = [
  */
 @Component({
   selector: 'app-user-editor',
-  templateUrl: './user-editor.component.html',
-  styleUrls: ['./user-editor.component.scss']
+  templateUrl: './user-creator.component.html',
+  styleUrls: ['./user-creator.component.scss']
 })
-export class UserEditorComponent implements OnInit {
+export class UserCreatorComponent implements OnInit {
 
   public roles: string[];
   public rolesDescriptions: string[];

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { UserListComponent } from './components/user-list/user-list.component';
-import { UserEditorComponent } from './components/user-editor/user-editor.component';
+import { UserCreatorComponent } from './components/user-creator/user-creator.component';
 
 /**
  * The feature module containing functionalities related to user management.
@@ -11,7 +11,7 @@ import { UserEditorComponent } from './components/user-editor/user-editor.compon
 @NgModule({
   declarations: [
     UserListComponent,
-    UserEditorComponent
+    UserCreatorComponent
   ],
   imports: [
     CommonModule,

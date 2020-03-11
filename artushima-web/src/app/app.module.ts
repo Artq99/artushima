@@ -14,7 +14,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
 import { LoginComponent } from './core/components/login/login.component';
 import { UserListComponent } from './users/components/user-list/user-list.component';
-import { UserEditorComponent } from './users/components/user-editor/user-editor.component';
+import { UserCreatorComponent } from './users/components/user-creator/user-creator.component';
 
 /**
  * The definitions of all the routes existing in the application.
@@ -37,7 +37,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'users/add',
-    component: UserEditorComponent,
+    component: UserCreatorComponent,
     canActivate: [AuthGuard],
     data: { roles: ['role_create_user'] }
   },
