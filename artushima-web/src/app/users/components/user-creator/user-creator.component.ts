@@ -6,6 +6,8 @@ import { MessagesService } from 'src/app/core/services/messages.service';
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
 
+export const MSG_USER_ADDED = 'Użytkownik dodany!';
+
 /**
  * All the existing roles.
  *
@@ -53,6 +55,10 @@ export class UserCreatorComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.populateRolesData();
+  }
+
+  private populateRolesData(): void {
     this.roles = [];
     this.rolesDescriptions = [];
     this.rolesSelection = [];
@@ -79,7 +85,7 @@ export class UserCreatorComponent implements OnInit {
     this.userService.createNewUser(this.userName, this.password, selectedRoles)
       .subscribe(status => {
         if (status === RequestStatus.SUCCESS) {
-          this.messagesService.showMessage('Użytkownik dodany!', MessageLevel.INFO);
+          this.messagesService.showMessage(MSG_USER_ADDED, MessageLevel.INFO);
           this.router.navigate(['users', 'list']);
         }
       });
