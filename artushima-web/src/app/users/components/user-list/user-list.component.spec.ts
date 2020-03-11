@@ -67,4 +67,26 @@ describe('UserListComponent', () => {
     expect(usersDE.children[1].children[0].nativeElement.textContent).toContain(TEST_USER_2.id);
     expect(usersDE.children[1].children[1].nativeElement.textContent).toContain(TEST_USER_2.userName)
   });
+
+  it('should render the button redirecting to the user-creator', () => {
+    // given
+    component.hasRoleCreateUser = true;
+
+    // when
+    fixture.detectChanges();
+
+    // then
+    expect(fixture.debugElement.query(By.css('#btn-redirect-users-add'))).toBeTruthy();
+  });
+
+  it('should not render the button redirecting to the user-creator, when the user lacks appropriate roles', () => {
+    // given
+    component.hasRoleCreateUser = false;
+
+    // when
+    fixture.detectChanges();
+
+    // then
+    expect(fixture.debugElement.query(By.css('#btn-redirect-users-add'))).toBeFalsy();
+  });
 });
