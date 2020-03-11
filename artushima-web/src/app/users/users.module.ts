@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserEditorComponent } from './components/user-editor/user-editor.component';
 
@@ -12,7 +14,8 @@ import { UserEditorComponent } from './components/user-editor/user-editor.compon
     UserEditorComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [
     UserListComponent

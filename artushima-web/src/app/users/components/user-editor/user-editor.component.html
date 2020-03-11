@@ -1,1 +1,32 @@
-<p>user-editor works!</p>
+<div class="container">
+
+  <h1>Nowy użytkownik</h1>
+
+  <br>
+
+  <form>
+    <div class="form-group">
+      <label>Nazwa użytkownika</label>
+      <input type="text" class="form-control" name="userName" [(ngModel)]="userName">
+    </div>
+
+    <div class="form-group">
+      <label>Hasło</label>
+      <input type="password" class="form-control" placeholder="Hasło" name="password" [(ngModel)]="password">
+    </div>
+
+    <h4>Uprawnienia:</h4>
+
+    <div class="container">
+      <div class="form-group form-check" *ngFor="let role of roles; let i = index">
+        <input id="checkbox-role-{{i}}" type="checkbox" class="form-check-input" name="checkbox-role-{{i}}"
+          [(ngModel)]="rolesSelection[i]">
+        <label class="form-check-label" for="checkbox-role-{{i}}">
+          {{rolesDescriptions[i]}} <code>({{role}})</code>
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary float-right" (click)="createOnClick()">Utwórz</button>
+  </form>
+</div>
