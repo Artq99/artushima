@@ -12,6 +12,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
+  /**
+   * Should the user-list card be rendered?
+   */
   public hasRoleShowUsers: boolean = false;
 
   public constructor(
