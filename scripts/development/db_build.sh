@@ -140,7 +140,7 @@ echo "[INFO] Creating users..."
 docker exec $DB_CONTAINER_NAME mysql \
 	--user=root \
 	--password=$DB_ROOT_PASSWORD \
-	--execute "CREATE USER 'admin'@'%' IDENTIFIED BY '$DB_ADMIN_PASSWORD';" \
+	--execute "CREATE USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY '$DB_ADMIN_PASSWORD';" \
 	&> /dev/null
 
 if [ "$?" != "0" ];
