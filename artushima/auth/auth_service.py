@@ -120,6 +120,27 @@ def get_user_name(token):
     return decoded_token["sub"]
 
 
+def get_user_id(token):
+    """
+    Get the ID of the user from the token.
+    """
+
+    user_name = get_user_name(token)
+
+    if user_name is None:
+        return None
+
+    if user_name == "Test":
+        user_name = "superuser"
+
+    user = user_service.get_user_by_user_name(user_name)
+
+    if user is None:
+        return None
+
+    return user["id"]
+
+
 def are_roles_sufficient(token, required_roles):
     """
     Check if the user for whom the token has been issued has required roles.

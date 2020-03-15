@@ -261,6 +261,88 @@ class GetUserNameTest(TestCase):
         self.assertEqual("test_user", result)
 
 
+class GetUserIdTest(TestCase):
+
+    def setUp(self):
+        self.jwt_mock = create_autospec(jwt)
+        self.user_service_mock = create_autospec(user_service)
+        auth_service.jwt = self.jwt_mock
+        auth_service.user_service = self.user_service_mock
+
+    def tearDown(self):
+        auth_service.jwt = jwt
+        auth_service.user_service = user_service
+
+    def test_should_get_user_id(self):
+        # given
+        token = "Bearer test"
+        self.jwt_mock.decode.return_value = {"sub": "test_user"}
+        self.user_service_mock.get_user_by_user_name.return_value = {
+            "id": 100,
+            "user_name": "test_user"
+        }
+
+        # when
+        result = auth_service.get_user_id(token)
+
+        # then
+        self.assertIsNotNone(result)
+        self.assertEqual(100, result)
+        self.user_service_mock.get_user_by_user_name.assert_called_once_with("test_user")
+
+    def test_should_get_none_when_token_is_none(self):
+        # given
+        token = None
+
+        # when
+        result = auth_service.get_user_id(token)
+
+        # then
+        self.assertIsNone(result)
+
+    def test_should_get_superuser_id_when_token_is_test_bearer_token(self):
+        # given
+        token = f"Bearer {auth_service.TEST_BEARER_TOKEN}"
+        self.user_service_mock.get_user_by_user_name.return_value = {
+            "id": 1,
+            "user_name": "superuser"
+        }
+
+        # when
+        result = auth_service.get_user_id(token)
+
+        # then
+        self.assertIsNotNone(result)
+        self.assertEqual(1, result)
+        self.jwt_mock.decode.assert_not_called()
+        self.user_service_mock.get_user_by_user_name.assert_called_once_with("superuser")
+
+    def test_should_get_none_when_token_is_invalid(self):
+        # given
+        token = "Bearer test"
+        self.jwt_mock.decode.side_effect = InvalidTokenError()
+
+        # when
+        result = auth_service.get_user_id(token)
+
+        # then
+        self.assertIsNone(result)
+
+    def test_should_get_none_when_user_does_not_exist(self):
+        # given
+        token = "Bearer test"
+        self.jwt_mock.decode.return_value = {
+            "sub": "test_user"
+        }
+        self.user_service_mock.get_user_by_user_name.return_value = None
+
+        # when
+        result = auth_service.get_user_id(token)
+
+        # then
+        self.assertIsNone(result)
+
+
 class AreRolesSufficientTest(TestCase):
 
     def setUp(self):
