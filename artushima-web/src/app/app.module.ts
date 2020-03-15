@@ -6,6 +6,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
 import { UsersModule } from './users/users.module';
+import { MyCampaignsModule } from './my-campaigns/my-campaigns.module';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -15,6 +16,7 @@ import { DashboardComponent } from './dashboard/components/dashboard/dashboard.c
 import { LoginComponent } from './core/components/login/login.component';
 import { UserListComponent } from './users/components/user-list/user-list.component';
 import { UserCreatorComponent } from './users/components/user-creator/user-creator.component';
+import { MyCampaignsListComponent } from './my-campaigns/components/my-campaigns-list/my-campaigns-list.component';
 
 /**
  * The definitions of all the routes existing in the application.
@@ -42,6 +44,12 @@ export const appRoutes: Routes = [
     data: { roles: ['role_create_user'] }
   },
   {
+    path: 'my_campaigns/list',
+    component: MyCampaignsListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['role_show_owned_campaigns'] }
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'
@@ -57,7 +65,8 @@ export const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     CoreModule,
     DashboardModule,
-    UsersModule
+    UsersModule,
+    MyCampaignsModule
   ],
   providers: [
     {
