@@ -60,7 +60,7 @@ class GetCampaignsByGmIdTest(TestCase):
 
     def test_should_get_business_error_when_gm_of_given_id_does_not_exist(self):
         # given
-        self.user_service_mock.get_user_by_user_name.return_value = None
+        self.user_service_mock.get_user_by_id.return_value = None
 
         # when then
         with self.assertRaises(BusinessError):
