@@ -27,6 +27,18 @@ def persist(user):
         raise PersistenceError("Error on persisting user: {}".format(str(err))) from err
 
 
+def read_by_id(id):
+    """
+    Read the user of the given ID.
+    """
+
+    try:
+        session: Session = db_access.Session()
+        return session.query(UserEntity).filter_by(id=id).first()
+    except SQLAlchemyError as err:
+        raise PersistenceError(f"Error on reading user by the ID {id}: {str(err)}") from err
+
+
 def read_by_user_name(name):
     """
     Read the user of the given name.
@@ -34,10 +46,9 @@ def read_by_user_name(name):
 
     try:
         session: Session = db_access.Session()
-        user = session.query(UserEntity).filter_by(user_name=name).first()
-        return user
+        return session.query(UserEntity).filter_by(user_name=name).first()
     except SQLAlchemyError as err:
-        raise PersistenceError("Error on reading user: {}".format(str(err))) from err
+        raise PersistenceError(f"Error on reading user by the user name {name}: {str(err)}") from err
 
 
 def read_all():
