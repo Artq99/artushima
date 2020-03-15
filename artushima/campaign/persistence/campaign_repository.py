@@ -20,4 +20,4 @@ def read_by_gm_id(gm_id):
         session: Session = db_access.Session()
         return session.query(CampaignEntity).filter_by(game_master_id=gm_id).all()
     except SQLAlchemyError as err:
-        raise PersistenceError(f"Błąd przy odczycie kampanii z bazy danych> {str(err)}") from err
+        raise PersistenceError(f"Error on reading campaigns of the GM (ID: {str(gm_id)}): {str(err)}") from err
