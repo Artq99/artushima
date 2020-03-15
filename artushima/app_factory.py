@@ -4,6 +4,9 @@ The factory module for the application object.
 
 import flask
 
+import artushima.auth.persistence.model as auth_model
+import artushima.campaign.persistence.model as campaign_model
+import artushima.user.persistence.model as user_model
 from artushima.commons import logger
 from artushima.core import db_access, properties
 from artushima.startup import startup_service
@@ -20,6 +23,11 @@ class App:
     """
 
     def __init__(self):
+
+        # Making sure that all the entities has been imported (i.e. initialized)
+        assert auth_model is not None
+        assert user_model is not None
+        assert campaign_model is not None
 
         self.flask_app = flask.Flask(__name__)
 
