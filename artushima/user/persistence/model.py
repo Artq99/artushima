@@ -24,6 +24,7 @@ class UserEntity(BaseEntity):
 
     user_history_entries = relationship("UserHistoryEntity", back_populates="user")
     user_roles = relationship("UserRoleEntity", back_populates="user")
+    owned_campaigns = relationship("CampaignEntity", back_populates="game_master")
 
 
 class UserHistoryEntity(BaseEntity):

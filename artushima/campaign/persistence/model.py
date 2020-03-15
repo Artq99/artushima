@@ -22,7 +22,7 @@ class CampaignEntity(BaseEntity):
     campaign_name = Column("campaign_name", String(255), nullable=False)
     begin_date = Column("begin_date", Date, nullable=False)
     passed_days = Column("passed_days", Integer, nullable=False)
-    game_master_id = Column("user_id", Integer, ForeignKey("user.id"), nullable=False)
+    game_master_id = Column("game_master_id", Integer, ForeignKey("user.id"), nullable=False)
 
     campaign_history_entries = relationship("CampaignHistoryEntity", back_populates="campaign")
     game_master = relationship("UserEntity", back_populates="owned_campaigns")
