@@ -10,7 +10,7 @@ import { User } from '../model/user';
 import { UsersAddRequest } from '../model/users-add-request';
 import { UsersAddResponse } from '../model/users-add-response';
 
-describe('UserServiceService', () => {
+describe('UserService', () => {
 
   // test data
   const TEST_USER_1 = new User();
