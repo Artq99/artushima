@@ -8,10 +8,25 @@ from werkzeug import security
 
 from artushima.core.exceptions import BusinessError
 from artushima.core.utils.argument_validator import (
-    validate_list_arg_nullable, validate_str_arg)
+    validate_list_arg_nullable, validate_str_arg, validate_int_arg)
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import (UserEntity, UserHistoryEntity,
                                               UserRoleEntity)
+
+
+def get_user_by_id(id):
+    """
+    Get the user data by his/her ID.
+    """
+
+    validate_int_arg(id, "ID użytkownika")
+
+    user = user_repository.read_by_id(id)
+
+    if user is None:
+        return None
+
+    return _map_user_entity_to_dict(user)
 
 
 def get_user_by_user_name(name):

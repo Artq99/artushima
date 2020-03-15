@@ -5,6 +5,18 @@ The module with utils for argument validation.
 from artushima.core.exceptions import BusinessError
 
 
+def validate_int_arg(arg, arg_name):
+    """
+    Check if the argument is an integer.
+    """
+
+    if arg is None:
+        raise BusinessError(f"Brakujące dane: {arg_name}")
+
+    if not isinstance(arg, int):
+        raise ValueError(f"{arg_name} must be an int value!")
+
+
 def validate_str_arg(arg, arg_name):
     """
     Check if the argument is a non-empty string.
