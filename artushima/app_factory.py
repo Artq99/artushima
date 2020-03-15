@@ -12,7 +12,7 @@ from artushima.core import db_access, properties
 from artushima.startup import startup_service
 from artushima.user import roles, user_roles_service
 from artushima.views import index_view
-from artushima.web_api import auth_endpoint, users_endpoint
+from artushima.web_api import auth_endpoint, users_endpoint, my_campaigns_endpoint
 
 
 class App:
@@ -41,6 +41,7 @@ class App:
         # Registering web-service endpoints
         self.flask_app.register_blueprint(auth_endpoint.AUTH_BLUEPRINT)
         self.flask_app.register_blueprint(users_endpoint.USERS_BLUEPRINT)
+        self.flask_app.register_blueprint(my_campaigns_endpoint.MY_CAMPAIGNS_BLUEPRINT)
 
         # Registering views
         self.flask_app.register_blueprint(index_view.INDEX_BLUEPRINT)
