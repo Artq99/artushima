@@ -3,13 +3,26 @@
 
     <!-- user list -->
     <div id="user-list-card" *ngIf="hasRoleShowUsers" class="col">
-      <div class="card">
+      <div class="card mb-4">
         <div class="card-header">
           Użytkownicy
         </div>
         <div class="card-body">
           <p>Zobacz listę wszystkich użytkowników i nimi zarządzaj.</p>
           <button routerLink="/users/list" class="btn btn-primary">Lista użytkowników</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- game master card -->
+    <div id="game-master-card" *ngIf="hasRoleShowOwnedCampaigns" class="col">
+      <div class="card mb-4">
+        <div class="card-header">
+          Mistrz Gry
+        </div>
+        <div class="card-body">
+          <p>Zarządzaj swoimi kampaniami które prowadzisz.</p>
+          <button routerLink="/my_campaigns/list" class="btn btn-primary">Lista kampanii</button>
         </div>
       </div>
     </div>
