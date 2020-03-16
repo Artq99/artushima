@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRouteSnapshot, UrlSegment } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlSegment, Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 
@@ -9,6 +9,7 @@ import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard', () => {
 
+  let router: Router;
   let authGuard: AuthGuard;
   let authService: AuthService;
 
@@ -24,8 +25,11 @@ describe('AuthGuard', () => {
       ]
     });
 
+    router = TestBed.get(Router);
     authGuard = TestBed.get(AuthGuard);
     authService = TestBed.get(AuthService);
+
+    spyOn(router, 'navigate');
   });
 
   it('should be created', () => {
