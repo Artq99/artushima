@@ -6,9 +6,100 @@ from datetime import date, datetime
 from unittest import TestCase
 
 from artushima.campaign.persistence import campaign_repository
-from artushima.campaign.persistence.model import CampaignEntity
+from artushima.campaign.persistence.model import (CampaignEntity,
+                                                  CampaignHistoryEntity)
 from artushima.core import db_access, properties
+from artushima.core.exceptions import PersistenceError
 from artushima.user.persistence.model import UserEntity
+
+
+class PersistTest(TestCase):
+
+    def setUp(self):
+        properties.init()
+        db_access.init()
+        self.session = db_access.Session()
+
+    def tearDown(self):
+        self.session.rollback()
+        self.session.close()
+
+    def test_should_persist_new_campaign(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
+        user.opt_lock = 0
+
+        self.session.add(user)
+        self.session.flush()
+
+        new_campaign = CampaignEntity()
+        new_campaign.created_on = datetime.utcnow()
+        new_campaign.modified_on = datetime.utcnow()
+        new_campaign.opt_lock = 0
+        new_campaign.campaign_name = "test campaign"
+        new_campaign.begin_date = date(2054, 1, 1)
+        new_campaign.passed_days = 0
+        new_campaign.game_master_id = user.id
+
+        # when
+        campaign_repository.persist(new_campaign)
+
+        # then
+        self.assertIn(new_campaign, self.session.query(CampaignEntity).all())
+
+    def test_should_persist_new_campaign_with_history_entry(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
+        user.opt_lock = 0
+
+        self.session.add(user)
+        self.session.flush()
+
+        new_campaign = CampaignEntity()
+        new_campaign.created_on = datetime.utcnow()
+        new_campaign.modified_on = datetime.utcnow()
+        new_campaign.opt_lock = 0
+        new_campaign.campaign_name = "test campaign"
+        new_campaign.begin_date = date(2054, 1, 1)
+        new_campaign.passed_days = 0
+        new_campaign.game_master_id = user.id
+
+        new_campaign_history_entry = CampaignHistoryEntity()
+        new_campaign_history_entry.created_on = datetime.utcnow()
+        new_campaign_history_entry.modified_on = datetime.utcnow()
+        new_campaign_history_entry.opt_lock = 0
+        new_campaign_history_entry.editor_name = "Test"
+        new_campaign_history_entry.message = "Test message"
+        new_campaign_history_entry.campaign = new_campaign
+
+        # when
+        campaign_repository.persist(new_campaign)
+
+        # then
+        self.assertIn(new_campaign, self.session.query(CampaignEntity).all())
+        self.assertIsNotNone(self.session.query(CampaignHistoryEntity).filter_by(campaign_id=new_campaign.id).first())
+
+    def test_should_get_persistence_error_on_constraint_violation(self):
+        # given
+        new_campaign = CampaignEntity()
+
+        # when then
+        with self.assertRaises(PersistenceError):
+            campaign_repository.persist(new_campaign)
+
+    def test_should_raise_value_error_when_argument_is_of_wrong_type(self):
+        # given
+        new_campaign = str()
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_repository.persist(new_campaign)
 
 
 class ReadByGMNameTest(TestCase):

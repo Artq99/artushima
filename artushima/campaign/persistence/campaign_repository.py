@@ -11,6 +11,23 @@ from artushima.core.exceptions import PersistenceError
 from artushima.campaign.persistence.model import CampaignEntity
 
 
+def persist(campaign):
+    """
+    Persist the campaign data.
+    """
+
+    if not isinstance(campaign, CampaignEntity):
+        raise ValueError("The argument is not CampaignEntity!")
+
+    try:
+        session: Session = db_access.Session()
+        session.add(campaign)
+        session.flush()
+        return campaign
+    except SQLAlchemyError as err:
+        raise PersistenceError(f"Error on persisting a campaign: {str(err)}")
+
+
 def read_by_gm_id(gm_id):
     """
     Get all campaigns belonging to the game master of the given ID.
