@@ -29,7 +29,7 @@ def log_in(user_name, password):
     if user is None:
         raise BusinessError(f"User {user_name} does not exist!")
 
-    if not werkzeug.check_password_hash(user["password_hash"], password):
+    if not werkzeug.security.check_password_hash(user["password_hash"], password):
         raise BusinessError(f"Incorrect password!")
 
     payload = _create_jwt_payload(user_name)

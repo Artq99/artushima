@@ -71,7 +71,7 @@ class LogInTest(TestCase):
 
     def test_should_raise_error_when_password_is_incorrect(self):
         # given
-        self.werkzeug_mock.check_password_hash.return_value = False
+        self.werkzeug_mock.security.check_password_hash.return_value = False
 
         # when then
         with self.assertRaises(BusinessError):
