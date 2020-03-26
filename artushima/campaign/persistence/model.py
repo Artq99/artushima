@@ -2,7 +2,7 @@
 The module containing the data model for the campaign component.
 """
 
-from sqlalchemy import Column, DateTime, Date, ForeignKey, Integer, String
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from artushima.core.db_access import BaseEntity

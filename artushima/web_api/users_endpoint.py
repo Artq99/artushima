@@ -97,7 +97,7 @@ def users_add():
         }), 200
 
     except BusinessError as err:
-        db_session.rollback
+        db_session.rollback()
 
         return flask.jsonify({
             "status": "failure",
