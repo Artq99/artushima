@@ -13,6 +13,181 @@ from artushima.core.exceptions import BusinessError
 from artushima.user import user_service
 
 
+class CreateCampaignTest(TestCase):
+
+    def setUp(self):
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
+
+    def tearDown(self):
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_create_new_campaign(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when
+        campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+        # then
+        self.campaign_repository_mock.persist.assert_called_once()
+        campaign_entity: CampaignEntity = self.campaign_repository_mock.persist.call_args.args[0]
+        self.assertEqual(campaign_name, campaign_entity.campaign_name)
+        self.assertEqual(begin_date, campaign_entity.begin_date)
+        self.assertEqual(passed_days, campaign_entity.passed_days)
+        self.assertEqual(game_master_id, campaign_entity.game_master_id)
+        self.assertEqual(1, len(campaign_entity.campaign_history_entries))
+        self.assertEqual(editor_name, campaign_entity.campaign_history_entries[0].editor_name)
+
+    def test_should_get_exception_when_editor_name_is_none(self):
+        # given
+        editor_name = None
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_editor_name_is_not_str(self):
+        # given
+        editor_name = 1
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(TypeError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_editor_name_is_empty_str(self):
+        # given
+        editor_name = ""
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_campaign_name_is_none(self):
+        # given
+        editor_name = "Test"
+        campaign_name = None
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_campaign_name_is_not_str(self):
+        # given
+        editor_name = "Test"
+        campaign_name = 1
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(TypeError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_campaign_name_is_empty_str(self):
+        # given
+        editor_name = "Test"
+        campaign_name = ""
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_begin_date_is_none(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = None
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_begin_date_is_not_date(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = "01.01.2055"
+        passed_days = 0
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(TypeError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_passed_days_is_none(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = None
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_passed_days_is_not_int(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = "0"
+        game_master_id = 1
+
+        # when then
+        with self.assertRaises(TypeError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_game_master_id_is_none(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = None
+
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+    def test_should_get_exception_when_game_master_id_is_not_int(self):
+        # given
+        editor_name = "Test"
+        campaign_name = "Test campaign"
+        begin_date = date(2055, 1, 1)
+        passed_days = 0
+        game_master_id = "1"
+
+        # when then
+        with self.assertRaises(TypeError):
+            campaign_service.create_campaign(editor_name, campaign_name, begin_date, passed_days, game_master_id)
+
+
 class GetCampaignsByGmIdTest(TestCase):
 
     def setUp(self):
