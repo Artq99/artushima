@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+/**
+ * The default date for a campaign to begin with.
+ * The date is the last mentioned date in the Neuroshima Handbook 1.5.
+ */
+export const DEFAULT_CAMPAIGN_START_DATE = "2053-11-18";
 
 /**
  * The component displaying a form for starting a new campaign with
@@ -11,6 +17,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StartCampaignComponent implements OnInit {
 
+  @Input()
+  public campaignName: string;
+
+  @Input()
+  public beginDate: string = DEFAULT_CAMPAIGN_START_DATE;
+
   /**
    * @inheritdoc
    */
@@ -20,5 +32,13 @@ export class StartCampaignComponent implements OnInit {
    * @inheritdoc
    */
   public ngOnInit(): void { }
+
+  /**
+   * The callback function for the button 'start'.
+   */
+  public startOnClick(): void {
+    console.log(this.campaignName);
+    console.log(this.beginDate);
+  }
 
 }
