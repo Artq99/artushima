@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
+import { RouterModule } from '@angular/router';
 
 /**
  * A feature module with functionalities for game masters.
@@ -18,7 +19,8 @@ import { StartCampaignComponent } from './components/start-campaign/start-campai
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ]
 })
 export class MyCampaignsModule { }

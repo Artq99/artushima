@@ -6,7 +6,8 @@
     </div>
     <div class="col">
       <!-- button redirecting to the campaign creator -->
-      <button id="btn-redirect-campaign-new" class="btn btn-primary float-right">Nowa kampania</button>
+      <button id="btn-redirect-my-campaigns-start" *ngIf="hasRoleStartCampaign" routerLink="/my_campaigns/start"
+        class="btn btn-primary float-right">Nowa kampania</button>
     </div>
   </div>
 </div>
