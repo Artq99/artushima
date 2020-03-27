@@ -16,7 +16,8 @@ export const MSG_USER_ADDED = 'Użytkownik dodany!';
 export const ROLES = [
   'role_show_users',
   'role_create_user',
-  'role_show_owned_campaigns'
+  'role_show_owned_campaigns',
+  'role_start_campaign'
 ]
 
 /**
@@ -25,7 +26,8 @@ export const ROLES = [
 export const ROLES_DESCRIPTION = [
   'Wyświetlanie listy użytkowników',
   'Tworzenie nowych użytkowników',
-  'Wyświetlanie listy własnych kampanii'
+  'Wyświetlanie listy własnych kampanii',
+  'Prowadzenie własnych kampanii'
 ]
 
 /**
