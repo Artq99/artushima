@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
+import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -9,7 +10,10 @@ import { MyCampaignsListComponent } from './components/my-campaigns-list/my-camp
  * new ones and manage existing.
  */
 @NgModule({
-  declarations: [MyCampaignsListComponent],
+  declarations: [
+    MyCampaignsListComponent,
+    StartCampaignComponent
+  ],
   imports: [
     CommonModule
   ]
