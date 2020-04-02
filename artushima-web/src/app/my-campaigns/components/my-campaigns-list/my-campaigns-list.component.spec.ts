@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MyCampaignsListComponent } from './my-campaigns-list.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MyCampaignsListElement } from '../../model/my-campaigns-list-element';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+
+import { MyCampaignsListComponent } from './my-campaigns-list.component';
+
+import { MyCampaignsListElement } from '../../model/my-campaigns.model';
 
 describe('MyCampaignsListComponent', () => {
 

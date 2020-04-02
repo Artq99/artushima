@@ -7,14 +7,24 @@ import { MessagesService } from 'src/app/core/services/messages.service';
 
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
-import { MyCampaignsListElement } from '../model/my-campaigns-list-element';
-import { MyCampaignsListResponse } from '../model/my-campaigns-list-response';
+import {
+  MyCampaignsListElement,
+  MyCampaignsListResponse,
+  MyCampaignsStartRequest,
+  MyCampaignsStartResponse
+} from '../model/my-campaigns.model';
 
 /**
  * The URL of the endpoint providing with the list of the campaigns belonging
  * to the currently logged in game master.
  */
 export const URL_MY_CAMPAIGNS_LIST = '/api/my_campaigns/list';
+
+/**
+ * The URL of the endpoint creating a new campaign with the currently
+ * logged-in user as the game master.
+ */
+export const URL_MY_CAMPAIGNS_START = '/api/my_campaigns/start';
 
 /**
  * The message shown on application error.
@@ -63,6 +73,48 @@ export class MyCampaignsService {
           responseSubject.next([]);
           responseSubject.complete();
           this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
+        }
+      );
+
+    return response$;
+  }
+
+  /**
+   * Sends a request for starting a new campaign with the currently logged-in user as the game master.
+   *
+   * @param campaignName the name of the new campaign
+   * @param beginDate the starting date of the new campaign
+   */
+  public startCampaign(campaignName: string, beginDate: string): Observable<RequestStatus> {
+    // Creating the request body.
+    let request: MyCampaignsStartRequest = new MyCampaignsStartRequest();
+    request.campaignName = campaignName;
+    request.beginDate = beginDate
+
+    // Creating the request object.
+    let startCampaign$: Observable<MyCampaignsStartResponse> =
+      this.httpClient.post<MyCampaignsStartResponse>(URL_MY_CAMPAIGNS_START, request);
+
+    // Creating the response subject and observable.
+    let responseSubject: Subject<RequestStatus> = new Subject<RequestStatus>();
+    let response$: Observable<RequestStatus> = responseSubject.asObservable();
+
+    startCampaign$
+      .pipe(first())
+      .subscribe(
+        // on a valid response
+        response => {
+          if (response.status === RequestStatus.FAILURE) {
+            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
+          }
+          responseSubject.next(response.status);
+          responseSubject.complete();
+        },
+        // on error
+        () => {
+          this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
+          responseSubject.next(RequestStatus.FAILURE);
+          responseSubject.complete();
         }
       );
 

@@ -8,7 +8,7 @@ export const DEFAULT_CAMPAIGN_START_DATE = "2053-11-18";
 
 /**
  * The component displaying a form for starting a new campaign with
- * the currently logged-in user as a game master.
+ * the currently logged-in user as the game master.
  */
 @Component({
   selector: 'app-start-campaign',

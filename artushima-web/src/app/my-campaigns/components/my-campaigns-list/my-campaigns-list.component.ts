@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MyCampaignsService } from '../../services/my-campaigns.service';
 
-import { MyCampaignsListElement } from '../../model/my-campaigns-list-element';
+import { MyCampaignsListElement } from '../../model/my-campaigns.model';
 
 /**
  * The component showing the list of campaigns belonging to the game master.

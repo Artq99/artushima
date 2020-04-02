@@ -2,12 +2,21 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, TestRequest, HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MessagesService } from 'src/app/core/services/messages.service';
-import { MyCampaignsService, URL_MY_CAMPAIGNS_LIST, MSG_APP_ERROR } from './my-campaigns.service';
+import {
+  MyCampaignsService,
+  MSG_APP_ERROR,
+  URL_MY_CAMPAIGNS_LIST,
+  URL_MY_CAMPAIGNS_START
+} from './my-campaigns.service';
 
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
-import { MyCampaignsListResponse } from '../model/my-campaigns-list-response';
-import { MyCampaignsListElement } from '../model/my-campaigns-list-element';
+import {
+  MyCampaignsListElement,
+  MyCampaignsListResponse,
+  MyCampaignsStartRequest,
+  MyCampaignsStartResponse
+} from '../model/my-campaigns.model';
 
 describe('MyCampaignsService', () => {
 
@@ -20,7 +29,9 @@ describe('MyCampaignsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [
+        HttpClientTestingModule
+      ]
     });
 
     httpTestingController = TestBed.get(HttpTestingController);
@@ -36,27 +47,27 @@ describe('MyCampaignsService', () => {
   describe('getMyCampaignsList', () => {
 
     // test data
-    const CAMPAIGN_1 = new MyCampaignsListElement();
-    CAMPAIGN_1.id = 1;
-    CAMPAIGN_1.campaignName = 'Campaign 1';
+    let campaign1: MyCampaignsListElement = new MyCampaignsListElement();
+    campaign1.id = 1;
+    campaign1.campaignName = 'Campaign 1';
 
-    const CAMPAIGN_2 = new MyCampaignsListElement();
-    CAMPAIGN_2.id = 2;
-    CAMPAIGN_2.campaignName = 'Campaign 2';
+    let campaign2: MyCampaignsListElement = new MyCampaignsListElement();
+    campaign2.id = 2;
+    campaign2.campaignName = 'Campaign 2';
 
-    const MY_CAMPAIGNS_LIST = [
-      CAMPAIGN_1,
-      CAMPAIGN_2
+    let myCampaignsList: MyCampaignsListElement[] = [
+      campaign1,
+      campaign2
     ]
 
-    const RESPONSE_SUCCESS = new MyCampaignsListResponse();
-    RESPONSE_SUCCESS.status = RequestStatus.SUCCESS;
-    RESPONSE_SUCCESS.message = '';
-    RESPONSE_SUCCESS.myCampaigns = MY_CAMPAIGNS_LIST;
+    let responseBodySuccess: MyCampaignsListResponse = new MyCampaignsListResponse();
+    responseBodySuccess.status = RequestStatus.SUCCESS;
+    responseBodySuccess.message = '';
+    responseBodySuccess.myCampaigns = myCampaignsList;
 
-    const RESPONSE_FAILURE = new MyCampaignsListResponse();
-    RESPONSE_FAILURE.status = RequestStatus.FAILURE;
-    RESPONSE_FAILURE.message = 'Test error message';
+    let responseBodyFailure: MyCampaignsListResponse = new MyCampaignsListResponse();
+    responseBodyFailure.status = RequestStatus.FAILURE;
+    responseBodyFailure.message = 'Test error message';
 
     it('should return a list of campaigns belonging to the currently logged in game master', () => {
       // given
@@ -64,10 +75,10 @@ describe('MyCampaignsService', () => {
 
       // when then
       myCampaignsService.getMyCampaignsList()
-        .subscribe(response => expect(response).toEqual(MY_CAMPAIGNS_LIST));
+        .subscribe(response => expect(response).toEqual(myCampaignsList));
 
       let request: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_LIST);
-      request.flush(RESPONSE_SUCCESS);
+      request.flush(responseBodySuccess);
 
       httpTestingController.verify();
       expect(messageService.showMessage).not.toHaveBeenCalled();
@@ -82,10 +93,10 @@ describe('MyCampaignsService', () => {
         .subscribe(response => expect(response).toEqual([]));
 
       let request: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_LIST);
-      request.flush(RESPONSE_FAILURE);
+      request.flush(responseBodyFailure);
 
       httpTestingController.verify();
-      expect(messageService.showMessage).toHaveBeenCalledWith(RESPONSE_FAILURE.message, MessageLevel.ERROR);
+      expect(messageService.showMessage).toHaveBeenCalledWith(responseBodyFailure.message, MessageLevel.ERROR);
     });
 
     it('should process an HTTP error', () => {
@@ -100,6 +111,72 @@ describe('MyCampaignsService', () => {
       request.error(new ErrorEvent('error'), { status: 404 });
 
       httpTestingController.verify()
+      expect(messageService.showMessage).toHaveBeenCalledWith(MSG_APP_ERROR, MessageLevel.ERROR);
+    });
+  });
+
+  describe('startCampaign', () => {
+
+    // test data
+    let campaignName: string = 'Test campaign';
+    let beginDate: string = '2053-11-18';
+
+    let requestBody: MyCampaignsStartRequest = new MyCampaignsStartRequest();
+    requestBody.campaignName = campaignName;
+    requestBody.beginDate = beginDate;
+
+    let responseBodySuccess: MyCampaignsStartResponse = new MyCampaignsStartResponse();
+    responseBodySuccess.status = RequestStatus.SUCCESS;
+
+    let responseBodyFailure: MyCampaignsStartResponse = new MyCampaignsStartResponse();
+    responseBodyFailure.status = RequestStatus.FAILURE;
+    responseBodyFailure.message = 'Error message';
+
+    it('should send a request for starting a new campaign', () => {
+      // given
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      myCampaignsService.startCampaign(campaignName, beginDate)
+        .subscribe(response => expect(response).toEqual(RequestStatus.SUCCESS));
+
+      let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
+      testRequest.flush(responseBodySuccess);
+
+      httpTestingController.verify();
+      expect(testRequest.request.body).toEqual(requestBody);
+      expect(messageService.showMessage).not.toHaveBeenCalled();
+    });
+
+    it('should return the status failure', () => {
+      // given
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      myCampaignsService.startCampaign(campaignName, beginDate)
+        .subscribe(response => expect(response).toEqual(RequestStatus.FAILURE));
+
+      let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
+      testRequest.flush(responseBodyFailure);
+
+      httpTestingController.verify();
+      expect(testRequest.request.body).toEqual(requestBody);
+      expect(messageService.showMessage).toHaveBeenCalledWith(responseBodyFailure.message, MessageLevel.ERROR);
+    });
+
+    it('should process an HTTP error', () => {
+      // given
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      myCampaignsService.startCampaign(campaignName, beginDate)
+        .subscribe(response => expect(response).toEqual(RequestStatus.FAILURE));
+
+      let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
+      testRequest.error(new ErrorEvent('error'), { status: 404 });
+
+      httpTestingController.verify();
+      expect(testRequest.request.body).toEqual(requestBody);
       expect(messageService.showMessage).toHaveBeenCalledWith(MSG_APP_ERROR, MessageLevel.ERROR);
     });
   });
