@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+// Services
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MyCampaignsService } from '../../services/my-campaigns.service';
 
+// Model
 import { MyCampaignsListElement } from '../../model/my-campaigns.model';
 
 /**

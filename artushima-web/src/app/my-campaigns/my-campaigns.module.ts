@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
+// Components
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
-import { RouterModule } from '@angular/router';
 
 /**
  * A feature module with functionalities for game masters.

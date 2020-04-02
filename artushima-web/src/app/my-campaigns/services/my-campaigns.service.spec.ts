@@ -1,14 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, TestRequest, HttpClientTestingModule } from '@angular/common/http/testing';
 
+// Services
 import { MessagesService } from 'src/app/core/services/messages.service';
+import { MyCampaignsService } from './my-campaigns.service';
+
+// Constants
 import {
-  MyCampaignsService,
-  MSG_APP_ERROR,
   URL_MY_CAMPAIGNS_LIST,
   URL_MY_CAMPAIGNS_START
-} from './my-campaigns.service';
+} from '../constants/my-campaigns.constants';
+import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
 
+// Model
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
 import {

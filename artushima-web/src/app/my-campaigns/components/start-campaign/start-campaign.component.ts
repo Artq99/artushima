@@ -1,22 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+// Services
 import { MessagesService } from 'src/app/core/services/messages.service';
 import { MyCampaignsService } from '../../services/my-campaigns.service';
 
+// Constants
+import { DEFAULT_CAMPAIGN_START_DATE } from '../../constants/my-campaigns.constants';
+import { MSG_CAMPAIGN_CREATED } from '../../constants/my-campaings.messages';
+
+// Model
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
-
-/**
- * The default date for a campaign to begin with.
- * The date is the last mentioned date in the Neuroshima Handbook 1.5.
- */
-export const DEFAULT_CAMPAIGN_START_DATE = '2053-11-18';
-
-/**
- * The message displayed as a campaign has been successfuly created.
- */
-export const MSG_CAMPAIGN_CREATED = 'Kampania została utworzona.';
 
 /**
  * The component displaying a form for starting a new campaign with

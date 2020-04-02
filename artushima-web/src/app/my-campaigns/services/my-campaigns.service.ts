@@ -3,8 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
+// Services
 import { MessagesService } from 'src/app/core/services/messages.service';
 
+// Constants
+import {
+  URL_MY_CAMPAIGNS_LIST,
+  URL_MY_CAMPAIGNS_START
+} from '../constants/my-campaigns.constants';
+import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
+
+// Model
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
 import {
@@ -13,23 +22,6 @@ import {
   MyCampaignsStartRequest,
   MyCampaignsStartResponse
 } from '../model/my-campaigns.model';
-
-/**
- * The URL of the endpoint providing with the list of the campaigns belonging
- * to the currently logged in game master.
- */
-export const URL_MY_CAMPAIGNS_LIST = '/api/my_campaigns/list';
-
-/**
- * The URL of the endpoint creating a new campaign with the currently
- * logged-in user as the game master.
- */
-export const URL_MY_CAMPAIGNS_START = '/api/my_campaigns/start';
-
-/**
- * The message shown on application error.
- */
-export const MSG_APP_ERROR = 'Błąd aplikacji.';
 
 /**
  * The service with logic behind campaigns from the GM's point of view.
@@ -45,13 +37,16 @@ export class MyCampaignsService {
   ) { }
 
   /**
-   * Get the list of campaigns belonging to the currently logged in game master.
+   * Returns the list of campaigns belonging to the currently logged in game master.
    *
    * @returns an observable emitting the list of campaigns
    */
   public getMyCampaignsList(): Observable<MyCampaignsListElement[]> {
+    // Creating the request object.
     let myCampaignsList$: Observable<MyCampaignsListResponse> =
       this.httpClient.get<MyCampaignsListResponse>(URL_MY_CAMPAIGNS_LIST);
+
+    // Creating the response subject and observable.
     let responseSubject: Subject<MyCampaignsListElement[]> = new Subject<MyCampaignsListElement[]>();
     let response$: Observable<MyCampaignsListElement[]> = responseSubject.asObservable();
 
@@ -84,6 +79,7 @@ export class MyCampaignsService {
    *
    * @param campaignName the name of the new campaign
    * @param beginDate the starting date of the new campaign
+   * @returns an observable emitting the status of the finished request
    */
   public startCampaign(campaignName: string, beginDate: string): Observable<RequestStatus> {
     // Creating the request body.

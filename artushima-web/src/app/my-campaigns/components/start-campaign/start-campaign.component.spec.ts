@@ -5,10 +5,18 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 
+// Components
+import { StartCampaignComponent } from './start-campaign.component';
+
+// Services
 import { MessagesService } from 'src/app/core/services/messages.service';
 import { MyCampaignsService } from '../../services/my-campaigns.service';
 
-import { StartCampaignComponent, DEFAULT_CAMPAIGN_START_DATE, MSG_CAMPAIGN_CREATED } from './start-campaign.component';
+// Constants
+import { DEFAULT_CAMPAIGN_START_DATE } from '../../constants/my-campaigns.constants';
+import { MSG_CAMPAIGN_CREATED } from '../../constants/my-campaings.messages';
+
+// Model
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
 
