@@ -15,12 +15,9 @@ import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
 // Model
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
-import {
-  MyCampaignsListElement,
-  MyCampaignsListResponse,
-  MyCampaignsStartRequest,
-  MyCampaignsStartResponse
-} from '../model/my-campaigns.model';
+import { MyCampaignsListElement, MyCampaignsListResponse } from '../model/my-campaigns-list-response.model';
+import { MyCampaignsStartRequest } from '../model/my-campaigns-start-request.model';
+import { MyCampaignsStartResponse } from '../model/my-campaigns-start-response.model';
 
 describe('MyCampaignsAdapterService', () => {
 

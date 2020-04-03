@@ -7,7 +7,7 @@ import { By } from '@angular/platform-browser';
 import { MyCampaignsListComponent } from './my-campaigns-list.component';
 
 // Model
-import { MyCampaignsListElement } from '../../model/my-campaigns.model';
+import { MyCampaignsListElement } from '../../model/my-campaigns-list-response.model';
 
 describe('MyCampaignsListComponent', () => {
 

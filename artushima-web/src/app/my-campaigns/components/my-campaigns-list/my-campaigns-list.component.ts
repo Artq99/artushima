@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
 
 // Model
-import { MyCampaignsListElement } from '../../model/my-campaigns.model';
+import { MyCampaignsListElement } from '../../model/my-campaigns-list-response.model';
 
 /**
  * The component showing the list of campaigns belonging to the game master.
