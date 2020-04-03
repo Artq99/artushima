@@ -117,14 +117,14 @@ class ReadByGMNameTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         campaign_1 = CampaignEntity()
         campaign_1.campaign_name = "campaign_1"
-        campaign_1.created_on = datetime.now()
-        campaign_1.modified_on = datetime.now()
+        campaign_1.created_on = datetime.utcnow()
+        campaign_1.modified_on = datetime.utcnow()
         campaign_1.opt_lock = 0
         campaign_1.begin_date = date(2055, 1, 1)
         campaign_1.passed_days = 0
@@ -132,8 +132,8 @@ class ReadByGMNameTest(TestCase):
 
         campaign_2 = CampaignEntity()
         campaign_2.campaign_name = "campaign_2"
-        campaign_2.created_on = datetime.now()
-        campaign_2.modified_on = datetime.now()
+        campaign_2.created_on = datetime.utcnow()
+        campaign_2.modified_on = datetime.utcnow()
         campaign_2.opt_lock = 0
         campaign_2.begin_date = date(2055, 1, 1)
         campaign_2.passed_days = 0
@@ -141,14 +141,14 @@ class ReadByGMNameTest(TestCase):
 
         other_user = UserEntity()
         other_user.user_name = "other_user"
-        other_user.created_on = datetime.now()
-        other_user.modified_on = datetime.now()
+        other_user.created_on = datetime.utcnow()
+        other_user.modified_on = datetime.utcnow()
         other_user.opt_lock = 0
 
         campaign_3 = CampaignEntity()
         campaign_3.campaign_name = "campaign_3"
-        campaign_3.created_on = datetime.now()
-        campaign_3.modified_on = datetime.now()
+        campaign_3.created_on = datetime.utcnow()
+        campaign_3.modified_on = datetime.utcnow()
         campaign_3.opt_lock = 0
         campaign_3.begin_date = date(2055, 1, 1)
         campaign_3.passed_days = 0
@@ -172,8 +172,8 @@ class ReadByGMNameTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         self.session.add(user)

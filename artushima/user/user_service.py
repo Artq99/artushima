@@ -83,7 +83,7 @@ def create_user(editor_name, user_name, password, roles=None):
     if user_repository.read_by_user_name(user_name) is not None:
         raise BusinessError("Użytkownik {} już istnieje!".format(user_name))
 
-    timestamp = datetime.now()
+    timestamp = datetime.utcnow()
     user = _create_user_entity(user_name, password, timestamp)
     _grant_roles(user, roles, timestamp)
     _create_and_assing_history_entry_creation(user, editor_name, timestamp)
