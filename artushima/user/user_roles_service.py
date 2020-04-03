@@ -42,7 +42,7 @@ def grant_roles(editor_name, user_name, roles):
 
     previous_user_roles = [role.role_name for role in user.user_roles]
 
-    timestamp = datetime.now()
+    timestamp = datetime.utcnow()
 
     for role in roles:
         if role not in previous_user_roles:

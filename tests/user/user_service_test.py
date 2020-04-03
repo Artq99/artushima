@@ -28,8 +28,8 @@ class GetUserByIdTest(TestCase):
         user = UserEntity()
         user.id = 1
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
         user.password_hash = "test_hash"
 
@@ -85,8 +85,8 @@ class GetUserByUserNameTest(TestCase):
         user = UserEntity()
         user.id = 1
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
         user.password_hash = "test_hash"
 
@@ -146,14 +146,14 @@ class GetAllUsersTest(TestCase):
         # given
         user_1 = UserEntity()
         user_1.user_name = "test_user_1"
-        user_1.created_on = datetime.now()
-        user_1.modified_on = datetime.now()
+        user_1.created_on = datetime.utcnow()
+        user_1.modified_on = datetime.utcnow()
         user_1.opt_lock = 0
 
         user_2 = UserEntity()
         user_2.user_name = "test_user_2"
-        user_2.created_on = datetime.now()
-        user_2.modified_on = datetime.now()
+        user_2.created_on = datetime.utcnow()
+        user_2.modified_on = datetime.utcnow()
         user_2.opt_lock = 0
 
         self.user_repository_mock.read_all.return_value = [user_1, user_2]

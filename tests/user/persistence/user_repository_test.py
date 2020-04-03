@@ -27,8 +27,8 @@ class PersistTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         # when
@@ -41,13 +41,13 @@ class PersistTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         user_history_entry = UserHistoryEntity()
-        user_history_entry.created_on = datetime.now()
-        user_history_entry.modified_on = datetime.now()
+        user_history_entry.created_on = datetime.utcnow()
+        user_history_entry.modified_on = datetime.utcnow()
         user_history_entry.opt_lock = 0
         user_history_entry.editor_name = "test"
         user_history_entry.message = "test message"
@@ -64,13 +64,13 @@ class PersistTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         user_role = UserRoleEntity()
-        user_role.created_on = datetime.now()
-        user_role.modified_on = datetime.now()
+        user_role.created_on = datetime.utcnow()
+        user_role.modified_on = datetime.utcnow()
         user_role.opt_lock = 0
         user_role.role_name = "test_role"
         user_role.user = user
@@ -86,8 +86,8 @@ class PersistTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         self.session.add(user)
@@ -135,8 +135,8 @@ class ReadByIdTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         self.session.add(user)
@@ -172,8 +172,8 @@ class ReadByUserNameTest(TestCase):
         # given
         user = UserEntity()
         user.user_name = "test_user"
-        user.created_on = datetime.now()
-        user.modified_on = datetime.now()
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
         user.opt_lock = 0
 
         self.session.add(user)
@@ -209,14 +209,14 @@ class ReadAllTest(TestCase):
         # given
         user_1 = UserEntity()
         user_1.user_name = "test_user_1"
-        user_1.created_on = datetime.now()
-        user_1.modified_on = datetime.now()
+        user_1.created_on = datetime.utcnow()
+        user_1.modified_on = datetime.utcnow()
         user_1.opt_lock = 0
 
         user_2 = UserEntity()
         user_2.user_name = "test_user_2"
-        user_2.created_on = datetime.now()
-        user_2.modified_on = datetime.now()
+        user_2.created_on = datetime.utcnow()
+        user_2.modified_on = datetime.utcnow()
         user_2.opt_lock = 0
 
         self.session.add(user_1)
