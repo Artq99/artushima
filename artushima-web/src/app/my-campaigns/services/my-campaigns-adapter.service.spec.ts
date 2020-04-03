@@ -3,7 +3,7 @@ import { HttpTestingController, TestRequest, HttpClientTestingModule } from '@an
 
 // Services
 import { MessagesService } from 'src/app/core/services/messages.service';
-import { MyCampaignsService } from './my-campaigns.service';
+import { MyCampaignsAdapterService } from './my-campaigns-adapter.service';
 
 // Constants
 import {
@@ -22,14 +22,14 @@ import {
   MyCampaignsStartResponse
 } from '../model/my-campaigns.model';
 
-describe('MyCampaignsService', () => {
+describe('MyCampaignsAdapterService', () => {
 
   // dependencies
   let httpTestingController: HttpTestingController;
   let messageService: MessagesService;
 
   // the service under test
-  let myCampaignsService: MyCampaignsService;
+  let myCampaignsService: MyCampaignsAdapterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,7 +40,7 @@ describe('MyCampaignsService', () => {
 
     httpTestingController = TestBed.get(HttpTestingController);
     messageService = TestBed.get(MessagesService);
-    myCampaignsService = TestBed.get(MyCampaignsService);
+    myCampaignsService = TestBed.get(MyCampaignsAdapterService);
   });
 
   it('should be created', () => {

@@ -10,7 +10,7 @@ import { StartCampaignComponent } from './start-campaign.component';
 
 // Services
 import { MessagesService } from 'src/app/core/services/messages.service';
-import { MyCampaignsService } from '../../services/my-campaigns.service';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
 
 // Constants
 import { DEFAULT_CAMPAIGN_START_DATE } from '../../constants/my-campaigns.constants';
@@ -25,7 +25,7 @@ describe('StartCampaignComponent', () => {
   // The dependencies
   let router: Router;
   let messagesService: MessagesService;
-  let myCampaignsService: MyCampaignsService;
+  let myCampaignsAdapterService: MyCampaignsAdapterService;
 
   // The component under test
   let startCampaignComponent: StartCampaignComponent;
@@ -52,7 +52,7 @@ describe('StartCampaignComponent', () => {
     fixture = TestBed.createComponent(StartCampaignComponent);
     router = TestBed.get(Router);
     messagesService = TestBed.get(MessagesService);
-    myCampaignsService = TestBed.get(MyCampaignsService);
+    myCampaignsAdapterService = TestBed.get(MyCampaignsAdapterService);
 
     startCampaignComponent = fixture.componentInstance;
     fixture.detectChanges();
@@ -73,7 +73,7 @@ describe('StartCampaignComponent', () => {
       let responseSubject: Subject<RequestStatus> = new BehaviorSubject<RequestStatus>(RequestStatus.SUCCESS);
       let response$: Observable<RequestStatus> = responseSubject.asObservable();
 
-      spyOn(myCampaignsService, 'startCampaign')
+      spyOn(myCampaignsAdapterService, 'startCampaign')
         .and.returnValue(response$);
       spyOn(messagesService, 'showMessage');
       spyOn(router, 'navigate');
@@ -84,7 +84,7 @@ describe('StartCampaignComponent', () => {
       startCampaignComponent.startOnClick();
 
       // then
-      expect(myCampaignsService.startCampaign).toHaveBeenCalledWith(campaignName, DEFAULT_CAMPAIGN_START_DATE);
+      expect(myCampaignsAdapterService.startCampaign).toHaveBeenCalledWith(campaignName, DEFAULT_CAMPAIGN_START_DATE);
       expect(messagesService.showMessage).toHaveBeenCalledWith(MSG_CAMPAIGN_CREATED, MessageLevel.INFO);
       expect(router.navigate).toHaveBeenCalledWith(['my_campaigns', 'list']);
     });
@@ -94,7 +94,7 @@ describe('StartCampaignComponent', () => {
       let responseSubject: Subject<RequestStatus> = new BehaviorSubject<RequestStatus>(RequestStatus.FAILURE);
       let response$: Observable<RequestStatus> = responseSubject.asObservable();
 
-      spyOn(myCampaignsService, 'startCampaign')
+      spyOn(myCampaignsAdapterService, 'startCampaign')
         .and.returnValue(response$);
       spyOn(messagesService, 'showMessage');
       spyOn(router, 'navigate');
@@ -105,7 +105,7 @@ describe('StartCampaignComponent', () => {
       startCampaignComponent.startOnClick();
 
       // then
-      expect(myCampaignsService.startCampaign).toHaveBeenCalledWith(campaignName, DEFAULT_CAMPAIGN_START_DATE);
+      expect(myCampaignsAdapterService.startCampaign).toHaveBeenCalledWith(campaignName, DEFAULT_CAMPAIGN_START_DATE);
       expect(messagesService.showMessage).not.toHaveBeenCalled();
       expect(router.navigate).not.toHaveBeenCalled();
     });

@@ -24,13 +24,19 @@ import {
 } from '../model/my-campaigns.model';
 
 /**
- * The service with logic behind campaigns from the GM's point of view.
+ * The adapter-service for retrieving campaigns data from the backend.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class MyCampaignsService {
+export class MyCampaignsAdapterService {
 
+  /**
+   * @inheritdoc
+   *
+   * @param httpClient the HTTP client
+   * @param messagesService the service responsible for displaying messages
+   */
   public constructor(
     private httpClient: HttpClient,
     private messagesService: MessagesService

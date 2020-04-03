@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 // Services
 import { AuthService } from 'src/app/core/services/auth.service';
-import { MyCampaignsService } from '../../services/my-campaigns.service';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
 
 // Model
 import { MyCampaignsListElement } from '../../model/my-campaigns.model';
@@ -31,11 +31,13 @@ export class MyCampaignsListComponent implements OnInit {
   /**
    * @inheritdoc
    *
-   * @param myCampaignsService the my-campaigns service
+   * @param authService the service for user-authentication
+   * @param myCampaignsAdapterService the my-campaigns adapter service for
+   *          retrieving the campaigns data from the backend
    */
   public constructor(
     private authService: AuthService,
-    private myCampaignsService: MyCampaignsService
+    private myCampaignsAdapterService: MyCampaignsAdapterService
   ) { }
 
   /**
@@ -58,7 +60,7 @@ export class MyCampaignsListComponent implements OnInit {
    * Loads the campaigns from the backend.
    */
   private loadMyCampaigns(): void {
-    this.myCampaignsService.getMyCampaignsList()
+    this.myCampaignsAdapterService.getMyCampaignsList()
       .subscribe(response => this.myCampaigns = response);
   }
 

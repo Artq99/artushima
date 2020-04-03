@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 // Services
 import { MessagesService } from 'src/app/core/services/messages.service';
-import { MyCampaignsService } from '../../services/my-campaigns.service';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
 
 // Constants
 import { DEFAULT_CAMPAIGN_START_DATE } from '../../constants/my-campaigns.constants';
@@ -35,19 +35,20 @@ export class StartCampaignComponent {
    *
    * @param router the router
    * @param messagesService the service for displaying messages
-   * @param myCampaignsService the service for managing the GM's campaigns
+   * @param myCampaignsAdapterService the adapter-service for retrieving
+   *          the campaigns data from the backend
    */
   public constructor(
     private router: Router,
     private messagesService: MessagesService,
-    private myCampaignsService: MyCampaignsService
+    private myCampaignsAdapterService: MyCampaignsAdapterService
   ) { }
 
   /**
    * The callback function for the button 'start'.
    */
   public startOnClick(): void {
-    this.myCampaignsService.startCampaign(this.campaignName, this.beginDate)
+    this.myCampaignsAdapterService.startCampaign(this.campaignName, this.beginDate)
       .subscribe(status => {
         if (status === RequestStatus.SUCCESS) {
           this.messagesService.showMessage(MSG_CAMPAIGN_CREATED, MessageLevel.INFO);
