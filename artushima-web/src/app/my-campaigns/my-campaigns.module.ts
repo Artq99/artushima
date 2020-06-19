@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 // Components
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
+import { CampaignDetailsComponent } from './components/campaign-details/campaign-details.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -16,7 +17,8 @@ import { StartCampaignComponent } from './components/start-campaign/start-campai
 @NgModule({
   declarations: [
     MyCampaignsListComponent,
-    StartCampaignComponent
+    StartCampaignComponent,
+    CampaignDetailsComponent
   ],
   imports: [
     CommonModule,
