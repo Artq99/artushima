@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
 import { CampaignDetailsComponent } from './components/campaign-details/campaign-details.component';
+import { CampaignDetailsCampaignInfoComponent } from './components/campaign-details/campaign-details-campaign-info/campaign-details-campaign-info.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -18,7 +19,8 @@ import { CampaignDetailsComponent } from './components/campaign-details/campaign
   declarations: [
     MyCampaignsListComponent,
     StartCampaignComponent,
-    CampaignDetailsComponent
+    CampaignDetailsComponent,
+    CampaignDetailsCampaignInfoComponent
   ],
   imports: [
     CommonModule,
