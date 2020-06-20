@@ -58,7 +58,7 @@ export const appRoutes: Routes = [
     data: { roles: ['role_start_campaign'] }
   },
   {
-    path: 'my_campaigns/campaign_details',
+    path: 'my_campaigns/campaign_details/:id',
     component: CampaignDetailsComponent,
     canActivate: [AuthGuard],
     // TODO add appropriate role
