@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * The child component showing basic information of a campaign.
@@ -10,4 +10,12 @@ import { Component } from '@angular/core';
 })
 export class CampaignDetailsCampaignInfoComponent {
 
+  @Input()
+  public campaignTitle: string;
+
+  @Input()
+  public campaignId: number;
+
+  @Input()
+  public campaignCreatedOn: Date;
 }

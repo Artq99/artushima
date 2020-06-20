@@ -1,1 +1,16 @@
-<p>campaign-details-campaign-info works!</p>
+<div>
+  <div class="row">
+    <div class="col-12">
+      <span class="campaign-title">{{ campaignTitle }}</span>
+    </div>
+  </div>
+  <div class="row campaign-minor-info-row">
+    <div class="col-1">
+      <span class="campaign-minor-info-text">ID: {{ campaignId }}</span>
+    </div>
+    <div class="col-11">
+      <span class="campaign-minor-info-text">Utworzono:
+        {{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
+    </div>
+  </div>
+</div>
