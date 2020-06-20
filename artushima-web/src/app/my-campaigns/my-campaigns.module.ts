@@ -8,6 +8,7 @@ import { MyCampaignsListComponent } from './components/my-campaigns-list/my-camp
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
 import { CampaignDetailsComponent } from './components/campaign-details/campaign-details.component';
 import { CampaignDetailsCampaignInfoComponent } from './components/campaign-details/campaign-details-campaign-info/campaign-details-campaign-info.component';
+import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -20,7 +21,8 @@ import { CampaignDetailsCampaignInfoComponent } from './components/campaign-deta
     MyCampaignsListComponent,
     StartCampaignComponent,
     CampaignDetailsComponent,
-    CampaignDetailsCampaignInfoComponent
+    CampaignDetailsCampaignInfoComponent,
+    GmInfoComponent
   ],
   imports: [
     CommonModule,

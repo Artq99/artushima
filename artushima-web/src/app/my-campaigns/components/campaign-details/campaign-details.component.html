@@ -1,7 +1,15 @@
 <div class="container">
-  <app-campaign-details-campaign-info
-    [campaignTitle]="'Kampania 1'"
-    [campaignId]="1"
-    [campaignCreatedOn]="'2020-01-01'">
-  </app-campaign-details-campaign-info>
+  <div class="row">
+    <div class="col-8">
+      <app-campaign-details-campaign-info
+        [campaignTitle]="'Kampania 1'"
+        [campaignId]="1"
+        [campaignCreatedOn]="'2020-01-01'">
+      </app-campaign-details-campaign-info>
+    </div>
+    <div class="col-4">
+      <artushima-campaign-details-gm-info></artushima-campaign-details-gm-info>
+    </div>
+  </div>
+
 </div>
