@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CampaignDetailsCampaignInfoComponent } from './campaign-details-campaign-info/campaign-details-campaign-info.component';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -8,7 +10,12 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CampaignDetailsComponent]
+      imports: [RouterTestingModule],
+      declarations: [
+        CampaignDetailsComponent,
+        // TODO Child components - should they be mocked?
+        CampaignDetailsCampaignInfoComponent
+      ]
     })
       .compileComponents();
   }));
