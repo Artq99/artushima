@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { CampaignDetailsComponent } from './campaign-details.component';
-import { CampaignDetailsCampaignInfoComponent } from './campaign-details-campaign-info/campaign-details-campaign-info.component';
+import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
 import { GmInfoComponent } from './gm-info/gm-info.component';
 
 describe('CampaignDetailsComponent', () => {
@@ -19,7 +19,7 @@ describe('CampaignDetailsComponent', () => {
       declarations: [
         CampaignDetailsComponent,
         // TODO Child components - should they be mocked?
-        CampaignDetailsCampaignInfoComponent,
+        CampaignInfoComponent,
         GmInfoComponent
       ]
     })

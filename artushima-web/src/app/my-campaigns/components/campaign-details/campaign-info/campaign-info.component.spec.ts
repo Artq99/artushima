@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CampaignDetailsCampaignInfoComponent } from './campaign-details-campaign-info.component';
 import { By } from '@angular/platform-browser';
 
-describe('CampaignDetailsCampaignInfoComponent', () => {
-  let component: CampaignDetailsCampaignInfoComponent;
-  let fixture: ComponentFixture<CampaignDetailsCampaignInfoComponent>;
+import { CampaignInfoComponent } from './campaign-info.component';
+
+describe('CampaignInfoComponent', () => {
+  let component: CampaignInfoComponent;
+  let fixture: ComponentFixture<CampaignInfoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CampaignDetailsCampaignInfoComponent]
+      declarations: [CampaignInfoComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CampaignDetailsCampaignInfoComponent);
+    fixture = TestBed.createComponent(CampaignInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -30,7 +30,7 @@ describe('CampaignDetailsCampaignInfoComponent', () => {
     const title: string = 'Test Campaign';
     let titleElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#campaign-info_title'))
+      .query(By.css('#campaign-info_campaign-title'))
       .nativeElement;
 
     // when
@@ -46,7 +46,7 @@ describe('CampaignDetailsCampaignInfoComponent', () => {
     const id: number = 1234567890;
     let idElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#campaign-info_id'))
+      .query(By.css('#campaign-info_campaign-id'))
       .nativeElement;
 
     // when
@@ -62,7 +62,7 @@ describe('CampaignDetailsCampaignInfoComponent', () => {
     const date: Date = new Date(2020, 0, 1);
     let dateElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#campaign-info_created-on'))
+      .query(By.css('#campaign-info_campaign-created-on'))
       .nativeElement;
 
     // when
