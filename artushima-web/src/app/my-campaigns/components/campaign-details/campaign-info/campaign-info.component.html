@@ -1,14 +1,14 @@
-<div>
+<div class="container-fluid">
   <div class="row">
     <div class="col-12">
       <span id="campaign-info_campaign-title" class="campaign-title">{{ campaignTitle }}</span>
     </div>
   </div>
   <div class="row campaign-minor-info-row">
-    <div class="col-2">
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
       <span id="campaign-info_campaign-id" class="campaign-minor-info-text">ID: {{ campaignId }}</span>
     </div>
-    <div class="col-10">
+    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
       <span
         id="campaign-info_campaign-created-on"
         class="campaign-minor-info-text">Utworzono: {{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
