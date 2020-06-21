@@ -2,15 +2,15 @@
 
 .container-campaign-info {
   background-color: $artushima-lightgray;
+  border-radius: 5px;
   height: 100%;
 }
 
-.campaign-minor-info-row {
-  padding-left: 15px;
-
-  .campaign-minor-info-text {
-    font-size: small;
-    color: gray;
-  }
+.campaign-title {
+  color: white;
 }
 
+.campaign-minor-details {
+  font-size: small;
+  color: $artushima-darkgray;
+}

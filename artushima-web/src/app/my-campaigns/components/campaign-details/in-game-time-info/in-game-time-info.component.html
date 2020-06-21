@@ -12,23 +12,25 @@
     </div>
   </div>
 
-  <div class="row">
+  <hr>
+
+  <div class="row text-center">
 
     <!-- Begin date -->
     <div class="col-lg-4">
-      <span>Data początku kampanii: </span>
+      <span>Data początku kampanii:</span><br>
       <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
     </div>
 
     <!-- Passed days -->
     <div class="col-lg-4">
-      <span>Minione dni: </span>
+      <span>Minione dni:</span><br>
       <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
     </div>
 
     <!-- Current date -->
     <div class="col-lg-4">
-      <span>Obecna data: </span>
+      <span>Obecna data:</span><br>
       <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
     </div>
 
