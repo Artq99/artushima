@@ -9,6 +9,7 @@ import { StartCampaignComponent } from './components/start-campaign/start-campai
 import { CampaignDetailsComponent } from './components/campaign-details/campaign-details.component';
 import { CampaignDetailsCampaignInfoComponent } from './components/campaign-details/campaign-details-campaign-info/campaign-details-campaign-info.component';
 import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 /**
  * A feature module with functionalities for game masters.
@@ -27,7 +28,8 @@ import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.c
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    FontAwesomeModule
   ]
 })
 export class MyCampaignsModule { }
