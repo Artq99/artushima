@@ -1,6 +1,10 @@
 <div class="container">
   <div class="container-fluid">
+
+    <!-- Header -->
     <div class="row">
+
+      <!-- Left column: Campaign info -->
       <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <artushima-campaign-details-campaign-info
           [campaignTitle]="'Kampania 1'"
@@ -8,10 +12,25 @@
           [campaignCreatedOn]="'2020-01-01'">
         </artushima-campaign-details-campaign-info>
       </div>
+
+      <!-- Right column: GM info -->
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <artushima-campaign-details-gm-info
           [gmName]="'Test Mistrz Gry'">
         </artushima-campaign-details-gm-info>
+      </div>
+
+    </div>
+    <br>
+
+    <!-- In-Game time info -->
+    <div class="row">
+      <div class="col-12">
+        <artushima-campaign-details-in-game-time-info
+          [beginDate]="'2053-11-18'"
+          [passedDays]="10"
+          [currentDate]="'2053-11-28'">
+        </artushima-campaign-details-in-game-time-info>
       </div>
     </div>
 

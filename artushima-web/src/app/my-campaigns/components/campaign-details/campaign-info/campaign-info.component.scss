@@ -1,5 +1,8 @@
-.campaign-title {
-  font-size: xx-large;
+@import "~src/colors.scss";
+
+.container-campaign-info {
+  background-color: $artushima-lightgray;
+  height: 100%;
 }
 
 .campaign-minor-info-row {

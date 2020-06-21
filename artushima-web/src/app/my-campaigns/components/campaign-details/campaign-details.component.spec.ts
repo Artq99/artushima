@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
 import { GmInfoComponent } from './gm-info/gm-info.component';
+import { InGameTimeInfoComponent } from './in-game-time-info/in-game-time-info.component';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -20,7 +21,8 @@ describe('CampaignDetailsComponent', () => {
         CampaignDetailsComponent,
         // TODO Child components - should they be mocked?
         CampaignInfoComponent,
-        GmInfoComponent
+        GmInfoComponent,
+        InGameTimeInfoComponent
       ]
     })
       .compileComponents();

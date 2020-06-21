@@ -1,1 +1,36 @@
-<p>in-game-time-info works!</p>
+<div class="container-fluid">
+
+  <!-- Header -->
+  <div class="row">
+    <div class="col-12">
+      <h2>
+        <span class="m-2">
+          <fa-icon [icon]="iconClock" size="md"></fa-icon>
+        </span>
+        <span>Czas w grze</span>
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- Begin date -->
+    <div class="col-lg-4">
+      <span>Data początku kampanii: </span>
+      <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
+    </div>
+
+    <!-- Passed days -->
+    <div class="col-lg-4">
+      <span>Minione dni: </span>
+      <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
+    </div>
+
+    <!-- Current date -->
+    <div class="col-lg-4">
+      <span>Obecna data: </span>
+      <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
+    </div>
+
+  </div>
+</div>

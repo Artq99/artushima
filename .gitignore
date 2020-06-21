@@ -9,6 +9,7 @@ artushima-venv/
 
 # logs
 logs/
+*.log
 
 # .env files
 *.env
