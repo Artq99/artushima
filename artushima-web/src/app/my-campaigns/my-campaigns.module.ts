@@ -10,6 +10,7 @@ import { StartCampaignComponent } from './components/start-campaign/start-campai
 import { CampaignDetailsComponent } from './components/campaign-details/campaign-details.component';
 import { CampaignInfoComponent } from './components/campaign-details/campaign-info/campaign-info.component';
 import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.component';
+import { InGameTimeInfoComponent } from './components/campaign-details/in-game-time-info/in-game-time-info.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -23,7 +24,8 @@ import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.c
     StartCampaignComponent,
     CampaignDetailsComponent,
     CampaignInfoComponent,
-    GmInfoComponent
+    GmInfoComponent,
+    InGameTimeInfoComponent
   ],
   imports: [
     CommonModule,
