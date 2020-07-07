@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from '../shared/shared.module';
 
 // Components
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
@@ -33,7 +34,8 @@ import { CampaignTimelineComponent } from './components/campaign-details/campaig
     CommonModule,
     FormsModule,
     RouterModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    SharedModule
   ]
 })
 export class MyCampaignsModule { }

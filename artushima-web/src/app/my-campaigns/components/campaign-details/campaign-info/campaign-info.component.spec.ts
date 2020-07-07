@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { CampaignInfoComponent } from './campaign-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 describe('CampaignInfoComponent', () => {
   let component: CampaignInfoComponent;
@@ -9,6 +11,10 @@ describe('CampaignInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        FontAwesomeModule,
+        SharedModule
+      ],
       declarations: [CampaignInfoComponent]
     })
       .compileComponents();
@@ -54,7 +60,7 @@ describe('CampaignInfoComponent', () => {
     fixture.detectChanges();
 
     // then
-    expect(idElement.textContent).toEqual('ID: 1234567890');
+    expect(idElement.textContent).toEqual('1234567890');
   });
 
   it('should show the date of the campaign creation', () => {
@@ -70,6 +76,6 @@ describe('CampaignInfoComponent', () => {
     fixture.detectChanges();
 
     // then
-    expect(dateElement.textContent).toEqual('Utworzono: 01.01.2020');
+    expect(dateElement.textContent).toEqual('01.01.2020');
   });
 });

@@ -1,38 +1,26 @@
-<div class="container-fluid container-campaign-info">
+<artushima-details-header
+  [icon]="iconBook"
+  [title]="campaignTitle"
+  [titleId]="'campaign-info_campaign-title'">
 
-  <!-- Title -->
-  <div class="row align-items-center" style="height: 70%;">
-    <div class="col-12">
-      <h1 class="m-2 campaign-title">
-        <span class="pr-4">
-          <fa-icon [icon]="iconBook" size="xl"></fa-icon>
-        </span>
-        <span id="campaign-info_campaign-title">{{ campaignTitle }}</span>
-      </h1>
-    </div>
+  <!-- Campaign ID -->
+  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <span class="pr-2">
+      <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
+    </span>
+    <span>id: </span>
+    <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
   </div>
 
-  <div class="row p-2 align-items-end campaign-minor-details" style="height: 30%;">
-
-    <!-- Campaign ID -->
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-      <span class="pr-2">
-        <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
-      </span>
-      <span>id: </span>
-      <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
-    </div>
-
-    <!-- Campaign created on -->
-    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-      <span class="pr-2">
-        <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
-      </span>
-      <span>Utworzono: </span>
-      <span
-        id="campaign-info_campaign-created-on"
-        class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
-    </div>
-
+  <!-- Created on -->
+  <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+    <span class="pr-2">
+      <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
+    </span>
+    <span>Utworzono: </span>
+    <span
+      id="campaign-info_campaign-created-on"
+      class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
   </div>
-</div>
+
+</artushima-details-header>
