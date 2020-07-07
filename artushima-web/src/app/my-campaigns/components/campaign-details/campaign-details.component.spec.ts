@@ -9,6 +9,7 @@ import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
 import { GmInfoComponent } from './gm-info/gm-info.component';
 import { InGameTimeInfoComponent } from './in-game-time-info/in-game-time-info.component';
 import { CampaignTimelineComponent } from './campaign-timeline/campaign-timeline.component';
+import { CampaignPlayersInfoComponent } from './campaign-players-info/campaign-players-info.component';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -26,7 +27,8 @@ describe('CampaignDetailsComponent', () => {
         CampaignInfoComponent,
         GmInfoComponent,
         InGameTimeInfoComponent,
-        CampaignTimelineComponent
+        CampaignTimelineComponent,
+        CampaignPlayersInfoComponent
       ]
     })
       .compileComponents();

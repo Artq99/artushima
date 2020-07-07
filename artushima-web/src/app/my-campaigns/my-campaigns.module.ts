@@ -13,6 +13,7 @@ import { CampaignInfoComponent } from './components/campaign-details/campaign-in
 import { GmInfoComponent } from './components/campaign-details/gm-info/gm-info.component';
 import { InGameTimeInfoComponent } from './components/campaign-details/in-game-time-info/in-game-time-info.component';
 import { CampaignTimelineComponent } from './components/campaign-details/campaign-timeline/campaign-timeline.component';
+import { CampaignPlayersInfoComponent } from './components/campaign-details/campaign-players-info/campaign-players-info.component';
 
 /**
  * A feature module with functionalities for game masters.
@@ -28,7 +29,8 @@ import { CampaignTimelineComponent } from './components/campaign-details/campaig
     CampaignInfoComponent,
     GmInfoComponent,
     InGameTimeInfoComponent,
-    CampaignTimelineComponent
+    CampaignTimelineComponent,
+    CampaignPlayersInfoComponent
   ],
   imports: [
     CommonModule,
