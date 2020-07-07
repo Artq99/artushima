@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { IconDefinition, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 /**
- * The child component showing the timeline of a campaign.pass
+ * The child component showing the timeline of a campaign.
  *
  * TODO this is just a stub implementation.
  */
@@ -11,5 +12,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./campaign-timeline.component.scss']
 })
 export class CampaignTimelineComponent {
+
+  /** The Icon: History. */
+  public iconHistory: IconDefinition = faHistory;
 
 }
