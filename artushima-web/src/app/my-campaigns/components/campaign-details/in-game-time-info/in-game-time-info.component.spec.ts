@@ -1,8 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { InGameTimeInfoComponent } from './in-game-time-info.component';
-import { By } from '@angular/platform-browser';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 describe('InGameTimeInfoComponent', () => {
   let component: InGameTimeInfoComponent;
@@ -10,7 +12,10 @@ describe('InGameTimeInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FontAwesomeModule],
+      imports: [
+        FontAwesomeModule,
+        SharedModule
+      ],
       declarations: [InGameTimeInfoComponent]
     })
       .compileComponents();

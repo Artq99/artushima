@@ -1,38 +1,23 @@
-<div class="container-fluid">
+<artushima-section
+  [icon]="iconClock"
+  [title]="'Czas w grze'">
 
-  <!-- Header -->
-  <div class="row">
-    <div class="col-12">
-      <h2>
-        <span class="m-2">
-          <fa-icon [icon]="iconClock" size="md"></fa-icon>
-        </span>
-        <span>Czas w grze</span>
-      </h2>
-    </div>
+  <!-- Begin date -->
+  <div class="col-lg-4 text-center">
+    <span>Data początku kampanii:</span><br>
+    <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
   </div>
 
-  <hr>
-
-  <div class="row text-center">
-
-    <!-- Begin date -->
-    <div class="col-lg-4">
-      <span>Data początku kampanii:</span><br>
-      <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
-    </div>
-
-    <!-- Passed days -->
-    <div class="col-lg-4">
-      <span>Minione dni:</span><br>
-      <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
-    </div>
-
-    <!-- Current date -->
-    <div class="col-lg-4">
-      <span>Obecna data:</span><br>
-      <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
-    </div>
-
+  <!-- Passed days -->
+  <div class="col-lg-4 text-center">
+    <span>Minione dni:</span><br>
+    <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
   </div>
-</div>
+
+  <!-- Current date -->
+  <div class="col-lg-4 text-center">
+    <span>Obecna data:</span><br>
+    <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
+  </div>
+
+</artushima-section>

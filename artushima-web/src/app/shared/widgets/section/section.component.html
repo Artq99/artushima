@@ -1,0 +1,21 @@
+<div class="container-fluid">
+
+  <!-- Header -->
+  <div class="row">
+    <div class="col-12">
+      <h2>
+        <span class="m-2">
+          <fa-icon [icon]="icon | defaultIcon" size="md"></fa-icon>
+        </span>
+        <span>{{ title }}</span>
+      </h2>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Content -->
+  <div class="row">
+    <ng-content></ng-content>
+  </div>
+</div>
