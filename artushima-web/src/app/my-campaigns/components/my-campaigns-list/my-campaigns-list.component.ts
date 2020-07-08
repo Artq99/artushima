@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faInfoCircle, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 // Services
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -17,15 +18,13 @@ import { MyCampaignsListElement } from '../../model/my-campaigns-list-response.m
 })
 export class MyCampaignsListComponent implements OnInit {
 
-  /**
-   * The role allowing a user to start a campaign.
-   */
+  /** The icon for the button leading to the campaign details. */
+  public iconDetails: IconDefinition = faInfoCircle;
+
+  /** The role allowing a user to start a campaign. */
   public hasRoleStartCampaign: boolean = false;
 
-  /**
-   * The list of all campaigns belonging to the currently logged in game
-   * master.
-   */
+  /** The list of all campaigns belonging to the currently logged in game master. */
   public myCampaigns: MyCampaignsListElement[] = [];
 
   /**
@@ -63,5 +62,4 @@ export class MyCampaignsListComponent implements OnInit {
     this.myCampaignsAdapterService.getMyCampaignsList()
       .subscribe(response => this.myCampaigns = response);
   }
-
 }
