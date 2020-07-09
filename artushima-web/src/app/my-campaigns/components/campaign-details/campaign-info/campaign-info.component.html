@@ -1,26 +1,36 @@
-<artushima-details-header
-  [icon]="iconBook"
-  [title]="campaignTitle"
-  [titleId]="'campaign-info_campaign-title'">
+<div class="pb-4">
 
-  <!-- Campaign ID -->
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <span class="pr-2">
-      <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
-    </span>
-    <span>id: </span>
-    <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
+  <!-- Header -->
+  <artushima-details-header
+    [icon]="iconBook"
+    [title]="campaignTitle"
+    [titleId]="'campaign-info_campaign-title'">
+  </artushima-details-header>
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <!-- Campaign ID -->
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <span class="pr-2">
+          <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
+        </span>
+        <span>id: </span>
+        <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
+      </div>
+
+      <!-- Created on -->
+      <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+        <span class="pr-2">
+          <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
+        </span>
+        <span>Utworzono: </span>
+        <span
+          id="campaign-info_campaign-created-on"
+          class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+    </div>
   </div>
-
-  <!-- Created on -->
-  <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-    <span class="pr-2">
-      <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
-    </span>
-    <span>Utworzono: </span>
-    <span
-      id="campaign-info_campaign-created-on"
-      class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
-  </div>
-
-</artushima-details-header>
+</div>

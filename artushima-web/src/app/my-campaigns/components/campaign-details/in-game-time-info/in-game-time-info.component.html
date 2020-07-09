@@ -2,22 +2,30 @@
   [icon]="iconClock"
   [title]="'Czas w grze'">
 
-  <!-- Begin date -->
-  <div class="col-lg-4 text-center">
-    <span>Data początku kampanii:</span><br>
-    <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
-  </div>
+  <div class="container-fluid">
 
-  <!-- Passed days -->
-  <div class="col-lg-4 text-center">
-    <span>Minione dni:</span><br>
-    <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
-  </div>
+    <div class="row">
 
-  <!-- Current date -->
-  <div class="col-lg-4 text-center">
-    <span>Obecna data:</span><br>
-    <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
+      <!-- Begin date -->
+      <div class="col-lg-4 text-center">
+        <span>Data początku kampanii:</span><br>
+        <span class="font-weight-bold" id="in-game-time-info_begin-date">{{ beginDate | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+      <!-- Passed days -->
+      <div class="col-lg-4 text-center">
+        <span>Minione dni:</span><br>
+        <span class="font-weight-bold" id="in-game-time-info_passed-days">{{ passedDays }}</span>
+      </div>
+
+      <!-- Current date -->
+      <div class="col-lg-4 text-center">
+        <span>Obecna data:</span><br>
+        <span class="font-weight-bold" id="in-game-time-info_current-date">{{ currentDate | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+    </div>
+
   </div>
 
 </artushima-section>

@@ -1,21 +1,18 @@
-<div class="container-fluid">
+<div class="card">
 
   <!-- Header -->
-  <div class="row">
-    <div class="col-12">
-      <h2>
-        <span class="m-2">
-          <fa-icon [icon]="icon | defaultIcon" size="md"></fa-icon>
-        </span>
-        <span>{{ title }}</span>
-      </h2>
-    </div>
+  <div class="card-header align-items-center">
+    <h4>
+      <span class="mr-4">
+        <fa-icon [icon]="icon | defaultIcon" size="md"></fa-icon>
+      </span>
+      <span>{{ title }}</span>
+    </h4>
   </div>
 
-  <hr>
-
-  <!-- Content -->
-  <div class="row">
+  <!-- Body -->
+  <div class="card-body">
     <ng-content></ng-content>
   </div>
+
 </div>

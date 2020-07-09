@@ -1,0 +1,30 @@
+// This file contains variables for colors.
+
+// Basic color definitions
+$artushima-black: #000000;
+$artushima-ebony: #0e1821;
+$artushima-river-bed: #44535e;
+$artushima-blue-smoke: #798f8c;
+$artushima-swans-down: #d9ebe9;
+
+// Body
+$artushima-body-bg: $artushima-ebony;
+$artushima-body-color: $artushima-swans-down;
+
+// Theme colors
+$artushima-primary: $artushima-blue-smoke;
+$artushima-secondary: $artushima-swans-down;
+$artushima-dark: $artushima-black;
+$artushima-light: $artushima-swans-down;
+
+// Cards
+$artushima-card-border-color: $artushima-black;
+$artushima-card-cap-bg: rgba($artushima-black, .1);
+$artushima-card-cap-color: $artushima-swans-down;
+$artushima-card-color: $artushima-swans-down;
+$artushima-card-bg: $artushima-river-bed;
+
+// Forms
+$artushima-input-bg: $artushima-river-bed;
+$artushima-input-color: $artushima-swans-down;
+$artushima-input-border-color: $artushima-black;

@@ -1,8 +1,8 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { DetailsHeaderComponent } from './widgets/details-header/details-header.component';
+import { NgModule } from "@angular/core";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DefaultIconPipe } from './pipes/default-icon/default-icon.pipe';
+import { DetailsHeaderComponent } from './widgets/details-header/details-header.component';
 import { SectionComponent } from './widgets/section/section.component';
 
 /**

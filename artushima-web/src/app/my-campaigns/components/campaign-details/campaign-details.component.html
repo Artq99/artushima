@@ -1,56 +1,41 @@
 <div class="container">
-  <div class="container-fluid">
 
-    <!-- Header -->
-    <div class="row">
-
-      <!-- Left column: Campaign info -->
-      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <artushima-campaign-details-campaign-info
-          [campaignTitle]="'Kampania 1 Test Test Test'"
-          [campaignId]="1"
-          [campaignCreatedOn]="'2020-01-01'">
-        </artushima-campaign-details-campaign-info>
-      </div>
-
-      <!-- Right column: GM info -->
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <artushima-campaign-details-gm-info
-          [gmName]="'Test Mistrz Gry'">
-        </artushima-campaign-details-gm-info>
-      </div>
-
+  <!-- Header -->
+  <div class="row">
+    <div class="col">
+      <artushima-campaign-details-campaign-info
+        [campaignTitle]="'Kampania 1 Test Test Test'"
+        [campaignId]="1"
+        [campaignCreatedOn]="'2020-01-01'">
+      </artushima-campaign-details-campaign-info>
     </div>
-    <br>
-
-    <!-- In-Game time info -->
-    <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <artushima-campaign-details-in-game-time-info
-          [beginDate]="'2053-11-18'"
-          [passedDays]="10"
-          [currentDate]="'2053-11-28'">
-        </artushima-campaign-details-in-game-time-info>
-      </div>
-    </div>
-    <br>
-
-    <!-- Campaign players info -->
-    <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <artushima-campaign-players-info>
-        </artushima-campaign-players-info>
-      </div>
-    </div>
-    <br>
-
-    <!-- Campaign timeline -->
-    <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <artushima-campaign-details-campaign-timeline>
-        </artushima-campaign-details-campaign-timeline>
-      </div>
-    </div>
-
   </div>
+
+  <!-- In-Game time info -->
+  <div class="row pt-2 pb-2">
+    <div class="col">
+      <artushima-campaign-details-in-game-time-info
+        [beginDate]="'2053-11-18'"
+        [passedDays]="10"
+        [currentDate]="'2053-11-28'">
+      </artushima-campaign-details-in-game-time-info>
+    </div>
+  </div>
+
+  <!-- Campaign players info -->
+  <div class="row pt-2 pb-2">
+    <div class="col">
+      <artushima-campaign-players-info>
+      </artushima-campaign-players-info>
+    </div>
+  </div>
+
+  <!-- Campaign timeline -->
+  <div class="row pt-2 pb-2">
+    <div class="col">
+      <artushima-campaign-details-campaign-timeline>
+      </artushima-campaign-details-campaign-timeline>
+    </div>
+  </div>
+
 </div>
