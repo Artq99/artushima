@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { faBook, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * The component showing campaign details.
@@ -10,6 +11,9 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./campaign-details.component.scss']
 })
 export class CampaignDetailsComponent implements OnInit {
+
+  /** The icon of a book for the header. */
+  public iconBook: IconDefinition = faBook;
 
   /**
    * The ID of the campaign.

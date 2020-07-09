@@ -2,35 +2,33 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from 'src/app/shared/shared.module';
-
-// Components
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
-import { GmInfoComponent } from './gm-info/gm-info.component';
-import { InGameTimeInfoComponent } from './in-game-time-info/in-game-time-info.component';
-import { CampaignTimelineComponent } from './campaign-timeline/campaign-timeline.component';
 import { CampaignPlayersInfoComponent } from './campaign-players-info/campaign-players-info.component';
+import { CampaignTimelineComponent } from './campaign-timeline/campaign-timeline.component';
+import { InGameTimeInfoComponent } from './in-game-time-info/in-game-time-info.component';
+
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
   let fixture: ComponentFixture<CampaignDetailsComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        FontAwesomeModule,
-        SharedModule
-      ],
-      declarations: [
-        CampaignDetailsComponent,
-        CampaignInfoComponent,
-        GmInfoComponent,
-        InGameTimeInfoComponent,
-        CampaignTimelineComponent,
-        CampaignPlayersInfoComponent
-      ]
-    })
+    TestBed
+      .configureTestingModule({
+        imports: [
+          RouterTestingModule,
+          FontAwesomeModule,
+          SharedModule
+        ],
+        declarations: [
+          CampaignDetailsComponent,
+          CampaignInfoComponent,
+          InGameTimeInfoComponent,
+          CampaignTimelineComponent,
+          CampaignPlayersInfoComponent
+        ]
+      })
       .compileComponents();
   }));
 

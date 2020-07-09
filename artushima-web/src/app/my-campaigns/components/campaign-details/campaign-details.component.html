@@ -1,12 +1,23 @@
 <div class="container">
 
   <!-- Header -->
-  <div class="row">
+  <div class="row pb-2">
+    <div class="col">
+      <artushima-header
+        [icon]="iconBook"
+        [title]="'Kampania Testowa'"
+        [titleId]="'campaign-info_campaign-title'">
+      </artushima-header>
+    </div>
+  </div>
+
+  <!-- Campaign info -->
+  <div class="row pb-4">
     <div class="col">
       <artushima-campaign-details-campaign-info
-        [campaignTitle]="'Kampania 1 Test Test Test'"
         [campaignId]="1"
-        [campaignCreatedOn]="'2020-01-01'">
+        [campaignCreatedOn]="'2020-01-01'"
+        [campaignGM]="'Test MG'">
       </artushima-campaign-details-campaign-info>
     </div>
   </div>

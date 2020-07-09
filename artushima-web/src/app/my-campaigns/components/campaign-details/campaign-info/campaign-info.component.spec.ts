@@ -4,7 +4,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CampaignInfoComponent } from './campaign-info.component';
 
-
 describe('CampaignInfoComponent', () => {
   let component: CampaignInfoComponent;
   let fixture: ComponentFixture<CampaignInfoComponent>;
@@ -29,22 +28,6 @@ describe('CampaignInfoComponent', () => {
   it('should be created', () => {
     // then
     expect(component).toBeTruthy();
-  });
-
-  it('should show the campaign title', () => {
-    // given
-    const title: string = 'Test Campaign';
-    let titleElement: HTMLElement = fixture
-      .debugElement
-      .query(By.css('#campaign-info_campaign-title'))
-      .nativeElement;
-
-    // when
-    component.campaignTitle = title;
-    fixture.detectChanges();
-
-    // then
-    expect(titleElement.textContent).toEqual(title);
   });
 
   it('should show the campaign ID', () => {

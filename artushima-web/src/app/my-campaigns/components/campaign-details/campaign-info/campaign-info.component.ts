@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IconDefinition, faBook, faCalendarPlus, faHashtag } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarPlus, faCrown, faHashtag, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * The child component showing basic information of a campaign.
@@ -11,18 +11,14 @@ import { IconDefinition, faBook, faCalendarPlus, faHashtag } from '@fortawesome/
 })
 export class CampaignInfoComponent {
 
-  /** The book icon. */
-  public iconBook: IconDefinition = faBook;
-
   /** The hashtag icon. */
   public iconHashtag: IconDefinition = faHashtag;
 
   /** The calendar icon. */
   public iconCalendar: IconDefinition = faCalendarPlus;
 
-  /** The campaign title. */
-  @Input()
-  public campaignTitle: string;
+  /** The game master icon. */
+  public iconGM: IconDefinition = faCrown;
 
   /** The campaign ID. */
   @Input()
@@ -31,4 +27,8 @@ export class CampaignInfoComponent {
   /** The date of campaign creation. */
   @Input()
   public campaignCreatedOn: Date;
+
+  /** Campaign game master. */
+  @Input()
+  public campaignGM: string;
 }

@@ -1,36 +1,37 @@
-<div class="pb-4">
+<div class="container-fluid">
 
-  <!-- Header -->
-  <artushima-header
-    [icon]="iconBook"
-    [title]="campaignTitle"
-    [titleId]="'campaign-info_campaign-title'">
-  </artushima-header>
+  <div class="row">
 
-  <div class="container-fluid">
-
-    <div class="row">
-
-      <!-- Campaign ID -->
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-        <span class="pr-2">
-          <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
-        </span>
-        <span>id: </span>
-        <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
-      </div>
-
-      <!-- Created on -->
-      <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-        <span class="pr-2">
-          <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
-        </span>
-        <span>Utworzono: </span>
-        <span
-          id="campaign-info_campaign-created-on"
-          class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
-      </div>
-
+    <!-- Campaign ID -->
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
+      <span class="pr-2">
+        <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
+      </span>
+      <span>id: </span>
+      <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
     </div>
+
+    <!-- Created on -->
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
+      <span class="pr-2">
+        <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
+      </span>
+      <span>utworzono: </span>
+      <span
+        id="campaign-info_campaign-created-on"
+        class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
+    </div>
+
+    <!-- Game master -->
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
+      <span class="pr-2">
+        <fa-icon [icon]="iconGM" size="sm"></fa-icon>
+      </span>
+      <span>mistrz gry: </span>
+      <span
+        id="campaign-info_campaign-gm"
+        class="font-weight-bold">{{ campaignGM }}</span>
+    </div>
+
   </div>
 </div>
