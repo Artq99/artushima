@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { SharedModule } from 'src/app/shared/shared.module';
-
-import { CampaignInfoComponent } from './campaign-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { CampaignInfoComponent } from './campaign-info.component';
+
 
 describe('CampaignInfoComponent', () => {
   let component: CampaignInfoComponent;

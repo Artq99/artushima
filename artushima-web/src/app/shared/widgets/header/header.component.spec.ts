@@ -1,26 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DetailsHeaderComponent } from './details-header.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../../shared.module';
+import { HeaderComponent } from './header.component';
 
-describe('DetailsHeaderComponent', () => {
-  let component: DetailsHeaderComponent;
-  let fixture: ComponentFixture<DetailsHeaderComponent>;
+describe('HeaderComponent', () => {
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FontAwesomeModule,
-        SharedModule
-      ],
-      declarations: [DetailsHeaderComponent]
-    })
+    TestBed
+      .configureTestingModule({
+        imports: [
+          FontAwesomeModule,
+          SharedModule
+        ],
+        declarations: [HeaderComponent]
+      })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetailsHeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
