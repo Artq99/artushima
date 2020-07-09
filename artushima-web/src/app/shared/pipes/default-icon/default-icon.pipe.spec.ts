@@ -1,5 +1,5 @@
+import { faInfoCircle, faJedi, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { DefaultIconPipe } from './default-icon.pipe';
-import { IconDefinition, faJedi, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 describe('DefaultIconPipe', () => {
   let pipe: DefaultIconPipe;

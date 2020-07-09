@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SectionComponent } from './section.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from '../../shared.module';
+import { SectionComponent } from './section.component';
 
 describe('SectionComponent', () => {
   let component: SectionComponent;
   let fixture: ComponentFixture<SectionComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FontAwesomeModule,
-        SharedModule
-      ],
-      declarations: [SectionComponent]
-    })
+    TestBed
+      .configureTestingModule({
+        imports: [
+          FontAwesomeModule,
+          SharedModule
+        ],
+        declarations: [SectionComponent]
+      })
       .compileComponents();
   }));
 
