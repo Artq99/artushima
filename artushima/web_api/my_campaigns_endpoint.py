@@ -124,6 +124,16 @@ def my_campaigns_start():
         db_session.close()
 
 
+@MY_CAMPAIGNS_BLUEPRINT.route("/details/<campaignId>")
+@allow_authorized_with_roles([ROLE_SHOW_OWNED_CAMPAIGNS])
+def my_campaigns_details(campaignId):
+    """
+    Get the data of a campaign.
+    """
+
+    return _create_failure(f"Not implemented. Requested with the ID: {campaignId}")
+
+
 def _create_success():
     return flask.jsonify({
         "status": "success",
