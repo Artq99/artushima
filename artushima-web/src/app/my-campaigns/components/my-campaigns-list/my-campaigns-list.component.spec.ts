@@ -1,35 +1,30 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-// Components
-import { MyCampaignsListComponent } from './my-campaigns-list.component';
-
-// Model
+import { RouterTestingModule } from '@angular/router/testing';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MyCampaignsListElement } from '../../model/my-campaigns-list-response.model';
+import { MyCampaignsListComponent } from './my-campaigns-list.component';
 
 describe('MyCampaignsListComponent', () => {
 
   // test data
-  let campaign1: MyCampaignsListElement = new MyCampaignsListElement();
+  const campaign1: MyCampaignsListElement = new MyCampaignsListElement();
   campaign1.id = 1;
   campaign1.campaignName = 'Campaign 1';
 
-  let campaing2: MyCampaignsListElement = new MyCampaignsListElement();
+  const campaing2: MyCampaignsListElement = new MyCampaignsListElement();
   campaing2.id = 2;
   campaing2.campaignName = 'Campaign 2';
 
-  let myCampaingsList: MyCampaignsListElement[] = [
+  const myCampaingsList: MyCampaignsListElement[] = [
     campaign1,
     campaing2
-  ]
+  ];
 
-  // The fixture
   let fixture: ComponentFixture<MyCampaignsListComponent>;
-
-  // the component under test
-  let myCampaignsListComponent: MyCampaignsListComponent;
+  let component: MyCampaignsListComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -38,7 +33,9 @@ describe('MyCampaignsListComponent', () => {
           MyCampaignsListComponent
         ],
         imports: [
-          HttpClientTestingModule
+          HttpClientTestingModule,
+          RouterTestingModule,
+          FontAwesomeModule
         ]
       })
       .compileComponents();
@@ -46,28 +43,28 @@ describe('MyCampaignsListComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MyCampaignsListComponent);
-    myCampaignsListComponent = fixture.componentInstance;
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should be created', () => {
     // then
-    expect(myCampaignsListComponent).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   it('should display the list of campaigns', () => {
     // given
-    myCampaignsListComponent.myCampaigns = myCampaingsList;
+    component.myCampaigns = myCampaingsList;
 
     // when
     fixture.detectChanges();
 
     // then
-    let myCampaignsListTableBody: DebugElement = fixture.debugElement.query(By.css('#my-campaigns-list-table-body'));
+    const myCampaignsListTableBody: DebugElement = fixture.debugElement.query(By.css('#my-campaigns-list-table-body'));
     expect(myCampaignsListTableBody.children.length).toEqual(2);
 
-    let campaignRow1: DebugElement = myCampaignsListTableBody.children[0];
-    let campaignRow2: DebugElement = myCampaignsListTableBody.children[1];
+    const campaignRow1: DebugElement = myCampaignsListTableBody.children[0];
+    const campaignRow2: DebugElement = myCampaignsListTableBody.children[1];
 
     const COL_ID = 0;
     const COL_CAMPAIGN_NAME = 1;
@@ -77,4 +74,6 @@ describe('MyCampaignsListComponent', () => {
     expect(campaignRow2.children[COL_ID].nativeElement.textContent).toContain(campaing2.id);
     expect(campaignRow2.children[COL_CAMPAIGN_NAME].nativeElement.textContent).toContain(campaing2.campaignName);
   });
+
+  // TODO Tests for the button navigating to the campaign details
 });

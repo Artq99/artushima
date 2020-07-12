@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IconDefinition, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * The component displaying the information about users (players) participating
  * in the campaign.
  *
- * This is a stub implementation.
+ * @todo This is a stub implementation.
  */
 @Component({
   selector: 'artushima-campaign-players-info',
@@ -14,6 +14,6 @@ import { IconDefinition, faUsers } from '@fortawesome/free-solid-svg-icons';
 })
 export class CampaignPlayersInfoComponent {
 
-  /** The icon for users. */
+  /** The icon for the header. */
   public iconPlayers: IconDefinition = faUsers;
 }

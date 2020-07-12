@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IconDefinition, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faClock, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * The child component that displays information about the in-game time of
@@ -12,14 +12,14 @@ import { IconDefinition, faClock } from '@fortawesome/free-solid-svg-icons';
 })
 export class InGameTimeInfoComponent {
 
-  /** Clock icon. */
+  /** The icon for the header. */
   public iconClock: IconDefinition = faClock;
 
   /** The in-game date when the campaign started. */
   @Input()
-  public beginDate: Date;
+  public startDate: Date;
 
-  /** The number of days that passed since the begin date. */
+  /** The number of days that passed since the start date. */
   @Input()
   public passedDays: number;
 

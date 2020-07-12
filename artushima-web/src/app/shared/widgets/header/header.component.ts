@@ -22,7 +22,7 @@ export class HeaderComponent {
   @Input()
   public title: string;
 
-  /** The ID for the span tag with title. */
+  /** The ID for the span tag with the title. */
   @Input()
   public titleId: string;
 }

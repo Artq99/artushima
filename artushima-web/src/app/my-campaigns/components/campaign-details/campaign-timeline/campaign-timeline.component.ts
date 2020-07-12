@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IconDefinition, faHistory } from '@fortawesome/free-solid-svg-icons';
+import { faHistory, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * The child component showing the timeline of a campaign.
  *
- * TODO this is just a stub implementation.
+ * @todo this is just a stub implementation.
  */
 @Component({
   selector: 'artushima-campaign-details-campaign-timeline',
@@ -13,7 +13,7 @@ import { IconDefinition, faHistory } from '@fortawesome/free-solid-svg-icons';
 })
 export class CampaignTimelineComponent {
 
-  /** The Icon: History. */
+  /** The icon for the header. */
   public iconHistory: IconDefinition = faHistory;
 
 }

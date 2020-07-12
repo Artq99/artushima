@@ -1,5 +1,5 @@
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DefaultIconPipe } from './pipes/default-icon/default-icon.pipe';
 import { HeaderComponent } from './widgets/header/header.component';

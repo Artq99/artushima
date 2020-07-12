@@ -5,32 +5,32 @@
     <!-- Campaign ID -->
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
       <span class="pr-2">
-        <fa-icon [icon]="iconHashtag" size="sm"></fa-icon>
+        <fa-icon [icon]="iconId" size="sm"></fa-icon>
       </span>
       <span>id: </span>
-      <span id="campaign-info_campaign-id" class="font-weight-bold">{{ campaignId }}</span>
+      <span id="campaign-details__campaign-info__id" class="font-weight-bold">{{ id }}</span>
     </div>
 
     <!-- Created on -->
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
       <span class="pr-2">
-        <fa-icon [icon]="iconCalendar" size="sm"></fa-icon>
+        <fa-icon [icon]="iconCreationDate" size="sm"></fa-icon>
       </span>
       <span>utworzono: </span>
       <span
-        id="campaign-info_campaign-created-on"
-        class="font-weight-bold">{{ campaignCreatedOn | date:'dd.MM.yyyy' }}</span>
+        id="campaign-details__campaign-info__creationDate"
+        class="font-weight-bold">{{ creationDate | date:'dd.MM.yyyy' }}</span>
     </div>
 
     <!-- Game master -->
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-center">
       <span class="pr-2">
-        <fa-icon [icon]="iconGM" size="sm"></fa-icon>
+        <fa-icon [icon]="iconGameMasterName" size="sm"></fa-icon>
       </span>
       <span>mistrz gry: </span>
       <span
-        id="campaign-info_campaign-gm"
-        class="font-weight-bold">{{ campaignGM }}</span>
+        id="campaign-details__campaign-info__gameMasterName"
+        class="font-weight-bold">{{ gameMasterName }}</span>
     </div>
 
   </div>

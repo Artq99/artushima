@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from 'src/app/shared/shared.module';
-
 import { InGameTimeInfoComponent } from './in-game-time-info.component';
 
 describe('InGameTimeInfoComponent', () => {
@@ -11,13 +9,14 @@ describe('InGameTimeInfoComponent', () => {
   let fixture: ComponentFixture<InGameTimeInfoComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FontAwesomeModule,
-        SharedModule
-      ],
-      declarations: [InGameTimeInfoComponent]
-    })
+    TestBed
+      .configureTestingModule({
+        imports: [
+          FontAwesomeModule,
+          SharedModule
+        ],
+        declarations: [InGameTimeInfoComponent]
+      })
       .compileComponents();
   }));
 
@@ -32,28 +31,28 @@ describe('InGameTimeInfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the begin date', () => {
+  it('should show the start date', () => {
     // given
-    const beginDate: Date = new Date(2053, 10, 18);
-    let beginDateElement: HTMLElement = fixture
+    const startDate: Date = new Date(2053, 10, 18);
+    const startDateElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#in-game-time-info_begin-date'))
+      .query(By.css('#campaign-details__in-game-time-info__startDate'))
       .nativeElement;
 
     // when
-    component.beginDate = beginDate;
+    component.startDate = startDate;
     fixture.detectChanges();
 
     // then
-    expect(beginDateElement.textContent).toEqual('18.11.2053');
+    expect(startDateElement.textContent).toEqual('18.11.2053');
   });
 
   it('should show the number of days that passed', () => {
     // given
     const passedDays: number = 10;
-    let passedDaysElement: HTMLElement = fixture
+    const passedDaysElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#in-game-time-info_passed-days'))
+      .query(By.css('#campaign-details__in-game-time-info__passedDays'))
       .nativeElement;
 
     // when
@@ -67,9 +66,9 @@ describe('InGameTimeInfoComponent', () => {
   it('should show the current date', () => {
     // given
     const currentDate: Date = new Date(2020, 10, 28);
-    let currentDateElement: HTMLElement = fixture
+    const currentDateElement: HTMLElement = fixture
       .debugElement
-      .query(By.css('#in-game-time-info_current-date'))
+      .query(By.css('#campaign-details__in-game-time-info__currentDate'))
       .nativeElement;
 
     // when

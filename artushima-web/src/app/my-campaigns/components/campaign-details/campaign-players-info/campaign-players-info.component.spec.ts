@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from 'src/app/shared/shared.module';
-
 import { CampaignPlayersInfoComponent } from './campaign-players-info.component';
 
 describe('CampaignPlayersInfoComponent', () => {
@@ -9,13 +8,14 @@ describe('CampaignPlayersInfoComponent', () => {
   let fixture: ComponentFixture<CampaignPlayersInfoComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FontAwesomeModule,
-        SharedModule
-      ],
-      declarations: [CampaignPlayersInfoComponent]
-    })
+    TestBed
+      .configureTestingModule({
+        imports: [
+          FontAwesomeModule,
+          SharedModule
+        ],
+        declarations: [CampaignPlayersInfoComponent]
+      })
       .compileComponents();
   }));
 

@@ -11,24 +11,24 @@ import { faCalendarPlus, faCrown, faHashtag, IconDefinition } from '@fortawesome
 })
 export class CampaignInfoComponent {
 
-  /** The hashtag icon. */
-  public iconHashtag: IconDefinition = faHashtag;
+  /** The icon for the ID of a campaign. */
+  public iconId: IconDefinition = faHashtag;
 
-  /** The calendar icon. */
-  public iconCalendar: IconDefinition = faCalendarPlus;
+  /** The icon for the creation date of a campaign. */
+  public iconCreationDate: IconDefinition = faCalendarPlus;
 
-  /** The game master icon. */
-  public iconGM: IconDefinition = faCrown;
+  /** The icon for the game master's name. */
+  public iconGameMasterName: IconDefinition = faCrown;
 
-  /** The campaign ID. */
+  /** The ID of a campaign. */
   @Input()
-  public campaignId: number;
+  public id: number;
 
-  /** The date of campaign creation. */
+  /** The creation date of a campaign. */
   @Input()
-  public campaignCreatedOn: Date;
+  public creationDate: Date;
 
-  /** Campaign game master. */
+  /** The game master's name of a campaign. */
   @Input()
-  public campaignGM: string;
+  public gameMasterName: string;
 }

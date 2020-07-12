@@ -6,7 +6,7 @@
       <artushima-header
         [icon]="iconBook"
         [title]="'Kampania Testowa'"
-        [titleId]="'campaign-info_campaign-title'">
+        [titleId]="'campaign-details__campaignTitle'">
       </artushima-header>
     </div>
   </div>
@@ -15,9 +15,9 @@
   <div class="row pb-4">
     <div class="col">
       <artushima-campaign-details-campaign-info
-        [campaignId]="1"
-        [campaignCreatedOn]="'2020-01-01'"
-        [campaignGM]="'Test MG'">
+        [id]="1"
+        [creationDate]="'2020-01-01'"
+        [gameMasterName]="'Test MG'">
       </artushima-campaign-details-campaign-info>
     </div>
   </div>
@@ -26,7 +26,7 @@
   <div class="row pt-2 pb-2">
     <div class="col">
       <artushima-campaign-details-in-game-time-info
-        [beginDate]="'2053-11-18'"
+        [startDate]="'2053-11-18'"
         [passedDays]="10"
         [currentDate]="'2053-11-28'">
       </artushima-campaign-details-in-game-time-info>
