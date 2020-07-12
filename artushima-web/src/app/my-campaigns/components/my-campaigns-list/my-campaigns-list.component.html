@@ -19,12 +19,18 @@
       <tr>
         <th>#</th>
         <th>Nazwa kampanii</th>
+        <th></th>
       </tr>
     </thead>
     <tbody id="my-campaigns-list-table-body">
       <tr *ngFor="let campaign of myCampaigns">
         <td>{{campaign.id}}</td>
         <td>{{campaign.campaignName}}</td>
+        <td>
+          <button class="btn btn-primary float-right" routerLink="/my_campaigns/campaign_details/{{ campaign.id }}">
+            <fa-icon [icon]="iconDetails" size="sm"></fa-icon>
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./scss/colors.scss";
+
+// Body
+$body-bg: $artushima-body-bg;
+$body-color: $artushima-body-color;
+
+// Theme colors
+$primary: $artushima-primary;
+$secondary: $artushima-secondary;
+$light: $artushima-light;
+$dark: $artushima-dark;
+
+// Cards
+$card-border-color: $artushima-card-border-color;
+$card-cap-bg: $artushima-card-cap-bg;
+$card-cap-color: $artushima-card-cap-color;
+$card-color: $artushima-card-color;
+$card-bg: $artushima-card-bg;
+
+// Forms
+$input-bg: $artushima-input-bg;
+$input-color: $artushima-input-color;
+$input-border-color: $artushima-input-border-color;
+
+@import "node_modules/bootstrap/scss/bootstrap";

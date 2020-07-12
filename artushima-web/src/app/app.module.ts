@@ -18,6 +18,7 @@ import { UserListComponent } from './users/components/user-list/user-list.compon
 import { UserCreatorComponent } from './users/components/user-creator/user-creator.component';
 import { MyCampaignsListComponent } from './my-campaigns/components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './my-campaigns/components/start-campaign/start-campaign.component';
+import { CampaignDetailsComponent } from './my-campaigns/components/campaign-details/campaign-details.component';
 
 /**
  * The definitions of all the routes existing in the application.
@@ -55,6 +56,13 @@ export const appRoutes: Routes = [
     component: StartCampaignComponent,
     canActivate: [AuthGuard],
     data: { roles: ['role_start_campaign'] }
+  },
+  {
+    path: 'my_campaigns/campaign_details/:id',
+    component: CampaignDetailsComponent,
+    canActivate: [AuthGuard],
+    // TODO add appropriate role
+    data: { roles: ['role_show_owned_campaigns'] }
   },
   {
     path: '',

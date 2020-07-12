@@ -1,0 +1,35 @@
+<artushima-section
+  [icon]="iconClock"
+  [title]="'Czas w grze'">
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <!-- Start date -->
+      <div class="col-lg-4 text-center">
+        <span>Data początku kampanii:</span><br>
+        <span
+          class="font-weight-bold"
+          id="campaign-details__in-game-time-info__startDate">{{ startDate | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+      <!-- Passed days -->
+      <div class="col-lg-4 text-center">
+        <span>Minione dni:</span><br>
+        <span class="font-weight-bold" id="campaign-details__in-game-time-info__passedDays">{{ passedDays }}</span>
+      </div>
+
+      <!-- Current date -->
+      <div class="col-lg-4 text-center">
+        <span>Obecna data:</span><br>
+        <span
+          class="font-weight-bold"
+          id="campaign-details__in-game-time-info__currentDate">{{ currentDate | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</artushima-section>
