@@ -162,3 +162,97 @@ class GetCampaignDetailsTest(TestCase):
         # when then
         with self.assertRaises(BusinessError):
             campaign_service.get_campaign_details(1)
+
+
+class CheckIfUserRelatedToCampaignTest(TestCase):
+
+    def setUp(self):
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
+
+    def tearDown(self):
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_get_business_error_when_user_id_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            campaign_service.check_if_user_related_to_campaign(None, 99)
+
+    def test_should_get_value_error_when_user_id_is_not_int(self):
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.check_if_user_related_to_campaign("88", 99)
+
+    def test_should_get_business_error_when_campaign_id_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            campaign_service.check_if_user_related_to_campaign(88, None)
+
+    def test_should_get_value_error_when_campaign_id_is_not_int(self):
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.check_if_user_related_to_campaign(88, "99")
+
+    def test_should_get_business_error_when_campaign_does_not_exist(self):
+        # given
+        self.campaign_repository_mock.read_by_id.return_value = None
+
+        # when then
+        with self.assertRaises(BusinessError):
+            campaign_service.check_if_user_related_to_campaign(88, 99)
+
+    def test_should_get_true_when_user_is_game_master(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        gm = UserEntity()
+        gm.id = 88
+        gm.created_on = date(2019, 1, 1)
+        gm.modified_on = date(2019, 1, 1)
+        gm.opt_lock = 0
+        gm.user_name = "Test User"
+
+        campaign.game_master = gm
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        result = campaign_service.check_if_user_related_to_campaign(88, 99)
+
+        # then
+        self.assertEqual(True, result)
+
+    def test_should_get_false_when_user_is_not_related_to_campaign(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        gm = UserEntity()
+        gm.id = 77
+        gm.created_on = date(2019, 1, 1)
+        gm.modified_on = date(2019, 1, 1)
+        gm.opt_lock = 0
+        gm.user_name = "Test User"
+
+        campaign.game_master = gm
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        result = campaign_service.check_if_user_related_to_campaign(88, 99)
+
+        # then
+        self.assertEqual(False, result)

@@ -97,16 +97,16 @@ def _map_campaign_to_dict(campaign):
     }
 
 
-def get_campaign_details(campaignId):
+def get_campaign_details(campaign_id):
     """
     Get the details of a campaign.
     """
 
-    validate_int_arg(campaignId, "ID kampanii")
+    validate_int_arg(campaign_id, "ID kampanii")
 
-    campaign = campaign_repository.read_by_id(campaignId)
+    campaign = campaign_repository.read_by_id(campaign_id)
     if campaign is None:
-        raise BusinessError(f"Kampania o ID {campaignId} nie istnieje!")
+        raise BusinessError(f"Kampania o ID {campaign_id} nie istnieje!")
 
     current_date = campaign.begin_date + timedelta(days=campaign.passed_days)
 
@@ -120,3 +120,23 @@ def get_campaign_details(campaignId):
         "gameMasterId": campaign.game_master.id,
         "gameMasterName": campaign.game_master.user_name
     }
+
+
+def check_if_user_related_to_campaign(user_id, campaign_id):
+    """
+    Check if the user of the given ID is somehow related to the campaign
+    of the given ID, i.e. if he/she is its game master or participates
+    as a player.
+
+    TODO For now only game masters are checked.
+    """
+
+    validate_int_arg(user_id, "ID użytkownika")
+    validate_int_arg(campaign_id, "ID kampanii")
+
+    campaign = campaign_repository.read_by_id(campaign_id)
+
+    if campaign is None:
+        raise BusinessError(f"Kampania o ID {campaign_id} nie istnieje!")
+
+    return campaign.game_master.id == user_id
