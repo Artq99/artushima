@@ -11,6 +11,7 @@ from artushima.campaign.persistence import campaign_repository
 from artushima.campaign.persistence.model import CampaignEntity
 from artushima.core.exceptions import BusinessError
 from artushima.user import user_service
+from artushima.user.persistence.model import UserEntity
 
 
 class CreateCampaignTest(TestCase):
@@ -98,3 +99,66 @@ class GetCampaignsByGmIdTest(TestCase):
         # when then
         with self.assertRaises(BusinessError):
             campaign_service.get_campaigns_by_gm_id(1)
+
+
+class GetCampaignDetailsTest(TestCase):
+
+    def setUp(self):
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
+
+    def tearDown(self):
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_get_campaign_details(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        gm = UserEntity()
+        gm.id = 88
+        gm.created_on = date(2019, 1, 1)
+        gm.modified_on = date(2019, 1, 1)
+        gm.opt_lock = 0
+        gm.user_name = "Test User"
+
+        campaign.game_master = gm
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        campaign_details = campaign_service.get_campaign_details(99)
+
+        # then
+        self.assertEqual(99, campaign_details["id"])
+        self.assertEqual("Test Campaign", campaign_details["title"])
+        self.assertEqual(date(2020, 1, 1), campaign_details["creationDate"])
+        self.assertEqual(date(2055, 1, 1), campaign_details["startDate"])
+        self.assertEqual(10, campaign_details["passedDays"])
+        self.assertEqual(date(2055, 1, 11), campaign_details["currentDate"])
+        self.assertEqual(88, campaign_details["gameMasterId"])
+        self.assertEqual("Test User", campaign_details["gameMasterName"])
+
+    def test_should_get_business_error_when_campaign_id_is_none(self):
+        # when then
+        with self.assertRaises(BusinessError):
+            campaign_service.get_campaign_details(None)
+
+    def test_should_get_value_error_when_campaign_id_is_not_int(self):
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.get_campaign_details("1")
+
+    def test_should_get_business_error_when_campaign_of_given_id_does_not_exist(self):
+        # given
+        self.campaign_repository_mock.read_by_id.return_value = None
+
+        # when then
+        with self.assertRaises(BusinessError):
+            campaign_service.get_campaign_details(1)

@@ -2,7 +2,7 @@
 The service module dealing with the logic behind campaigns.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from artushima.campaign.persistence import campaign_repository
 from artushima.campaign.persistence.model import (CampaignEntity,
@@ -94,4 +94,29 @@ def _map_campaign_to_dict(campaign):
         "campaign_name": campaign.campaign_name,
         "begin_date": campaign.begin_date,
         "passed_days": campaign.passed_days,
+    }
+
+
+def get_campaign_details(campaignId):
+    """
+    Get the details of a campaign.
+    """
+
+    validate_int_arg(campaignId, "ID kampanii")
+
+    campaign = campaign_repository.read_by_id(campaignId)
+    if campaign is None:
+        raise BusinessError(f"Kampania o ID {campaignId} nie istnieje!")
+
+    current_date = campaign.begin_date + timedelta(days=campaign.passed_days)
+
+    return {
+        "id": campaign.id,
+        "title": campaign.campaign_name,
+        "creationDate": campaign.created_on,
+        "startDate": campaign.begin_date,
+        "passedDays": campaign.passed_days,
+        "currentDate": current_date,
+        "gameMasterId": campaign.game_master.id,
+        "gameMasterName": campaign.game_master.user_name
     }

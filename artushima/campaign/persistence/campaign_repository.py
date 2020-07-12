@@ -28,6 +28,14 @@ def persist(campaign):
         raise PersistenceError(f"Error on persisting a campaign: {str(err)}")
 
 
+def read_by_id(campaign_id):
+    """
+    Read campaign data by its ID.
+    """
+
+    raise NotImplementedError()
+
+
 def read_by_gm_id(gm_id):
     """
     Get all campaigns belonging to the game master of the given ID.
