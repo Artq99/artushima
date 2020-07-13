@@ -2,7 +2,7 @@
 The test module for the campaign service module.
 """
 
-from datetime import date
+from datetime import date, datetime
 from unittest import TestCase
 from unittest.mock import create_autospec
 
@@ -114,8 +114,8 @@ class GetCampaignDetailsTest(TestCase):
         # given
         campaign = CampaignEntity()
         campaign.id = 99
-        campaign.created_on = date(2020, 1, 1)
-        campaign.modified_on = date(2020, 1, 1)
+        campaign.created_on = datetime(2020, 1, 1, 12, 12, 12)
+        campaign.modified_on = datetime(2020, 1, 1, 13, 13, 13)
         campaign.opt_lock = 0
         campaign.campaign_name = "Test Campaign"
         campaign.begin_date = date(2055, 1, 1)
@@ -138,10 +138,10 @@ class GetCampaignDetailsTest(TestCase):
         # then
         self.assertEqual(99, campaign_details["id"])
         self.assertEqual("Test Campaign", campaign_details["title"])
-        self.assertEqual(date(2020, 1, 1), campaign_details["creationDate"])
-        self.assertEqual(date(2055, 1, 1), campaign_details["startDate"])
+        self.assertEqual("2020-01-01T12:12:12", campaign_details["creationDate"])
+        self.assertEqual("2055-01-01", campaign_details["startDate"])
         self.assertEqual(10, campaign_details["passedDays"])
-        self.assertEqual(date(2055, 1, 11), campaign_details["currentDate"])
+        self.assertEqual("2055-01-11", campaign_details["currentDate"])
         self.assertEqual(88, campaign_details["gameMasterId"])
         self.assertEqual("Test User", campaign_details["gameMasterName"])
 

@@ -113,10 +113,10 @@ def get_campaign_details(campaign_id):
     return {
         "id": campaign.id,
         "title": campaign.campaign_name,
-        "creationDate": campaign.created_on,
-        "startDate": campaign.begin_date,
+        "creationDate": campaign.created_on.isoformat(),
+        "startDate": campaign.begin_date.isoformat(),
         "passedDays": campaign.passed_days,
-        "currentDate": current_date,
+        "currentDate": current_date.isoformat(),
         "gameMasterId": campaign.game_master.id,
         "gameMasterName": campaign.game_master.user_name
     }
