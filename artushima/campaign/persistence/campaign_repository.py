@@ -33,7 +33,11 @@ def read_by_id(campaign_id):
     Read campaign data by its ID.
     """
 
-    raise NotImplementedError()
+    try:
+        session: Session = db_access.Session()
+        return session.query(CampaignEntity).filter_by(id=campaign_id).first()
+    except SQLAlchemyError as err:
+        raise PersistenceError(f"Error on reading a campaign of the ID: {str(campaign_id)}") from err
 
 
 def read_by_gm_id(gm_id):
