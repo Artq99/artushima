@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
-
-// Services
+import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
+import { MessageLevel } from 'src/app/core/model/message-level';
+import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessagesService } from 'src/app/core/services/messages.service';
-
-// Constants
 import {
   URL_MY_CAMPAIGNS_LIST,
   URL_MY_CAMPAIGNS_START
-} from '../constants/my-campaigns.constants';
-import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
-
-// Model
-import { RequestStatus } from 'src/app/core/model/request-status';
-import { MessageLevel } from 'src/app/core/model/message-level';
-import { MyCampaignsListElement, MyCampaignsListResponse } from '../model/my-campaigns-list-response.model';
-import { MyCampaignsStartRequest } from '../model/my-campaigns-start-request.model';
-import { MyCampaignsStartResponse } from '../model/my-campaigns-start-response.model';
+} from '../../constants/my-campaigns.constants';
+import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
+import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
+import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
 
 /**
  * The adapter-service for retrieving campaigns data from the backend.
