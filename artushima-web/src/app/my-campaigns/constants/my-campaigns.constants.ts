@@ -11,6 +11,11 @@ export const URL_MY_CAMPAIGNS_LIST = '/api/my_campaigns/list';
 export const URL_MY_CAMPAIGNS_START = '/api/my_campaigns/start';
 
 /**
+ * The URL of the endpoint delivering the details of a campaign.
+ */
+export const URL_MY_CAMPAIGNS_DETAILS = '/api/my_campaigns/details';
+
+/**
  * The default date for a campaign to begin with.
  * The date is the last mentioned date in the Neuroshima Handbook 1.5.
  */

@@ -4,39 +4,31 @@ import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
 import { MessageLevel } from 'src/app/core/model/message-level';
 import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessagesService } from 'src/app/core/services/messages.service';
-import {
-  URL_MY_CAMPAIGNS_LIST,
-  URL_MY_CAMPAIGNS_START
-} from '../../constants/my-campaigns.constants';
+import { URL_MY_CAMPAIGNS_DETAILS, URL_MY_CAMPAIGNS_LIST, URL_MY_CAMPAIGNS_START } from '../../constants/my-campaigns.constants';
+import { CampaignDetailsResponse } from '../../model/campaign-details.model';
 import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
 import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
 import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
 import { MyCampaignsAdapterService } from './my-campaigns-adapter.service';
 
 describe('MyCampaignsAdapterService', () => {
-
-  // dependencies
+  let service: MyCampaignsAdapterService;
   let httpTestingController: HttpTestingController;
   let messageService: MessagesService;
 
-  // the service under test
-  let myCampaignsService: MyCampaignsAdapterService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule]
     });
 
-    httpTestingController = TestBed.get(HttpTestingController);
-    messageService = TestBed.get(MessagesService);
-    myCampaignsService = TestBed.get(MyCampaignsAdapterService);
+    service = TestBed.inject(MyCampaignsAdapterService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    messageService = TestBed.inject(MessagesService);
   });
 
   it('should be created', () => {
     // then
-    expect(myCampaignsService).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 
   describe('getMyCampaignsList', () => {
@@ -69,7 +61,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.getMyCampaignsList()
+      service.getMyCampaignsList()
         .subscribe(response => expect(response).toEqual(myCampaignsList));
 
       let request: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_LIST);
@@ -84,7 +76,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.getMyCampaignsList()
+      service.getMyCampaignsList()
         .subscribe(response => expect(response).toEqual([]));
 
       let request: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_LIST);
@@ -99,7 +91,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.getMyCampaignsList()
+      service.getMyCampaignsList()
         .subscribe(response => expect(response).toEqual([]));
 
       let request: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_LIST);
@@ -132,7 +124,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.startCampaign(campaignName, beginDate)
+      service.startCampaign(campaignName, beginDate)
         .subscribe(response => expect(response).toEqual(RequestStatus.SUCCESS));
 
       let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
@@ -148,7 +140,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.startCampaign(campaignName, beginDate)
+      service.startCampaign(campaignName, beginDate)
         .subscribe(response => expect(response).toEqual(RequestStatus.FAILURE));
 
       let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
@@ -164,7 +156,7 @@ describe('MyCampaignsAdapterService', () => {
       spyOn(messageService, 'showMessage');
 
       // when then
-      myCampaignsService.startCampaign(campaignName, beginDate)
+      service.startCampaign(campaignName, beginDate)
         .subscribe(response => expect(response).toEqual(RequestStatus.FAILURE));
 
       let testRequest: TestRequest = httpTestingController.expectOne(URL_MY_CAMPAIGNS_START);
@@ -173,6 +165,81 @@ describe('MyCampaignsAdapterService', () => {
       httpTestingController.verify();
       expect(testRequest.request.body).toEqual(requestBody);
       expect(messageService.showMessage).toHaveBeenCalledWith(MSG_APP_ERROR, MessageLevel.ERROR);
+    });
+  });
+
+  describe('getCampaignDetails', () => {
+
+    it('should get the details of a campaign', () => {
+      // given
+      const id: number = 99;
+      const url: string = `${URL_MY_CAMPAIGNS_DETAILS}/${id}`;
+      const campaignDetailsResponse: CampaignDetailsResponse = {
+        status: RequestStatus.SUCCESS,
+        message: '',
+        campaignDetails: {
+          id: 99,
+          title: 'Test Campaign',
+          creationDate: new Date(2020, 1, 1),
+          startDate: new Date(2055, 1, 1),
+          passedDays: 10,
+          currentDate: new Date(2055, 1, 11),
+          gameMasterId: 1,
+          gameMasterName: 'Test GM'
+        }
+      };
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service.getCampaignDetails(id)
+        .subscribe(response => expect(response).toEqual(campaignDetailsResponse.campaignDetails));
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.flush(campaignDetailsResponse);
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).not.toHaveBeenCalled();
+    });
+
+    it('should show message when the request failed', () => {
+      // given
+      const id: number = 99;
+      const url: string = `${URL_MY_CAMPAIGNS_DETAILS}/${id}`;
+      const campaignDetailsResponse: CampaignDetailsResponse = {
+        status: RequestStatus.FAILURE,
+        message: 'Test Message'
+      };
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service.getCampaignDetails(id)
+        .subscribe(response => expect(response).not.toBeDefined());
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.flush(campaignDetailsResponse);
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).toHaveBeenCalledWith(campaignDetailsResponse.message, MessageLevel.ERROR);
+    });
+
+    it('should process an HTTP error', () => {
+      // given
+      const id: number = 99;
+      const url: string = `${URL_MY_CAMPAIGNS_DETAILS}/${id}`;
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service.getCampaignDetails(id)
+        .subscribe(response => expect(response).not.toBeDefined());
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.error(new ErrorEvent('error'), { status: 404 });
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).toHaveBeenCalled();
     });
   });
 });
