@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { faBook, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
+import { CampaignDetails } from '../../model/campaign-details.model';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 
 /**
  * The component showing the details of a campaign.
- *
- * @todo This is just a stub implementation.
  */
 @Component({
   selector: 'artushima-campaign-details',
@@ -17,8 +18,8 @@ export class CampaignDetailsComponent implements OnInit {
   /** The icon of a book for the header. */
   public iconBook: IconDefinition = faBook;
 
-  /** The ID of the campaign. */
-  private campaignId: number;
+  /** The observable with the data. */
+  public campaignDetails$: Observable<CampaignDetails>;
 
   /**
    * @inheritdoc
@@ -27,16 +28,15 @@ export class CampaignDetailsComponent implements OnInit {
    * @param activatedRoute the activated route
    */
   public constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private myCampaignsAdapterService: MyCampaignsAdapterService
   ) { }
 
   /**
    * @inheritdoc
    */
   public ngOnInit(): void {
-    this.campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
-    // TODO load the campaign of the given id
-    // console.log(this.campaignId);
+    const campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
+    this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(campaignId);
   }
 }
