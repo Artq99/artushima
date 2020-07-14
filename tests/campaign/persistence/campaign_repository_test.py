@@ -102,6 +102,51 @@ class PersistTest(TestCase):
             campaign_repository.persist(new_campaign)
 
 
+class ReadByIdTest(TestCase):
+
+    def setUp(self):
+        properties.init()
+        db_access.init()
+        self.session = db_access.Session()
+
+    def tearDown(self):
+        self.session.rollback()
+        self.session.close()
+
+    def test_should_get_campaign(self):
+        # given
+        user = UserEntity()
+        user.user_name = "Test User"
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
+        user.opt_lock = 0
+
+        campaign = CampaignEntity()
+        campaign.campaign_name = "Test Campaign"
+        campaign.created_on = datetime.utcnow()
+        campaign.modified_on = datetime.utcnow()
+        campaign.opt_lock = 0
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 0
+        campaign.game_master = user
+
+        self.session.add(campaign)
+        self.session.flush()
+
+        # when
+        found_campaign = campaign_repository.read_by_id(campaign.id)
+
+        # then
+        self.assertEqual(campaign, found_campaign)
+
+    def test_should_get_none_when_campaign_does_not_exist(self):
+        # when
+        found_campaign = campaign_repository.read_by_id(999999)
+
+        # then
+        self.assertIsNone(found_campaign)
+
+
 class ReadByGMNameTest(TestCase):
 
     def setUp(self):

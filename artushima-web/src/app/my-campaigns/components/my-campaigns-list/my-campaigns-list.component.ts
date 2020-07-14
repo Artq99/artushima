@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faInfoCircle, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-
-// Services
 import { AuthService } from 'src/app/core/services/auth.service';
-import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
-
-// Model
 import { MyCampaignsListElement } from '../../model/my-campaigns-list-response.model';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 
 /**
  * The component showing the list of campaigns belonging to the game master.

@@ -1,24 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
-
-// Components
-import { StartCampaignComponent } from './start-campaign.component';
-
-// Services
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { MessageLevel } from 'src/app/core/model/message-level';
+import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessagesService } from 'src/app/core/services/messages.service';
-import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service';
-
-// Constants
 import { DEFAULT_CAMPAIGN_START_DATE } from '../../constants/my-campaigns.constants';
 import { MSG_CAMPAIGN_CREATED } from '../../constants/my-campaings.messages';
-
-// Model
-import { RequestStatus } from 'src/app/core/model/request-status';
-import { MessageLevel } from 'src/app/core/model/message-level';
+import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
+import { StartCampaignComponent } from './start-campaign.component';
 
 describe('StartCampaignComponent', () => {
 

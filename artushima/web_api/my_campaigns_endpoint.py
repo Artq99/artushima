@@ -124,6 +124,49 @@ def my_campaigns_start():
         db_session.close()
 
 
+@MY_CAMPAIGNS_BLUEPRINT.route("/details/<int:campaign_id>", methods=["GET"])
+@allow_authorized_with_roles([ROLE_SHOW_OWNED_CAMPAIGNS])
+def my_campaigns_details(campaign_id):
+    """
+    Get the data of a campaign.
+    """
+
+    # The decorator has assured that the user had been logged in.
+    # No need for checking the existence of the header at this point.
+    token = flask.request.headers.get("Authorization")
+    user_id = auth_service.get_user_id(token)
+
+    # Create the DB session.
+    db_session = db_access.Session()
+
+    try:
+        # Only the users who are somehow related to the campaign should be able to access its data.
+        if not campaign_service.check_if_user_related_to_campaign(user_id, campaign_id):
+            return _create_failure(f"Nie masz dostępu do danych kampani o ID {str(campaign_id)}."), 403
+
+        campaign_details = campaign_service.get_campaign_details(campaign_id)
+
+        return flask.jsonify({
+            "status": "success",
+            "message": "",
+            "campaignDetails": campaign_details
+        }), 200
+
+    except BusinessError as err:
+        db_session.rollback()
+
+        return _create_failure(err.message), 200
+
+    except Exception as err:
+        db_session.rollback()
+        logger.log_error(str(err))
+
+        return _create_failure("Błąd aplikacji."), 500
+
+    finally:
+        db_session.close()
+
+
 def _create_success():
     return flask.jsonify({
         "status": "success",

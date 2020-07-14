@@ -1,24 +1,20 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { first } from 'rxjs/operators';
-
-// Services
+import { Injectable } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, first, map, take } from 'rxjs/operators';
+import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
+import { MessageLevel } from 'src/app/core/model/message-level';
+import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessagesService } from 'src/app/core/services/messages.service';
-
-// Constants
 import {
+  URL_MY_CAMPAIGNS_DETAILS,
   URL_MY_CAMPAIGNS_LIST,
   URL_MY_CAMPAIGNS_START
-} from '../constants/my-campaigns.constants';
-import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
-
-// Model
-import { RequestStatus } from 'src/app/core/model/request-status';
-import { MessageLevel } from 'src/app/core/model/message-level';
-import { MyCampaignsListElement, MyCampaignsListResponse } from '../model/my-campaigns-list-response.model';
-import { MyCampaignsStartRequest } from '../model/my-campaigns-start-request.model';
-import { MyCampaignsStartResponse } from '../model/my-campaigns-start-response.model';
+} from '../../constants/my-campaigns.constants';
+import { CampaignDetails, CampaignDetailsResponse } from '../../model/campaign-details.model';
+import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
+import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
+import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
 
 /**
  * The adapter-service for retrieving campaigns data from the backend.
@@ -118,5 +114,38 @@ export class MyCampaignsAdapterService {
       );
 
     return response$;
+  }
+
+  /**
+   * Sends a request for details of a campaign of the given ID.
+   *
+   * @param campaignId the ID of a campaign
+   */
+  public getCampaignDetails(campaignId: number): Observable<CampaignDetails> {
+    const url: string = `${URL_MY_CAMPAIGNS_DETAILS}/${campaignId}`;
+    return this.httpClient.get<CampaignDetailsResponse>(url)
+      .pipe(
+        take(1),
+        map(response => {
+          if (response.status === RequestStatus.SUCCESS) {
+            return response.campaignDetails;
+          } else {
+            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
+            return undefined;
+          }
+        }),
+        catchError(error => this.handleError(error))
+      );
+  }
+
+  /**
+   * Shows a message with an appropriate message and returns an observable of undefined.
+   *
+   * @param error an error
+   */
+  private handleError(error: any): Observable<any> {
+    const message: string = error.error instanceof ErrorEvent ? 'Błąd przetwarzania odpowiedzi.' : 'Błąd aplikacji.';
+    this.messagesService.showMessage(message, MessageLevel.ERROR);
+    return of(undefined);
   }
 }
