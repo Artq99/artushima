@@ -7,7 +7,8 @@ from unittest import TestCase
 
 from artushima.campaign.persistence import campaign_repository
 from artushima.campaign.persistence.model import (CampaignEntity,
-                                                  CampaignHistoryEntity)
+                                                  CampaignHistoryEntity,
+                                                  CampaignTimelineEntity)
 from artushima.core import db_access, properties
 from artushima.core.exceptions import PersistenceError
 from artushima.user.persistence.model import UserEntity
@@ -84,6 +85,42 @@ class PersistTest(TestCase):
         # then
         self.assertIn(new_campaign, self.session.query(CampaignEntity).all())
         self.assertIsNotNone(self.session.query(CampaignHistoryEntity).filter_by(campaign_id=new_campaign.id).first())
+
+    def test_should_persist_new_campaign_with_timeline_entry(self):
+        # given
+        user = UserEntity()
+        user.user_name = "test_user"
+        user.created_on = datetime.utcnow()
+        user.modified_on = datetime.utcnow()
+        user.opt_lock = 0
+
+        self.session.add(user)
+        self.session.flush()
+
+        new_campaign = CampaignEntity()
+        new_campaign.created_on = datetime.utcnow()
+        new_campaign.modified_on = datetime.utcnow()
+        new_campaign.opt_lock = 0
+        new_campaign.campaign_name = "test campaign"
+        new_campaign.begin_date = date(2054, 1, 1)
+        new_campaign.passed_days = 0
+        new_campaign.game_master_id = user.id
+
+        new_campaign_timeline_entry = CampaignTimelineEntity()
+        new_campaign_timeline_entry.created_on = datetime.utcnow()
+        new_campaign_timeline_entry.modified_on = datetime.utcnow()
+        new_campaign_timeline_entry.opt_lock = 0
+        new_campaign_timeline_entry.title = "test session"
+        new_campaign_timeline_entry.session_date = date.today()
+        new_campaign_timeline_entry.summary_text = "this is summary"
+        new_campaign_timeline_entry.campaign = new_campaign
+
+        # when
+        campaign_repository.persist(new_campaign)
+
+        # then
+        self.assertIn(new_campaign, self.session.query(CampaignEntity).all())
+        self.assertIsNotNone(self.session.query(CampaignTimelineEntity).filter_by(campaign_id=new_campaign.id).first())
 
     def test_should_get_persistence_error_on_constraint_violation(self):
         # given
