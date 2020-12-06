@@ -22,6 +22,13 @@
     </div>
   </div>
 
+  <!-- Campaign GM's toolbar -->
+  <div *ngIf="(currentUser$ | async)?.userName === (campaignDetails$ | async)?.gameMasterName" class="row pb-4">
+    <div class="col">
+      <artushima-campaign-details-campaign-gm-toolbar></artushima-campaign-details-campaign-gm-toolbar>
+    </div>
+  </div>
+
   <!-- In-Game time info -->
   <div class="row pt-2 pb-2">
     <div class="col">

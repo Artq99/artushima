@@ -3,10 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { of } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CampaignDetails } from '../../model/campaign-details.model';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { CampaignGmToolbarComponent } from './campaign-gm-toolbar/campaign-gm-toolbar.component';
 import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
 import { CampaignPlayersInfoComponent } from './campaign-players-info/campaign-players-info.component';
 import { CampaignTimelineComponent } from './campaign-timeline/campaign-timeline.component';
@@ -31,11 +33,13 @@ describe('CampaignDetailsComponent', () => {
         declarations: [
           CampaignDetailsComponent,
           CampaignInfoComponent,
+          CampaignGmToolbarComponent,
           CampaignPlayersInfoComponent,
           CampaignTimelineComponent,
           InGameTimeInfoComponent
         ],
         providers: [
+          { provide: AuthService, useClass: jasmine.createSpy('AuthService') },
           { provide: MyCampaignsAdapterService, useValue: myCampaignsAdapterServiceMock }
         ]
       })
