@@ -2,11 +2,10 @@
 The module containing the data model for the campaign component.
 """
 
+from artushima.core.db_access import BaseEntity
 from sqlalchemy import (Column, Date, DateTime, ForeignKey, Integer, String,
                         Text)
 from sqlalchemy.orm import relationship
-
-from artushima.core.db_access import BaseEntity
 
 
 class CampaignEntity(BaseEntity):
@@ -56,7 +55,6 @@ class CampaignTimelineEntity(BaseEntity):
     __tablename__ = "campaign_timeline"
 
     id = Column("id", Integer, primary_key=True)
-
     created_on = Column("created_on", DateTime, nullable=False)
     modified_on = Column("modified_on", DateTime, nullable=False)
     opt_lock = Column("opt_lock", Integer, nullable=False)

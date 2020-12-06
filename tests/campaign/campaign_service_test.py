@@ -9,7 +9,7 @@ from unittest.mock import create_autospec
 from artushima.campaign import campaign_service
 from artushima.campaign.persistence import campaign_repository
 from artushima.campaign.persistence.model import CampaignEntity
-from artushima.core.exceptions import BusinessError
+from artushima.core.exceptions import BusinessError, DomainError
 from artushima.user import user_service
 from artushima.user.persistence.model import UserEntity
 
@@ -162,6 +162,155 @@ class GetCampaignDetailsTest(TestCase):
         # when then
         with self.assertRaises(BusinessError):
             campaign_service.get_campaign_details(1)
+
+
+class CreateTimelineEntryTest(TestCase):
+
+    def setUp(self):
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
+
+    def tearDown(self):
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_create_timeline_entry(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        entry_data = {
+            "title": "Test entry",
+            "sessionDate": date.fromisoformat("2020-01-01"),
+            "summaryText": "Test text",
+            "campaignId": campaign.id
+        }
+        editor_name = "Test user"
+
+        # when
+        campaign_service.create_timeline_entry(entry_data, editor_name)
+
+        # then
+        self.assertEqual(len(campaign.campaign_timeline_entries), 1)
+        self.assertEqual(len(campaign.campaign_history_entries), 1)
+        self.campaign_repository_mock.persist.assert_called_once_with(campaign)
+
+    def test_should_get_domain_error_when_campaign_does_not_exist(self):
+        # given
+        self.campaign_repository_mock.read_by_id.return_value = None
+
+        entry_data = {
+            "title": "Test entry",
+            "sessionDate": date.fromisoformat("2020-01-01"),
+            "summaryText": "Test text",
+            "campaignId": 99
+        }
+        editor_name = "Test user"
+
+        # when
+        with self.assertRaises(DomainError):
+            campaign_service.create_timeline_entry(entry_data, editor_name)
+
+
+class CheckIfCampaignGMTest(TestCase):
+
+    def setUp(self):
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
+
+    def tearDown(self):
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_get_domain_error_when_user_id_is_none(self):
+        # when then
+        with self.assertRaises(DomainError):
+            campaign_service.check_if_campaign_gm(None, 99)
+
+    def test_should_get_value_error_when_user_id_is_not_int(self):
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.check_if_campaign_gm("88", 99)
+
+    def test_should_get_domain_error_when_campaign_id_is_none(self):
+        # when then
+        with self.assertRaises(DomainError):
+            campaign_service.check_if_campaign_gm(88, None)
+
+    def test_should_get_value_error_when_campaign_id_is_not_int(self):
+        # when then
+        with self.assertRaises(ValueError):
+            campaign_service.check_if_campaign_gm(88, "99")
+
+    def test_should_get_domain_error_when_campaign_does_not_exist(self):
+        # given
+        self.campaign_repository_mock.read_by_id.return_value = None
+
+        # when then
+        with self.assertRaises(DomainError):
+            campaign_service.check_if_campaign_gm(88, 99)
+
+    def test_should_get_true_when_user_is_campaign_gm(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        gm = UserEntity()
+        gm.id = 88
+        gm.created_on = date(2019, 1, 1)
+        gm.modified_on = date(2019, 1, 1)
+        gm.opt_lock = 0
+        gm.user_name = "Test User"
+
+        campaign.game_master = gm
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        result = campaign_service.check_if_campaign_gm(88, 99)
+
+        # then
+        self.assertTrue(result)
+
+    def test_should_get_false_when_user_is_not_campaign_gm(self):
+        # given
+        campaign = CampaignEntity()
+        campaign.id = 99
+        campaign.created_on = date(2020, 1, 1)
+        campaign.modified_on = date(2020, 1, 1)
+        campaign.opt_lock = 0
+        campaign.campaign_name = "Test Campaign"
+        campaign.begin_date = date(2055, 1, 1)
+        campaign.passed_days = 10
+
+        gm = UserEntity()
+        gm.id = 77
+        gm.created_on = date(2019, 1, 1)
+        gm.modified_on = date(2019, 1, 1)
+        gm.opt_lock = 0
+        gm.user_name = "Test User"
+
+        campaign.game_master = gm
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        result = campaign_service.check_if_campaign_gm(88, 99)
+
+        # then
+        self.assertFalse(result)
 
 
 class CheckIfUserRelatedToCampaignTest(TestCase):

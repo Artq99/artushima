@@ -3,16 +3,19 @@ The module defining the endpoint for viewing and managing campaigns by the
 game master.
 """
 
-import flask
 from datetime import date
 
+import flask
 from artushima.auth import auth_service
 from artushima.auth.auth_decorators import allow_authorized_with_roles
-from artushima.campaign import campaign_service
+from artushima.campaign import campaign_mapper, campaign_service
 from artushima.commons import logger
 from artushima.core import db_access
-from artushima.core.exceptions import BusinessError
-from artushima.user.roles import ROLE_SHOW_OWNED_CAMPAIGNS, ROLE_START_CAMPAIGN
+from artushima.core.error_codes import get_error_message
+from artushima.core.exceptions import BusinessError, DomainError
+from artushima.user.roles import (ROLE_CREATE_SESSION_SUMMARY,
+                                  ROLE_SHOW_OWNED_CAMPAIGNS,
+                                  ROLE_START_CAMPAIGN)
 
 MY_CAMPAIGNS_BLUEPRINT = flask.Blueprint("my_campaigns_endpoint", __name__, url_prefix="/api/my_campaigns")
 
@@ -162,6 +165,46 @@ def my_campaigns_details(campaign_id):
         logger.log_error(str(err))
 
         return _create_failure("Błąd aplikacji."), 500
+
+    finally:
+        db_session.close()
+
+
+@MY_CAMPAIGNS_BLUEPRINT.route("/<int:campaign_id>/timeline/entry", methods=['POST'])
+@allow_authorized_with_roles([ROLE_CREATE_SESSION_SUMMARY])
+def my_campaigns_timeline_entry(campaign_id):
+    """
+    Create an entry of the campaign timeline.
+    """
+
+    token = flask.request.headers.get("Authorization")
+    user_id = auth_service.get_user_id(token)
+    user_name = auth_service.get_user_name(token)
+    db_session = db_access.Session()
+
+    try:
+        if not campaign_service.check_if_campaign_gm(user_id, campaign_id):
+            raise DomainError("User is not a GM!", "AC002", 403)
+
+        entry_data = campaign_mapper.map_create_timeline_entry_request(flask.request.json, campaign_id)
+        timeline_entry_id = campaign_service.create_timeline_entry(entry_data, user_name)
+        db_session.commit()
+        return flask.jsonify({
+            "status": "success",
+            "message": "",
+            "campaignTimelineEntryId": timeline_entry_id
+        })
+
+    except DomainError as err:
+        db_session.rollback()
+        error_message = get_error_message(err.error_code)
+        return _create_failure(error_message), err.http_status
+
+    except Exception as err:
+        db_session.rollback()
+        logger.log_error(str(err))
+        error_message = get_error_message("T0000")
+        return _create_failure(error_message), 500
 
     finally:
         db_session.close()
