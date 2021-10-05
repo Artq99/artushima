@@ -17,7 +17,8 @@ export const ROLES = [
   'role_show_users',
   'role_create_user',
   'role_show_owned_campaigns',
-  'role_start_campaign'
+  'role_start_campaign',
+  'role_create_session_summary'
 ]
 
 /**
@@ -27,7 +28,8 @@ export const ROLES_DESCRIPTION = [
   'Wyświetlanie listy użytkowników',
   'Tworzenie nowych użytkowników',
   'Wyświetlanie listy własnych kampanii',
-  'Prowadzenie własnych kampanii'
+  'Prowadzenie własnych kampanii',
+  'Dodawanie wpisu z podsumowaniem sesji'
 ]
 
 /**
