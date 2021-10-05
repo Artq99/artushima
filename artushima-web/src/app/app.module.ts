@@ -19,6 +19,7 @@ import { UserCreatorComponent } from './users/components/user-creator/user-creat
 import { MyCampaignsListComponent } from './my-campaigns/components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './my-campaigns/components/start-campaign/start-campaign.component';
 import { CampaignDetailsComponent } from './my-campaigns/components/campaign-details/campaign-details.component';
+import { TimelineEntryEditorComponent } from './my-campaigns/components/timeline-entry-editor/timeline-entry-editor.component';
 
 /**
  * The definitions of all the routes existing in the application.
@@ -63,6 +64,12 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     // TODO add appropriate role
     data: { roles: ['role_show_owned_campaigns'] }
+  },
+  {
+    path: 'my_campaigns/:id/timeline/entry',
+    component: TimelineEntryEditorComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['role_create_session_summary'] }
   },
   {
     path: '',

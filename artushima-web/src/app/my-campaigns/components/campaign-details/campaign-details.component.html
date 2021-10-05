@@ -3,9 +3,7 @@
   <!-- Header -->
   <div class="row pb-2">
     <div class="col">
-      <artushima-header
-        [icon]="iconBook"
-        [title]="(campaignDetails$ | async)?.title"
+      <artushima-header [icon]="iconBook" [title]="(campaignDetails$ | async)?.title"
         [titleId]="'campaign-details__campaignTitle'">
       </artushima-header>
     </div>
@@ -14,8 +12,7 @@
   <!-- Campaign info -->
   <div class="row pb-4">
     <div class="col">
-      <artushima-campaign-details-campaign-info
-        [id]="(campaignDetails$ | async)?.id"
+      <artushima-campaign-details-campaign-info [id]="(campaignDetails$ | async)?.id"
         [creationDate]="(campaignDetails$ | async)?.creationDate"
         [gameMasterName]="(campaignDetails$ | async)?.gameMasterName">
       </artushima-campaign-details-campaign-info>
@@ -25,17 +22,16 @@
   <!-- Campaign GM's toolbar -->
   <div *ngIf="(currentUser$ | async)?.userName === (campaignDetails$ | async)?.gameMasterName" class="row pb-4">
     <div class="col">
-      <artushima-campaign-details-campaign-gm-toolbar></artushima-campaign-details-campaign-gm-toolbar>
+      <artushima-campaign-details-campaign-gm-toolbar [campaignId]="(campaignDetails$ | async)?.id">
+      </artushima-campaign-details-campaign-gm-toolbar>
     </div>
   </div>
 
   <!-- In-Game time info -->
   <div class="row pt-2 pb-2">
     <div class="col">
-      <artushima-campaign-details-in-game-time-info
-        [startDate]="(campaignDetails$ | async)?.startDate"
-        [passedDays]="(campaignDetails$ | async)?.passedDays"
-        [currentDate]="(campaignDetails$ | async)?.currentDate">
+      <artushima-campaign-details-in-game-time-info [startDate]="(campaignDetails$ | async)?.startDate"
+        [passedDays]="(campaignDetails$ | async)?.passedDays" [currentDate]="(campaignDetails$ | async)?.currentDate">
       </artushima-campaign-details-in-game-time-info>
     </div>
   </div>

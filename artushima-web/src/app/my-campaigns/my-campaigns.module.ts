@@ -12,6 +12,7 @@ import { CampaignTimelineComponent } from './components/campaign-details/campaig
 import { InGameTimeInfoComponent } from './components/campaign-details/in-game-time-info/in-game-time-info.component';
 import { MyCampaignsListComponent } from './components/my-campaigns-list/my-campaigns-list.component';
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
+import { TimelineEntryEditorComponent } from './components/timeline-entry-editor/timeline-entry-editor.component';
 
 
 /**
@@ -29,7 +30,8 @@ import { StartCampaignComponent } from './components/start-campaign/start-campai
     InGameTimeInfoComponent,
     CampaignTimelineComponent,
     CampaignPlayersInfoComponent,
-    CampaignGmToolbarComponent
+    CampaignGmToolbarComponent,
+    TimelineEntryEditorComponent
   ],
   imports: [
     CommonModule,
