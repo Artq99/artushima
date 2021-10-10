@@ -10,11 +10,13 @@ from artushima.core.exceptions import PersistenceError
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import (UserEntity, UserHistoryEntity,
                                               UserRoleEntity)
+from tests import assertModelInitialized
 
 
 class PersistTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         properties.init()
         db_access.init()
         self.session = db_access.Session()
@@ -123,6 +125,7 @@ class PersistTest(TestCase):
 class ReadByIdTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         properties.init()
         db_access.init()
         self.session = db_access.Session()
@@ -160,6 +163,7 @@ class ReadByIdTest(TestCase):
 class ReadByUserNameTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         properties.init()
         db_access.init()
         self.session = db_access.Session()
@@ -197,6 +201,7 @@ class ReadByUserNameTest(TestCase):
 class ReadAllTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         properties.init()
         db_access.init()
         self.session = db_access.Session()

@@ -10,11 +10,13 @@ from artushima.core.exceptions import BusinessError
 from artushima.user import user_roles_service
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import UserEntity, UserRoleEntity
+from tests import assertModelInitialized
 
 
 class GetUserRolesTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.user_repository_mock = create_autospec(user_repository)
         user_roles_service.user_repository = self.user_repository_mock
 
@@ -75,6 +77,7 @@ class GetUserRolesTest(TestCase):
 class GrantRolesTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.user_repository_mock = create_autospec(user_repository)
         user_roles_service.user_repository = self.user_repository_mock
 

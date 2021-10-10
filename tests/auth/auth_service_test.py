@@ -8,19 +8,20 @@ from unittest.mock import create_autospec
 
 import jwt
 import werkzeug
-from jwt import ExpiredSignatureError, InvalidTokenError
-
 from artushima.auth import auth_service
 from artushima.auth.persistence import blacklisted_token_repository
 from artushima.auth.persistence.model import BlacklistedTokenEntity
 from artushima.core import properties
 from artushima.core.exceptions import BusinessError
 from artushima.user import user_roles_service, user_service
+from jwt import ExpiredSignatureError, InvalidTokenError
+from tests import assertModelInitialized
 
 
 class LogInTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.user_service_mock = create_autospec(user_service)
         self.user_roles_service_mock = create_autospec(user_roles_service)
         self.properties_mock = create_autospec(properties)
@@ -81,6 +82,7 @@ class LogInTest(TestCase):
 class IsTokenOkTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.jwt_mock = create_autospec(jwt)
         self.properties_mock = create_autospec(properties)
         self.blacklisted_token_repository_mock = create_autospec(blacklisted_token_repository)
@@ -530,6 +532,7 @@ class AreRolesSufficientTest(TestCase):
 class BlacklistTokenTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.blacklisted_token_repository_mock = create_autospec(blacklisted_token_repository)
         auth_service.blacklisted_token_repository = self.blacklisted_token_repository_mock
 

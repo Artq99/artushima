@@ -6,17 +6,18 @@ from datetime import datetime
 from unittest import TestCase
 from unittest.mock import create_autospec
 
-from werkzeug import security
-
 from artushima.core.exceptions import BusinessError
 from artushima.user import user_service
 from artushima.user.persistence import user_repository
 from artushima.user.persistence.model import UserEntity
+from tests import assertModelInitialized
+from werkzeug import security
 
 
 class GetUserByIdTest(TestCase):
 
     def setUp(self):
+        assertModelInitialized()
         self.user_repository_mock = create_autospec(user_repository)
         user_service.user_repository = self.user_repository_mock
 
@@ -171,6 +172,7 @@ class GetAllUsersTest(TestCase):
 class CreateUserTest(TestCase):
 
     def setUp(self):
+
         self.user_repository_mock = create_autospec(user_repository)
         self.security_mock = create_autospec(security)
         user_service.user_repository = self.user_repository_mock
