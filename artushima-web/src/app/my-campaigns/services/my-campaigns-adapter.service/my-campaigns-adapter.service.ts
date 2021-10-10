@@ -1,20 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, first, map, take } from 'rxjs/operators';
+import { catchError, first, map, take, tap } from 'rxjs/operators';
+import { API_CONFIG } from 'src/app/core/constants/api-config';
 import { MSG_APP_ERROR } from 'src/app/core/constants/core.messages';
 import { MessageLevel } from 'src/app/core/model/message-level';
 import { RequestStatus } from 'src/app/core/model/request-status';
+import { ResponseModel } from 'src/app/core/model/response.model';
 import { MessagesService } from 'src/app/core/services/messages.service';
 import {
   URL_MY_CAMPAIGNS_DETAILS,
   URL_MY_CAMPAIGNS_LIST,
-  URL_MY_CAMPAIGNS_START
+  URL_MY_CAMPAIGNS_START,
 } from '../../constants/my-campaigns.constants';
 import { CampaignDetails, CampaignDetailsResponse } from '../../model/campaign-details.model';
 import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
 import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
 import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
+import { CreateTimelineEntryResponse, TimelineEntryModel } from '../../model/timeline-entry.model';
 
 /**
  * The adapter-service for retrieving campaigns data from the backend.
@@ -136,6 +139,36 @@ export class MyCampaignsAdapterService {
         }),
         catchError(error => this.handleError(error))
       );
+  }
+
+  /**
+   * Sends a POST request to create a timeline entry for a given campaign.
+   *
+   * @param campaignId the campaign ID
+   * @param timelineEntry the timeline entry data
+   * @returns Observable of the request status
+   */
+  public createTimelineEntry(campaignId: number, timelineEntry: TimelineEntryModel): Observable<RequestStatus> {
+    const url = `${API_CONFIG.myCampaigns.endpoint}/${campaignId}${API_CONFIG.myCampaigns.timelineEntry}`;
+
+    return this.httpClient.post<CreateTimelineEntryResponse>(url, timelineEntry)
+      .pipe(
+        take(1),
+        tap(r => this.handleFailure(r)),
+        map(r => r.status),
+        catchError(err => this.handleError(err))
+      )
+  }
+
+  /**
+   * Shows the response message as an error if the request was not successful.
+   *
+   * @param response the backend response
+   */
+  private handleFailure(response: ResponseModel) {
+    if (response.status !== RequestStatus.SUCCESS) {
+      this.messagesService.showMessage(response.message, MessageLevel.ERROR);
+    }
   }
 
   /**
