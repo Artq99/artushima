@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faBook, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
+import { CurrentUser } from 'src/app/core/model/current-user';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { CampaignDetails } from '../../model/campaign-details.model';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 
@@ -11,14 +13,19 @@ import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.s
 @Component({
   selector: 'artushima-campaign-details',
   templateUrl: './campaign-details.component.html',
-  styleUrls: ['./campaign-details.component.scss']
+  styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit {
-
   /** The icon of a book for the header. */
   public iconBook: IconDefinition = faBook;
 
-  /** The observable with the data. */
+  /** The observable of the currently logged in user. */
+  public currentUser$: Observable<CurrentUser>;
+
+  /** The campaign ID. */
+  public campaignId: number;
+
+  /** The observable of the data. */
   public campaignDetails$: Observable<CampaignDetails>;
 
   /**
@@ -29,14 +36,16 @@ export class CampaignDetailsComponent implements OnInit {
    */
   public constructor(
     private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
     private myCampaignsAdapterService: MyCampaignsAdapterService
-  ) { }
+  ) {}
 
   /**
    * @inheritdoc
    */
   public ngOnInit(): void {
-    const campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
-    this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(campaignId);
+    this.campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
+    this.currentUser$ = this.authService.currentUser$;
+    this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(this.campaignId);
   }
 }

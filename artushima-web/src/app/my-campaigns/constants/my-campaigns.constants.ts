@@ -17,6 +17,6 @@ export const URL_MY_CAMPAIGNS_DETAILS = '/api/my_campaigns/details';
 
 /**
  * The default date for a campaign to begin with.
- * The date is the last mentioned date in the Neuroshima Handbook 1.5.
+ * The date is the last date mentioned in the Neuroshima Handbook 1.5.
  */
 export const DEFAULT_CAMPAIGN_START_DATE = '2053-11-18';

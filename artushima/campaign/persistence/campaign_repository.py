@@ -3,12 +3,11 @@ The repository module providing access to the data related to the campaign
 entity.
 """
 
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
-
+from artushima.campaign.persistence.model import CampaignEntity
 from artushima.core import db_access
 from artushima.core.exceptions import PersistenceError
-from artushima.campaign.persistence.model import CampaignEntity
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 
 def persist(campaign):
@@ -28,7 +27,7 @@ def persist(campaign):
         raise PersistenceError(f"Error on persisting a campaign: {str(err)}")
 
 
-def read_by_id(campaign_id):
+def read_by_id(campaign_id: int) -> CampaignEntity:
     """
     Read campaign data by its ID.
     """

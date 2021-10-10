@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { UserService } from '../../services/user.service';
-import { MessagesService } from 'src/app/core/services/messages.service';
-import { RequestStatus } from 'src/app/core/model/request-status';
 import { MessageLevel } from 'src/app/core/model/message-level';
+import { RequestStatus } from 'src/app/core/model/request-status';
+import { MessagesService } from 'src/app/core/services/messages.service';
+import { UserService } from '../../services/user.service';
 
 export const MSG_USER_ADDED = 'Użytkownik dodany!';
 
@@ -17,8 +16,9 @@ export const ROLES = [
   'role_show_users',
   'role_create_user',
   'role_show_owned_campaigns',
-  'role_start_campaign'
-]
+  'role_start_campaign',
+  'role_create_session_summary',
+];
 
 /**
  * Descriptions for the roles.
@@ -27,8 +27,9 @@ export const ROLES_DESCRIPTION = [
   'Wyświetlanie listy użytkowników',
   'Tworzenie nowych użytkowników',
   'Wyświetlanie listy własnych kampanii',
-  'Prowadzenie własnych kampanii'
-]
+  'Prowadzenie własnych kampanii',
+  'Dodawanie wpisu z podsumowaniem sesji',
+];
 
 /**
  * The editor of the user data.
@@ -36,10 +37,9 @@ export const ROLES_DESCRIPTION = [
 @Component({
   selector: 'app-user-editor',
   templateUrl: './user-creator.component.html',
-  styleUrls: ['./user-creator.component.scss']
+  styleUrls: ['./user-creator.component.scss'],
 })
 export class UserCreatorComponent implements OnInit {
-
   public roles: string[];
   public rolesDescriptions: string[];
 
@@ -56,7 +56,7 @@ export class UserCreatorComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private messagesService: MessagesService
-  ) { }
+  ) {}
 
   public ngOnInit() {
     this.populateRolesData();
@@ -70,7 +70,7 @@ export class UserCreatorComponent implements OnInit {
     for (let i in ROLES) {
       this.roles.push(ROLES[i]);
       this.rolesSelection.push(false);
-      this.rolesDescriptions.push(ROLES_DESCRIPTION[i])
+      this.rolesDescriptions.push(ROLES_DESCRIPTION[i]);
     }
   }
 
@@ -86,13 +86,11 @@ export class UserCreatorComponent implements OnInit {
       }
     }
 
-    this.userService.createNewUser(this.userName, this.password, selectedRoles)
-      .subscribe(status => {
-        if (status === RequestStatus.SUCCESS) {
-          this.messagesService.showMessage(MSG_USER_ADDED, MessageLevel.INFO);
-          this.router.navigate(['users', 'list']);
-        }
-      });
+    this.userService.createNewUser(this.userName, this.password, selectedRoles).subscribe((status) => {
+      if (status === RequestStatus.SUCCESS) {
+        this.messagesService.showMessage(MSG_USER_ADDED, MessageLevel.INFO);
+        this.router.navigate(['users', 'list']);
+      }
+    });
   }
-
 }

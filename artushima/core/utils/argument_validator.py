@@ -2,7 +2,7 @@
 The module with utils for argument validation.
 """
 
-from artushima.core.exceptions import BusinessError
+from artushima.core.exceptions import BusinessError, DomainError
 
 
 def validate_int_arg(arg, arg_name):
@@ -51,3 +51,36 @@ def validate_list_arg_nullable(arg, arg_name):
 
     if (arg is not None) and (not isinstance(arg, list)):
         raise ValueError(f"{arg_name} must be a list!")
+
+
+def assert_str(arg, error_code, http_status=200):
+    """
+    Check if the argument is a string.
+    """
+
+    if arg is None:
+        raise DomainError("Parameter not provided!", error_code, http_status)
+
+    if not isinstance(arg, str):
+        raise ValueError("Parameter not a string!")
+
+
+def assert_str_or_none(arg):
+    """
+    Check if the argument is a string or none.
+    """
+
+    if (not isinstance(arg, str)) and (arg is not None):
+        raise ValueError("Paramter not a string!")
+
+
+def assert_int(arg, error_code, http_status=200):
+    """
+    Check if the argument is an integer.
+    """
+
+    if arg is None:
+        raise DomainError("Parameter not provided!", error_code, http_status)
+
+    if not isinstance(arg, int):
+        raise ValueError("Parameter not an integer!")

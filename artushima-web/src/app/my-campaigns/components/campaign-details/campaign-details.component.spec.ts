@@ -3,10 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { of } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CampaignDetails } from '../../model/campaign-details.model';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { CampaignGmToolbarComponent } from './campaign-gm-toolbar/campaign-gm-toolbar.component';
 import { CampaignInfoComponent } from './campaign-info/campaign-info.component';
 import { CampaignPlayersInfoComponent } from './campaign-players-info/campaign-players-info.component';
 import { CampaignTimelineComponent } from './campaign-timeline/campaign-timeline.component';
@@ -17,29 +19,26 @@ describe('CampaignDetailsComponent', () => {
   let fixture: ComponentFixture<CampaignDetailsComponent>;
   let activatedRoute: ActivatedRoute;
 
-  const myCampaignsAdapterServiceMock: any = jasmine
-    .createSpyObj('MyCampaignsAdapterServiceMock', ['getCampaignDetails']);
+  const myCampaignsAdapterServiceMock: any = jasmine.createSpyObj('MyCampaignsAdapterServiceMock', [
+    'getCampaignDetails',
+  ]);
 
   beforeEach(async(() => {
-    TestBed
-      .configureTestingModule({
-        imports: [
-          RouterTestingModule,
-          FontAwesomeModule,
-          SharedModule
-        ],
-        declarations: [
-          CampaignDetailsComponent,
-          CampaignInfoComponent,
-          CampaignPlayersInfoComponent,
-          CampaignTimelineComponent,
-          InGameTimeInfoComponent
-        ],
-        providers: [
-          { provide: MyCampaignsAdapterService, useValue: myCampaignsAdapterServiceMock }
-        ]
-      })
-      .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, FontAwesomeModule, SharedModule],
+      declarations: [
+        CampaignDetailsComponent,
+        CampaignInfoComponent,
+        CampaignGmToolbarComponent,
+        CampaignPlayersInfoComponent,
+        CampaignTimelineComponent,
+        InGameTimeInfoComponent,
+      ],
+      providers: [
+        { provide: AuthService, useClass: jasmine.createSpy('AuthService') },
+        { provide: MyCampaignsAdapterService, useValue: myCampaignsAdapterServiceMock },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -55,7 +54,6 @@ describe('CampaignDetailsComponent', () => {
   });
 
   describe('ngOnInit', () => {
-
     it('should request the data by the correct ID', () => {
       // given
       const campaignDetails: CampaignDetails = {
@@ -66,7 +64,7 @@ describe('CampaignDetailsComponent', () => {
         passedDays: 10,
         currentDate: new Date(2055, 1, 11),
         gameMasterId: 88,
-        gameMasterName: 'Test GM'
+        gameMasterName: 'Test GM',
       };
 
       myCampaignsAdapterServiceMock.getCampaignDetails.and.returnValue(of(campaignDetails));

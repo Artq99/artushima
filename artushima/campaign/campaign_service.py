@@ -4,11 +4,14 @@ The service module dealing with the logic behind campaigns.
 
 from datetime import datetime, timedelta
 
+from artushima.campaign import campaign_mapper
 from artushima.campaign.persistence import campaign_repository
 from artushima.campaign.persistence.model import (CampaignEntity,
                                                   CampaignHistoryEntity)
-from artushima.core.exceptions import BusinessError
-from artushima.core.utils.argument_validator import validate_int_arg
+from artushima.core.exceptions import BusinessError, DomainError
+from artushima.core.history_messages import get_message
+from artushima.core.utils.argument_validator import (assert_int,
+                                                     validate_int_arg)
 from artushima.user import user_service
 
 
@@ -120,6 +123,48 @@ def get_campaign_details(campaign_id):
         "gameMasterId": campaign.game_master.id,
         "gameMasterName": campaign.game_master.user_name
     }
+
+
+def create_timeline_entry(entry_data: dict, editor_name: str) -> int:
+    """
+    Create an entry in the timeline of a campaign.
+    """
+
+    campaign = campaign_repository.read_by_id(entry_data["campaignId"])
+
+    if campaign is None:
+        raise DomainError("Campaign does not extist!", "DC002")
+
+    timestamp = datetime.utcnow()
+    timeline_entry = campaign_mapper.map_timeline_entry_data_to_timeline_entity(entry_data, timestamp)
+    campaign.campaign_timeline_entries.append(timeline_entry)
+
+    history_entry_data = {
+        "editorName": editor_name,
+        "message": get_message("campaign: timeline entry created").format(entry_data["title"])
+    }
+    history_entry = campaign_mapper.map_history_entry_data_to_history_entity(history_entry_data, timestamp)
+    campaign.campaign_history_entries.append(history_entry)
+
+    campaign_repository.persist(campaign)
+
+    return timeline_entry.id
+
+
+def check_if_campaign_gm(user_id, campaign_id):
+    """
+    Check if the user of the given ID is the game master of the campaign of the given ID.
+    """
+
+    assert_int(user_id, "DU001")
+    assert_int(campaign_id, "DC001")
+
+    campaign = campaign_repository.read_by_id(campaign_id)
+
+    if campaign is None:
+        raise DomainError("Campaign does not exist!", "DC002")
+
+    return campaign.game_master.id == user_id
 
 
 def check_if_user_related_to_campaign(user_id, campaign_id):
