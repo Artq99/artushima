@@ -8,7 +8,8 @@ from unittest.mock import create_autospec
 
 from artushima.campaign import campaign_service
 from artushima.campaign.persistence import campaign_repository
-from artushima.campaign.persistence.model import CampaignEntity
+from artushima.campaign.persistence.model import (CampaignEntity,
+                                                  CampaignTimelineEntity)
 from artushima.core.exceptions import BusinessError, DomainError
 from artushima.user import user_service
 from artushima.user.persistence.model import UserEntity
@@ -219,14 +220,61 @@ class CreateTimelineEntryTest(TestCase):
             campaign_service.create_timeline_entry(entry_data, editor_name)
 
 
-# TODO #50
 class GetTimeline(TestCase):
 
     def setUp(self):
-        return super().setUp()
+        self.campaign_repository_mock = create_autospec(campaign_repository)
+        campaign_service.campaign_repository = self.campaign_repository_mock
 
     def tearDown(self):
-        return super().tearDown()
+        campaign_service.campaign_repository = campaign_repository
+
+    def test_should_return_timeline(self):
+        # given
+        campaign_id = 99
+
+        entry_1 = CampaignTimelineEntity()
+        entry_1.id = 1
+        entry_1.title = "Test title 1"
+        entry_1.session_date = "2020-01-01"
+        entry_1.summary_text = "Test text 1"
+
+        entry_2 = CampaignTimelineEntity()
+        entry_2.id = 2
+        entry_2.title = "Test title 2"
+        entry_2.session_date = "2020-02-01"
+        entry_2.summary_text = "Test text 2"
+
+        campaign = CampaignEntity()
+        campaign.id = campaign_id
+        campaign.campaign_timeline_entries = [entry_1, entry_2]
+
+        self.campaign_repository_mock.read_by_id.return_value = campaign
+
+        # when
+        timeline = campaign_service.get_timeline(campaign_id)
+
+        # then
+        self.assertEqual(2, len(timeline))
+
+        self.assertEqual("Test title 1", timeline[0]["title"])
+        self.assertEqual("2020-01-01", timeline[0]["sessionDate"])
+        self.assertEqual("Test text 1", timeline[0]["summaryText"])
+
+        self.assertEqual("Test title 2", timeline[1]["title"])
+        self.assertEqual("2020-02-01", timeline[1]["sessionDate"])
+        self.assertEqual("Test text 2", timeline[1]["summaryText"])
+
+        self.campaign_repository_mock.read_by_id.assert_called_once_with(campaign_id)
+
+    def test_should_get_domain_error_if_campaign_does_not_exist(self):
+        # given
+        campaign_id = 99
+        self.campaign_repository_mock.read_by_id.return_value = None
+
+        # when then
+        with self.assertRaises(DomainError):
+            campaign_service.get_timeline(campaign_id)
 
 
 class CheckIfCampaignGMTest(TestCase):

@@ -2,6 +2,7 @@ from datetime import date, datetime
 from unittest import TestCase
 
 from artushima.campaign import campaign_mapper
+from artushima.campaign.persistence.model import CampaignTimelineEntity
 from artushima.core.exceptions import DomainError
 # Imported to prevent persistence errors
 from artushima.user.persistence import model
@@ -283,3 +284,21 @@ class MapHistoryEntryDataToHistoryEntity(TestCase):
         self.assertEqual(entity.editor_name, "Test user")
         self.assertEqual(entity.message, "Test message.")
         self.assertIsNone(entity.campaign_id)
+
+
+class MapCampaignTimelineEntityToDict(TestCase):
+
+    def test_should_map_entity_to_dict(self):
+        # given
+        entity = CampaignTimelineEntity()
+        entity.title = "Test title"
+        entity.session_date = "2020-01-01"
+        entity.summary_text = "Test text"
+
+        # when
+        data = campaign_mapper.map_campaign_timeline_entity_to_dict(entity)
+
+        # then
+        self.assertEqual("Test title", data["title"])
+        self.assertEqual("2020-01-01", data["sessionDate"])
+        self.assertEqual("Test text", data["summaryText"])

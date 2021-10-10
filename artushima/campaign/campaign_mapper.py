@@ -72,3 +72,15 @@ def map_timeline_entry_data_to_timeline_entity(entry_data: dict, timestamp: date
     entity.session_date = entry_data["sessionDate"]
     entity.summary_text = entry_data["summaryText"]
     return entity
+
+
+def map_campaign_timeline_entity_to_dict(timeline_entity: CampaignTimelineEntity) -> dict:
+    """
+    Map the campaign timeline entity to a dictionary with data.
+    """
+
+    return {
+        "title": timeline_entity.title,
+        "sessionDate": timeline_entity.session_date,
+        "summaryText": timeline_entity.summary_text,
+    }
