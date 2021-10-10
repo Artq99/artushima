@@ -14,12 +14,11 @@ import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.s
  * Editor for the entries of the campaign timeline.
  */
 @Component({
-  selector: 'app-timeline-entry-editor',
+  selector: 'artushima-timeline-entry-editor',
   templateUrl: './timeline-entry-editor.component.html',
-  styles: []
+  styles: [],
 })
 export class TimelineEntryEditorComponent implements OnInit {
-
   /** The campaign ID. */
   private campaignId: number;
 
@@ -27,7 +26,7 @@ export class TimelineEntryEditorComponent implements OnInit {
   public entryFormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
     sessionDate: new FormControl('', [Validators.required]),
-    summaryText: new FormControl('')
+    summaryText: new FormControl(''),
   });
 
   /** Icon configuration. */
@@ -45,8 +44,8 @@ export class TimelineEntryEditorComponent implements OnInit {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly myCampaignsAdapter: MyCampaignsAdapterService,
-    private readonly messagesService: MessagesService,
-  ) { };
+    private readonly messagesService: MessagesService
+  ) {}
 
   /**
    * @inheritdoc
@@ -60,7 +59,8 @@ export class TimelineEntryEditorComponent implements OnInit {
    */
   public onSubmit(): void {
     const timelineEntry = this.entryFormGroup.getRawValue() as TimelineEntryModel;
-    this.myCampaignsAdapter.createTimelineEntry(this.campaignId, timelineEntry)
+    this.myCampaignsAdapter
+      .createTimelineEntry(this.campaignId, timelineEntry)
       .pipe(take(1))
       .subscribe((status: RequestStatus) => {
         if (status === RequestStatus.SUCCESS) {

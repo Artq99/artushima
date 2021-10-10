@@ -1,5 +1,4 @@
 <div class="container">
-
   <!-- Header -->
   <div class="row pb-2">
     <div class="col">
@@ -11,7 +10,6 @@
   <!-- Form -->
   <form [formGroup]="entryFormGroup" (ngSubmit)="onSubmit()">
     <div class="row pb-2">
-
       <!-- Field: Title -->
       <div class="col-xs-12 col-md-8">
         <div class="row">
@@ -21,7 +19,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <input id="input-title" class="form-control" type="text" formControlName="title">
+            <input id="input-title" class="form-control" type="text" formControlName="title" />
           </div>
         </div>
       </div>
@@ -35,7 +33,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <input id="input-session-date" class="form-control" type="date" formControlName="sessionDate">
+            <input id="input-session-date" class="form-control" type="date" formControlName="sessionDate" />
           </div>
         </div>
       </div>
@@ -51,8 +49,12 @@
         </div>
         <div class="row">
           <div class="col">
-            <textarea id="textarea-summary-text" class="form-control" rows="15"
-              formControlName="summaryText"></textarea>
+            <textarea
+              id="textarea-summary-text"
+              class="form-control"
+              rows="15"
+              formControlName="summaryText"
+            ></textarea>
           </div>
         </div>
       </div>

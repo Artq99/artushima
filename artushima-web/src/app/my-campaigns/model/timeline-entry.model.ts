@@ -1,4 +1,4 @@
-import { ResponseModel } from "src/app/core/model/response.model";
+import { ResponseModel } from 'src/app/core/model/response.model';
 
 /**
  * Model for the timeline entry editor.

@@ -12,13 +12,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MSG_TIMELINE_ENTRY_CREATED } from '../../constants/my-campaings.messages';
 import { TimelineEntryModel } from '../../model/timeline-entry.model';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
-
 import { TimelineEntryEditorComponent } from './timeline-entry-editor.component';
 
 @Component({
-  template: ''
+  template: '',
 })
-class MockCampaignDetailsComponent { };
+class MockCampaignDetailsComponent {}
 
 describe('TimelineEntryEditorComponent', () => {
   let component: TimelineEntryEditorComponent;
@@ -34,21 +33,21 @@ describe('TimelineEntryEditorComponent', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
-          { path: 'my_campaigns/campaign_details/:id', component: MockCampaignDetailsComponent }
+          { path: 'my_campaigns/campaign_details/:id', component: MockCampaignDetailsComponent },
         ]),
-        SharedModule
+        SharedModule,
       ],
       providers: [
         {
           provide: MyCampaignsAdapterService,
-          useValue: jasmine.createSpyObj('MyCampaignsAdapterService', ['createTimelineEntry'])
+          useValue: jasmine.createSpyObj('MyCampaignsAdapterService', ['createTimelineEntry']),
         },
         {
           provide: MessagesService,
-          useValue: jasmine.createSpyObj('MessagesService', ['showMessage'])
-        }
+          useValue: jasmine.createSpyObj('MessagesService', ['showMessage']),
+        },
       ],
-      declarations: [TimelineEntryEditorComponent]
+      declarations: [TimelineEntryEditorComponent],
     }).compileComponents();
   }));
 
@@ -78,7 +77,7 @@ describe('TimelineEntryEditorComponent', () => {
         const timelineEntry: TimelineEntryModel = {
           title: 'Test title',
           sessionDate: '2020-01-01',
-          summaryText: 'Text text'
+          summaryText: 'Text text',
         } as TimelineEntryModel;
 
         component.entryFormGroup.controls['title'].setValue(timelineEntry.title);

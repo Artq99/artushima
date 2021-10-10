@@ -24,5 +24,5 @@ export const API_CONFIG = {
   myCampaigns: {
     endpoint: '/api/my_campaigns',
     timelineEntry: '/timeline/entry',
-  } as MyCampaignsURLs
+  } as MyCampaignsURLs,
 } as ApiConfig;

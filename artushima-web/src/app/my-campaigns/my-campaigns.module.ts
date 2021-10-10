@@ -14,7 +14,6 @@ import { MyCampaignsListComponent } from './components/my-campaigns-list/my-camp
 import { StartCampaignComponent } from './components/start-campaign/start-campaign.component';
 import { TimelineEntryEditorComponent } from './components/timeline-entry-editor/timeline-entry-editor.component';
 
-
 /**
  * A feature module with functionalities for game masters.
  *
@@ -31,15 +30,8 @@ import { TimelineEntryEditorComponent } from './components/timeline-entry-editor
     CampaignTimelineComponent,
     CampaignPlayersInfoComponent,
     CampaignGmToolbarComponent,
-    TimelineEntryEditorComponent
+    TimelineEntryEditorComponent,
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    FontAwesomeModule,
-    SharedModule
-  ]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, FontAwesomeModule, SharedModule],
 })
-export class MyCampaignsModule { }
+export class MyCampaignsModule {}

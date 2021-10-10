@@ -19,31 +19,26 @@ describe('CampaignDetailsComponent', () => {
   let fixture: ComponentFixture<CampaignDetailsComponent>;
   let activatedRoute: ActivatedRoute;
 
-  const myCampaignsAdapterServiceMock: any = jasmine
-    .createSpyObj('MyCampaignsAdapterServiceMock', ['getCampaignDetails']);
+  const myCampaignsAdapterServiceMock: any = jasmine.createSpyObj('MyCampaignsAdapterServiceMock', [
+    'getCampaignDetails',
+  ]);
 
   beforeEach(async(() => {
-    TestBed
-      .configureTestingModule({
-        imports: [
-          RouterTestingModule,
-          FontAwesomeModule,
-          SharedModule
-        ],
-        declarations: [
-          CampaignDetailsComponent,
-          CampaignInfoComponent,
-          CampaignGmToolbarComponent,
-          CampaignPlayersInfoComponent,
-          CampaignTimelineComponent,
-          InGameTimeInfoComponent
-        ],
-        providers: [
-          { provide: AuthService, useClass: jasmine.createSpy('AuthService') },
-          { provide: MyCampaignsAdapterService, useValue: myCampaignsAdapterServiceMock }
-        ]
-      })
-      .compileComponents();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, FontAwesomeModule, SharedModule],
+      declarations: [
+        CampaignDetailsComponent,
+        CampaignInfoComponent,
+        CampaignGmToolbarComponent,
+        CampaignPlayersInfoComponent,
+        CampaignTimelineComponent,
+        InGameTimeInfoComponent,
+      ],
+      providers: [
+        { provide: AuthService, useClass: jasmine.createSpy('AuthService') },
+        { provide: MyCampaignsAdapterService, useValue: myCampaignsAdapterServiceMock },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -59,7 +54,6 @@ describe('CampaignDetailsComponent', () => {
   });
 
   describe('ngOnInit', () => {
-
     it('should request the data by the correct ID', () => {
       // given
       const campaignDetails: CampaignDetails = {
@@ -70,7 +64,7 @@ describe('CampaignDetailsComponent', () => {
         passedDays: 10,
         currentDate: new Date(2055, 1, 11),
         gameMasterId: 88,
-        gameMasterName: 'Test GM'
+        gameMasterName: 'Test GM',
       };
 
       myCampaignsAdapterServiceMock.getCampaignDetails.and.returnValue(of(campaignDetails));

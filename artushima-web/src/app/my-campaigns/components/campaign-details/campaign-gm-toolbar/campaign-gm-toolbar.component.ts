@@ -7,11 +7,10 @@ import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
  */
 @Component({
   selector: 'artushima-campaign-details-campaign-gm-toolbar',
-  templateUrl: './campaign-gm-toolbar.component.html'
+  templateUrl: './campaign-gm-toolbar.component.html',
 })
 export class CampaignGmToolbarComponent implements OnInit {
-
-  /** Campaign ID */
+  /** The campaign ID. */
   @Input()
   public campaignId: number;
 

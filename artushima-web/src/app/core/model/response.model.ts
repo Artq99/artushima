@@ -1,4 +1,4 @@
-import { RequestStatus } from "./request-status";
+import { RequestStatus } from './request-status';
 
 /**
  * Base class for a response.

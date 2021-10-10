@@ -9,7 +9,7 @@ describe('CampaignGmToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FontAwesomeModule],
-      declarations: [CampaignGmToolbarComponent]
+      declarations: [CampaignGmToolbarComponent],
     }).compileComponents();
   }));
 

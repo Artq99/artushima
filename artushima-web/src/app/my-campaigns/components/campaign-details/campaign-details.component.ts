@@ -13,10 +13,9 @@ import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.s
 @Component({
   selector: 'artushima-campaign-details',
   templateUrl: './campaign-details.component.html',
-  styleUrls: ['./campaign-details.component.scss']
+  styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit {
-
   /** The icon of a book for the header. */
   public iconBook: IconDefinition = faBook;
 
@@ -39,7 +38,7 @@ export class CampaignDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private myCampaignsAdapterService: MyCampaignsAdapterService
-  ) { }
+  ) {}
 
   /**
    * @inheritdoc

@@ -1,5 +1,5 @@
-import { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import { faFeatherAlt } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Icon configuration class for the MyCampaigns module.
@@ -24,6 +24,6 @@ class IconConfig {
  */
 export const APP_ICON_CONFIG = {
   myCampaigns: {
-    timelineEntryEditorHeaderIcon: faFeatherAlt
-  } as MyCampaignsIconConfig
+    timelineEntryEditorHeaderIcon: faFeatherAlt,
+  } as MyCampaignsIconConfig,
 } as IconConfig;

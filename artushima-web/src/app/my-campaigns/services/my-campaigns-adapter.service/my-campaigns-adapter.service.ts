@@ -23,20 +23,16 @@ import { CreateTimelineEntryResponse, TimelineEntryModel } from '../../model/tim
  * The adapter-service for retrieving campaigns data from the backend.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MyCampaignsAdapterService {
-
   /**
    * @inheritdoc
    *
    * @param httpClient the HTTP client
    * @param messagesService the service responsible for displaying messages
    */
-  public constructor(
-    private httpClient: HttpClient,
-    private messagesService: MessagesService
-  ) { }
+  public constructor(private httpClient: HttpClient, private messagesService: MessagesService) {}
 
   /**
    * Returns the list of campaigns belonging to the currently logged in game master.
@@ -52,26 +48,24 @@ export class MyCampaignsAdapterService {
     let responseSubject: Subject<MyCampaignsListElement[]> = new Subject<MyCampaignsListElement[]>();
     let response$: Observable<MyCampaignsListElement[]> = responseSubject.asObservable();
 
-    myCampaignsList$
-      .pipe(first())
-      .subscribe(
-        // on a valid response
-        response => {
-          if (response.status === RequestStatus.SUCCESS) {
-            responseSubject.next(response.myCampaigns);
-          } else {
-            responseSubject.next([]);
-            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
-          }
-          responseSubject.complete();
-        },
-        // on error
-        () => {
+    myCampaignsList$.pipe(first()).subscribe(
+      // on a valid response
+      (response) => {
+        if (response.status === RequestStatus.SUCCESS) {
+          responseSubject.next(response.myCampaigns);
+        } else {
           responseSubject.next([]);
-          responseSubject.complete();
-          this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
+          this.messagesService.showMessage(response.message, MessageLevel.ERROR);
         }
-      );
+        responseSubject.complete();
+      },
+      // on error
+      () => {
+        responseSubject.next([]);
+        responseSubject.complete();
+        this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
+      }
+    );
 
     return response$;
   }
@@ -87,34 +81,34 @@ export class MyCampaignsAdapterService {
     // Creating the request body.
     let request: MyCampaignsStartRequest = new MyCampaignsStartRequest();
     request.campaignName = campaignName;
-    request.beginDate = beginDate
+    request.beginDate = beginDate;
 
     // Creating the request object.
-    let startCampaign$: Observable<MyCampaignsStartResponse> =
-      this.httpClient.post<MyCampaignsStartResponse>(URL_MY_CAMPAIGNS_START, request);
+    let startCampaign$: Observable<MyCampaignsStartResponse> = this.httpClient.post<MyCampaignsStartResponse>(
+      URL_MY_CAMPAIGNS_START,
+      request
+    );
 
     // Creating the response subject and observable.
     let responseSubject: Subject<RequestStatus> = new Subject<RequestStatus>();
     let response$: Observable<RequestStatus> = responseSubject.asObservable();
 
-    startCampaign$
-      .pipe(first())
-      .subscribe(
-        // on a valid response
-        response => {
-          if (response.status === RequestStatus.FAILURE) {
-            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
-          }
-          responseSubject.next(response.status);
-          responseSubject.complete();
-        },
-        // on error
-        () => {
-          this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
-          responseSubject.next(RequestStatus.FAILURE);
-          responseSubject.complete();
+    startCampaign$.pipe(first()).subscribe(
+      // on a valid response
+      (response) => {
+        if (response.status === RequestStatus.FAILURE) {
+          this.messagesService.showMessage(response.message, MessageLevel.ERROR);
         }
-      );
+        responseSubject.next(response.status);
+        responseSubject.complete();
+      },
+      // on error
+      () => {
+        this.messagesService.showMessage(MSG_APP_ERROR, MessageLevel.ERROR);
+        responseSubject.next(RequestStatus.FAILURE);
+        responseSubject.complete();
+      }
+    );
 
     return response$;
   }
@@ -126,19 +120,18 @@ export class MyCampaignsAdapterService {
    */
   public getCampaignDetails(campaignId: number): Observable<CampaignDetails> {
     const url: string = `${URL_MY_CAMPAIGNS_DETAILS}/${campaignId}`;
-    return this.httpClient.get<CampaignDetailsResponse>(url)
-      .pipe(
-        take(1),
-        map(response => {
-          if (response.status === RequestStatus.SUCCESS) {
-            return response.campaignDetails;
-          } else {
-            this.messagesService.showMessage(response.message, MessageLevel.ERROR);
-            return undefined;
-          }
-        }),
-        catchError(error => this.handleError(error))
-      );
+    return this.httpClient.get<CampaignDetailsResponse>(url).pipe(
+      take(1),
+      map((response) => {
+        if (response.status === RequestStatus.SUCCESS) {
+          return response.campaignDetails;
+        } else {
+          this.messagesService.showMessage(response.message, MessageLevel.ERROR);
+          return undefined;
+        }
+      }),
+      catchError((error) => this.handleError(error))
+    );
   }
 
   /**
@@ -151,13 +144,12 @@ export class MyCampaignsAdapterService {
   public createTimelineEntry(campaignId: number, timelineEntry: TimelineEntryModel): Observable<RequestStatus> {
     const url = `${API_CONFIG.myCampaigns.endpoint}/${campaignId}${API_CONFIG.myCampaigns.timelineEntry}`;
 
-    return this.httpClient.post<CreateTimelineEntryResponse>(url, timelineEntry)
-      .pipe(
-        take(1),
-        tap(r => this.handleFailure(r)),
-        map(r => r.status),
-        catchError(err => this.handleError(err))
-      )
+    return this.httpClient.post<CreateTimelineEntryResponse>(url, timelineEntry).pipe(
+      take(1),
+      tap((r) => this.handleFailure(r)),
+      map((r) => r.status),
+      catchError((err) => this.handleError(err))
+    );
   }
 
   /**

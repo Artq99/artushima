@@ -1,10 +1,12 @@
 <div class="container">
-
   <!-- Header -->
   <div class="row pb-2">
     <div class="col">
-      <artushima-header [icon]="iconBook" [title]="(campaignDetails$ | async)?.title"
-        [titleId]="'campaign-details__campaignTitle'">
+      <artushima-header
+        [icon]="iconBook"
+        [title]="(campaignDetails$ | async)?.title"
+        [titleId]="'campaign-details__campaignTitle'"
+      >
       </artushima-header>
     </div>
   </div>
@@ -12,9 +14,11 @@
   <!-- Campaign info -->
   <div class="row pb-4">
     <div class="col">
-      <artushima-campaign-details-campaign-info [id]="campaignId"
+      <artushima-campaign-details-campaign-info
+        [id]="campaignId"
         [creationDate]="(campaignDetails$ | async)?.creationDate"
-        [gameMasterName]="(campaignDetails$ | async)?.gameMasterName">
+        [gameMasterName]="(campaignDetails$ | async)?.gameMasterName"
+      >
       </artushima-campaign-details-campaign-info>
     </div>
   </div>
@@ -30,8 +34,11 @@
   <!-- In-Game time info -->
   <div class="row pt-2 pb-2">
     <div class="col">
-      <artushima-campaign-details-in-game-time-info [startDate]="(campaignDetails$ | async)?.startDate"
-        [passedDays]="(campaignDetails$ | async)?.passedDays" [currentDate]="(campaignDetails$ | async)?.currentDate">
+      <artushima-campaign-details-in-game-time-info
+        [startDate]="(campaignDetails$ | async)?.startDate"
+        [passedDays]="(campaignDetails$ | async)?.passedDays"
+        [currentDate]="(campaignDetails$ | async)?.currentDate"
+      >
       </artushima-campaign-details-in-game-time-info>
     </div>
   </div>
@@ -39,17 +46,14 @@
   <!-- Campaign players info -->
   <div class="row pt-2 pb-2">
     <div class="col">
-      <artushima-campaign-players-info>
-      </artushima-campaign-players-info>
+      <artushima-campaign-players-info> </artushima-campaign-players-info>
     </div>
   </div>
 
   <!-- Campaign timeline -->
   <div class="row pt-2 pb-2">
     <div class="col">
-      <artushima-campaign-details-campaign-timeline>
-      </artushima-campaign-details-campaign-timeline>
+      <artushima-campaign-details-campaign-timeline> </artushima-campaign-details-campaign-timeline>
     </div>
   </div>
-
 </div>
