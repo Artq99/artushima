@@ -8,6 +8,7 @@ import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
  */
 class MyCampaignsIconConfig {
   timelineEntryEditorHeaderIcon: IconDefinition;
+  campaignGmToolbarSummarizeSessionIcon: IconDefinition;
 }
 
 /**
@@ -25,5 +26,6 @@ class IconConfig {
 export const APP_ICON_CONFIG = {
   myCampaigns: {
     timelineEntryEditorHeaderIcon: faFeatherAlt,
+    campaignGmToolbarSummarizeSessionIcon: faFeatherAlt,
   } as MyCampaignsIconConfig,
 } as IconConfig;

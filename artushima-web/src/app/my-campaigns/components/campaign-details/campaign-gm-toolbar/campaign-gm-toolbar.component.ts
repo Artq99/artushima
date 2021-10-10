@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
+import { APP_ICON_CONFIG } from 'src/app/core/constants/icon-config';
 
 /**
  * Toolbar with tools for the game master of the campaign.
@@ -14,8 +13,8 @@ export class CampaignGmToolbarComponent implements OnInit {
   @Input()
   public campaignId: number;
 
-  /** The icon for the button leading to the session summary creator. */
-  public iconSummarizeSession: IconDefinition = faFeatherAlt;
+  /** Icon configuration. */
+  public iconConfig = APP_ICON_CONFIG;
 
   public createTimelineEntryURL: string;
 
