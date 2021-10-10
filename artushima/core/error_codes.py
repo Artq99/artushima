@@ -8,6 +8,7 @@ _error_codes = {
     "T0000": "Błąd aplikacji.",
     # Authentication related errors
     "AC002": "Ta operacja dostępna jest jedynie dla mistrza gry danej kampanii.",
+    "AC003": "Ta operacja dostępna jest jedynie dla mistrza gry oraz graczy danej kampanii.",
     # Data related errors
     "D0000": "Brakujące dane.",
     "D0001": "Niepoprawny format daty. Akceptowany format to 'rrrr-mm-dd'.",

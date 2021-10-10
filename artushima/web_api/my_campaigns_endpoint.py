@@ -15,7 +15,8 @@ from artushima.core.error_codes import get_error_message
 from artushima.core.exceptions import BusinessError, DomainError
 from artushima.user.roles import (ROLE_CREATE_SESSION_SUMMARY,
                                   ROLE_SHOW_OWNED_CAMPAIGNS,
-                                  ROLE_START_CAMPAIGN)
+                                  ROLE_START_CAMPAIGN,
+                                  ROLE_VIEW_CAMPAIGN_TIMELINE)
 
 MY_CAMPAIGNS_BLUEPRINT = flask.Blueprint("my_campaigns_endpoint", __name__, url_prefix="/api/my_campaigns")
 
@@ -202,6 +203,41 @@ def my_campaigns_timeline_entry(campaign_id):
 
     except Exception as err:
         db_session.rollback()
+        logger.log_error(str(err))
+        error_message = get_error_message("T0000")
+        return _create_failure(error_message), 500
+
+    finally:
+        db_session.close()
+
+
+@MY_CAMPAIGNS_BLUEPRINT.route("/<int:campaign_id>/timeline", methods=["GET"])
+@allow_authorized_with_roles([ROLE_VIEW_CAMPAIGN_TIMELINE])
+def my_campaigns_timeline(campaign_id):
+    """
+    Get the timeline of a campaign.
+    """
+
+    token = flask.request.headers.get("Authorization")
+    user_id = auth_service.get_user_id(token)
+    db_session = db_access.Session()
+
+    try:
+        if not campaign_service.check_if_user_related_to_campaign(user_id, campaign_id):
+            raise DomainError("User is not related to the campaign!", "AC003", 403)
+
+        timeline = campaign_service.get_timeline(campaign_id)
+        return flask.jsonify({
+            "status": "success",
+            "message": "",
+            "timeline": timeline
+        })
+
+    except DomainError as err:
+        error_message = get_error_message(err.error_code)
+        return _create_failure(error_message), err.http_status
+
+    except Exception as err:
         logger.log_error(str(err))
         error_message = get_error_message("T0000")
         return _create_failure(error_message), 500

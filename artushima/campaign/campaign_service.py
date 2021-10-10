@@ -151,6 +151,14 @@ def create_timeline_entry(entry_data: dict, editor_name: str) -> int:
     return timeline_entry.id
 
 
+def get_timeline(campaign_id):
+    """
+    TODO #50
+    """
+
+    return []
+
+
 def check_if_campaign_gm(user_id, campaign_id):
     """
     Check if the user of the given ID is the game master of the campaign of the given ID.

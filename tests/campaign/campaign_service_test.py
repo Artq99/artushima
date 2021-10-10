@@ -219,6 +219,16 @@ class CreateTimelineEntryTest(TestCase):
             campaign_service.create_timeline_entry(entry_data, editor_name)
 
 
+# TODO #50
+class GetTimeline(TestCase):
+
+    def setUp(self):
+        return super().setUp()
+
+    def tearDown(self):
+        return super().tearDown()
+
+
 class CheckIfCampaignGMTest(TestCase):
 
     def setUp(self):
