@@ -12,7 +12,7 @@
   <!-- Campaign info -->
   <div class="row pb-4">
     <div class="col">
-      <artushima-campaign-details-campaign-info [id]="(campaignDetails$ | async)?.id"
+      <artushima-campaign-details-campaign-info [id]="campaignId"
         [creationDate]="(campaignDetails$ | async)?.creationDate"
         [gameMasterName]="(campaignDetails$ | async)?.gameMasterName">
       </artushima-campaign-details-campaign-info>
@@ -22,7 +22,7 @@
   <!-- Campaign GM's toolbar -->
   <div *ngIf="(currentUser$ | async)?.userName === (campaignDetails$ | async)?.gameMasterName" class="row pb-4">
     <div class="col">
-      <artushima-campaign-details-campaign-gm-toolbar [campaignId]="(campaignDetails$ | async)?.id">
+      <artushima-campaign-details-campaign-gm-toolbar [campaignId]="campaignId">
       </artushima-campaign-details-campaign-gm-toolbar>
     </div>
   </div>

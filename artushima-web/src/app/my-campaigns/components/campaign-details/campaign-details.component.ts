@@ -23,6 +23,9 @@ export class CampaignDetailsComponent implements OnInit {
   /** The observable of the currently logged in user. */
   public currentUser$: Observable<CurrentUser>;
 
+  /** The campaign ID. */
+  public campaignId: number;
+
   /** The observable of the data. */
   public campaignDetails$: Observable<CampaignDetails>;
 
@@ -42,8 +45,8 @@ export class CampaignDetailsComponent implements OnInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    const campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
+    this.campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
     this.currentUser$ = this.authService.currentUser$;
-    this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(campaignId);
+    this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(this.campaignId);
   }
 }
