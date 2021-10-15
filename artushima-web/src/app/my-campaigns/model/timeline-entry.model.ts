@@ -15,3 +15,10 @@ export interface TimelineEntryModel {
 export interface CreateTimelineEntryResponse extends ResponseModel {
   campaignTimelineEntryId?: number;
 }
+
+/**
+ * Model for a response from an endpont for retrieving campaign timeline.
+ */
+export interface GetTimelineResponse extends ResponseModel {
+  timeline?: TimelineEntryModel[];
+}

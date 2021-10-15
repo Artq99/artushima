@@ -5,6 +5,7 @@
  */
 class MyCampaignsURLs {
   endpoint: string;
+  timeline: string;
   timelineEntry: string;
 }
 
@@ -23,6 +24,7 @@ class ApiConfig {
 export const API_CONFIG = {
   myCampaigns: {
     endpoint: '/api/my_campaigns',
+    timeline: '/timeline',
     timelineEntry: '/timeline/entry',
   } as MyCampaignsURLs,
 } as ApiConfig;
