@@ -15,7 +15,7 @@ import { CampaignDetailsResponse } from '../../model/campaign-details.model';
 import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
 import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
 import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
-import { CreateTimelineEntryResponse, TimelineEntryModel } from '../../model/timeline-entry.model';
+import { CreateTimelineEntryResponse, GetTimelineResponse, TimelineEntryModel } from '../../model/timeline-entry.model';
 import { MyCampaignsAdapterService } from './my-campaigns-adapter.service';
 
 describe('MyCampaignsAdapterService', () => {
@@ -332,6 +332,97 @@ describe('MyCampaignsAdapterService', () => {
 
       const request: TestRequest = httpTestingController.expectOne(url);
       request.error(new ErrorEvent('error'), { status: 404 });
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).toHaveBeenCalled();
+    });
+  });
+
+  describe('getTimeline', () => {
+    it('should get the campaign timeline', (done) => {
+      // given
+      const id: number = 99;
+      const url: string = `${API_CONFIG.myCampaigns.endpoint}/${id}${API_CONFIG.myCampaigns.timeline}`;
+      const response: GetTimelineResponse = {
+        status: RequestStatus.SUCCESS,
+        message: '',
+        timeline: [
+          {
+            title: 'Test Title 1',
+            sessionDate: '2020-01-01',
+            summaryText: 'Test Text 1',
+          } as TimelineEntryModel,
+          {
+            title: 'Test Title 2',
+            sessionDate: '2020-02-01',
+            summaryText: 'Test Text 2',
+          } as TimelineEntryModel,
+        ],
+      } as GetTimelineResponse;
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service
+        .getTimeline(id)
+        .pipe(take(1))
+        .subscribe((timeline) => {
+          expect(timeline).toEqual(response.timeline);
+          done();
+        });
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.flush(response);
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).not.toHaveBeenCalled();
+    });
+
+    it('should handle a failed response', (done) => {
+      // given
+      const id: number = 99;
+      const url: string = `${API_CONFIG.myCampaigns.endpoint}/${id}${API_CONFIG.myCampaigns.timeline}`;
+      const response: GetTimelineResponse = {
+        status: RequestStatus.FAILURE,
+        message: 'Test message',
+      };
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service
+        .getTimeline(id)
+        .pipe(take(1))
+        .subscribe((timeline) => {
+          expect(timeline).toEqual([]);
+          done();
+        });
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.flush(response);
+
+      httpTestingController.verify();
+      expect(messageService.showMessage).toHaveBeenCalledWith(response.message, MessageLevel.ERROR);
+    });
+
+    it('should handle an HTTP error', (done) => {
+      // given
+      const id: number = 99;
+      const url: string = `${API_CONFIG.myCampaigns.endpoint}/${id}${API_CONFIG.myCampaigns.timeline}`;
+
+      spyOn(messageService, 'showMessage');
+
+      // when then
+      service
+        .getTimeline(id)
+        .pipe(take(1))
+        .subscribe((timeline) => {
+          expect(timeline).not.toBeDefined();
+          done();
+        });
+
+      const request: TestRequest = httpTestingController.expectOne(url);
+      request.error(new ErrorEvent('error'), { status: 500 });
 
       httpTestingController.verify();
       expect(messageService.showMessage).toHaveBeenCalled();

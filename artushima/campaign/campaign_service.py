@@ -151,6 +151,25 @@ def create_timeline_entry(entry_data: dict, editor_name: str) -> int:
     return timeline_entry.id
 
 
+def get_timeline(campaign_id):
+    """
+    Get the timeline of a campaign.
+    """
+
+    assert_int(campaign_id, "DC001")
+
+    campaign = campaign_repository.read_by_id(campaign_id)
+    if campaign is None:
+        raise DomainError("Campaign does not exist!", "DC002")
+
+    timeline = []
+    for entry in campaign.campaign_timeline_entries:
+        mapped_entry = campaign_mapper.map_campaign_timeline_entity_to_dict(entry)
+        timeline.append(mapped_entry)
+
+    return timeline
+
+
 def check_if_campaign_gm(user_id, campaign_id):
     """
     Check if the user of the given ID is the game master of the campaign of the given ID.

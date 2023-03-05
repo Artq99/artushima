@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CurrentUser } from 'src/app/core/model/current-user';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { CampaignDetails } from '../../model/campaign-details.model';
+import { TimelineEntryModel } from '../../model/timeline-entry.model';
 import { MyCampaignsAdapterService } from '../../services/my-campaigns-adapter.service/my-campaigns-adapter.service';
 
 /**
@@ -28,6 +29,9 @@ export class CampaignDetailsComponent implements OnInit {
   /** The observable of the data. */
   public campaignDetails$: Observable<CampaignDetails>;
 
+  /** The observable of the campaign timeline. */
+  public campaignTimeline$: Observable<TimelineEntryModel[]>;
+
   /**
    * @inheritdoc
    *
@@ -47,5 +51,6 @@ export class CampaignDetailsComponent implements OnInit {
     this.campaignId = +this.activatedRoute.snapshot.paramMap.get('id');
     this.currentUser$ = this.authService.currentUser$;
     this.campaignDetails$ = this.myCampaignsAdapterService.getCampaignDetails(this.campaignId);
+    this.campaignTimeline$ = this.myCampaignsAdapterService.getTimeline(this.campaignId);
   }
 }

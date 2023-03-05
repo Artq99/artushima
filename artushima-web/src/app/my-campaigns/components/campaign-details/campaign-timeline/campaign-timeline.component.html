@@ -1,7 +1,36 @@
-<artushima-section
-  [icon]="iconHistory"
-  [title]="'Oś Czasu'">
-
-  <p>Under construction...</p>
-
+<artushima-section [icon]="iconConfig.myCampaigns.campaignTimelineIcon" [title]="'Oś Czasu'">
+  <ng-container *ngFor="let entry of timeline; let i = index">
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row">
+        <!-- Icon -->
+        <div class="col-2 d-flex align-items-center justify-content-center pr-4">
+          <span>
+            <fa-icon [icon]="iconConfig.myCampaigns.campaignTimelineEntryIcon" size="2x"></fa-icon>
+          </span>
+        </div>
+        <!-- Index, date and title -->
+        <div class="col-10">
+          <!-- Index and date-->
+          <div class="row">
+            <div class="col-12">
+              <span>Sesja {{ i + 1 }} - {{ entry.sessionDate | date: 'dd.MM.yyy' }}</span>
+            </div>
+          </div>
+          <!-- Title -->
+          <div class="row">
+            <div class="col-12">
+              <h2>{{ entry.title }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Summary text -->
+      <div class="row pt-2">
+        <div class="col-12" style="white-space: pre-wrap" [innerHtml]="entry.summaryText"></div>
+      </div>
+    </div>
+    <!-- Separator -->
+    <hr />
+  </ng-container>
 </artushima-section>

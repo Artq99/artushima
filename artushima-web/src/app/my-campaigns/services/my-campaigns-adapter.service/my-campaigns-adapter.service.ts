@@ -17,7 +17,7 @@ import { CampaignDetails, CampaignDetailsResponse } from '../../model/campaign-d
 import { MyCampaignsListElement, MyCampaignsListResponse } from '../../model/my-campaigns-list-response.model';
 import { MyCampaignsStartRequest } from '../../model/my-campaigns-start-request.model';
 import { MyCampaignsStartResponse } from '../../model/my-campaigns-start-response.model';
-import { CreateTimelineEntryResponse, TimelineEntryModel } from '../../model/timeline-entry.model';
+import { CreateTimelineEntryResponse, GetTimelineResponse, TimelineEntryModel } from '../../model/timeline-entry.model';
 
 /**
  * The adapter-service for retrieving campaigns data from the backend.
@@ -148,6 +148,23 @@ export class MyCampaignsAdapterService {
       take(1),
       tap((r) => this.handleFailure(r)),
       map((r) => r.status),
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  /**
+   * Sends a GET request to retrieve the timeline of a given campaign.
+   *
+   * @param campaignId the campaign ID
+   * @returns Observable of the campaign timeline
+   */
+  public getTimeline(campaignId: number): Observable<TimelineEntryModel[]> {
+    const url = `${API_CONFIG.myCampaigns.endpoint}/${campaignId}${API_CONFIG.myCampaigns.timeline}`;
+
+    return this.httpClient.get<GetTimelineResponse>(url).pipe(
+      take(1),
+      tap((r) => this.handleFailure(r)),
+      map((r) => (r.timeline ? r.timeline : [])),
       catchError((err) => this.handleError(err))
     );
   }

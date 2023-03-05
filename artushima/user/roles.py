@@ -7,6 +7,7 @@ ROLE_CREATE_USER = "role_create_user"
 ROLE_SHOW_OWNED_CAMPAIGNS = "role_show_owned_campaigns"
 ROLE_START_CAMPAIGN = "role_start_campaign"
 ROLE_CREATE_SESSION_SUMMARY = "role_create_session_summary"
+ROLE_VIEW_CAMPAIGN_TIMELINE = "role_view_campaign_timeline"
 
 ALL_ROLES = [
     ROLE_SHOW_USERS,
@@ -14,4 +15,5 @@ ALL_ROLES = [
     ROLE_SHOW_OWNED_CAMPAIGNS,
     ROLE_START_CAMPAIGN,
     ROLE_CREATE_SESSION_SUMMARY,
+    ROLE_VIEW_CAMPAIGN_TIMELINE
 ]

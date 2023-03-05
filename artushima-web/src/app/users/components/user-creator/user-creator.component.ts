@@ -18,6 +18,7 @@ export const ROLES = [
   'role_show_owned_campaigns',
   'role_start_campaign',
   'role_create_session_summary',
+  'role_view_campaign_timeline',
 ];
 
 /**
@@ -29,6 +30,7 @@ export const ROLES_DESCRIPTION = [
   'Wyświetlanie listy własnych kampanii',
   'Prowadzenie własnych kampanii',
   'Dodawanie wpisu z podsumowaniem sesji',
+  'Wyświetlanie osi czasu kampanii.',
 ];
 
 /**
