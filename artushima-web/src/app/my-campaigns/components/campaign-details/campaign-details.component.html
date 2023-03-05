@@ -53,7 +53,8 @@
   <!-- Campaign timeline -->
   <div class="row pt-2 pb-2">
     <div class="col">
-      <artushima-campaign-details-campaign-timeline> </artushima-campaign-details-campaign-timeline>
+      <artushima-campaign-details-campaign-timeline [timeline]="campaignTimeline$ | async">
+      </artushima-campaign-details-campaign-timeline>
     </div>
   </div>
 </div>

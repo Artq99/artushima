@@ -1,5 +1,5 @@
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFeatherAlt, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Icon configuration class for the MyCampaigns module.
@@ -9,6 +9,8 @@ import { faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
 class MyCampaignsIconConfig {
   timelineEntryEditorHeaderIcon: IconDefinition;
   campaignGmToolbarSummarizeSessionIcon: IconDefinition;
+  campaignTimelineIcon: IconDefinition;
+  campaignTimelineEntryIcon: IconDefinition;
 }
 
 /**
@@ -27,5 +29,7 @@ export const APP_ICON_CONFIG = {
   myCampaigns: {
     timelineEntryEditorHeaderIcon: faFeatherAlt,
     campaignGmToolbarSummarizeSessionIcon: faFeatherAlt,
+    campaignTimelineIcon: faHistory,
+    campaignTimelineEntryIcon: faFeatherAlt,
   } as MyCampaignsIconConfig,
 } as IconConfig;
